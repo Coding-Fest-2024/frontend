@@ -1,43 +1,57 @@
 <template>
   <div class="control-bar">
-    <div v-for="dropdown in dropdowns" :key="dropdown.id" class="dropdown">
-      <button @click="toggleDropdown(dropdown.id)">
-        {{ dropdown.name }}
-      </button>
-      <div v-show="dropdown.id === activeDropdown" class="dropdown-content">
-        <a href="#" v-for="item in dropdown.items" :key="item" class="dropdown-item">
-          {{ item }}
-        </a>
-      </div>
+    <div class="interaction-block-1">
+      <div class="block-label">Year of Start</div>
+      <t-date-picker id="degreeStartYear" mode="year" allowInput placeholder="Select Year"/>
+    </div>
+    <div class="interaction-block-2">
+      <div class="block-label">Your Degree</div>
+      <t-dropdown
+        id="degree"
+        minColumnWidth="230px"
+        :options="degreeOptions"
+        hideAfterItemClick
+        trigger="click"
+        @click="clickHandler"
+      >
+      <t-button id="degree_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedDegree }}</t-button>
+      </t-dropdown>
     </div>
   </div>
 </template>
+
   
+
+
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { MessagePlugin } from 'tdesign-vue-next';
+
+interface DegreeItem {
+  content: string;
+  value: number;
+}
+
 
 export default defineComponent({
   name: 'ControlBar',
   setup() {
-    const activeDropdown = ref<number | null>(null);  // Specify the type as number or null
+    const selectedDegree = ref<string>('Select Degree');
 
-    const dropdowns = ref([
-      { id: 1, name: 'Degree', items: ['Bachelor of Science', 'Advanced Computing'] },
-      { id: 2, name: 'Dropdown 2', items: ['Item 3', 'Item 4'] },
-      { id: 3, name: 'Dropdown 3', items: ['Item 5', 'Item 6'] },
-      { id: 4, name: 'Dropdown 4', items: ['Item 7', 'Item 8'] },
+    const buttonStyle = ref({ color: '#8b8b8b'});
+
+    const degreeOptions = ref<DegreeItem[]>([
+      { content: 'Bachelor of Science', value: 1, },
+      { content: 'Bachelor of Advanced Computing', value: 2, }
     ]);
 
-    // Specify the type of the parameter `id`
-    const toggleDropdown = (id: number) => {
-      if (activeDropdown.value === id) {
-        activeDropdown.value = null;
-      } else {
-        activeDropdown.value = id;
-      }
+    const clickHandler = (data: DegreeItem) => {
+      selectedDegree.value = data.content;
+      MessagePlugin.success(`selected: ${data.content}`);
+      buttonStyle.value.color = 'black';
     };
-
-    return { dropdowns, activeDropdown, toggleDropdown };
+        
+    return { selectedDegree, degreeOptions, clickHandler, buttonStyle};
   }
 });
 </script>
@@ -68,33 +82,63 @@ export default defineComponent({
     margin-top: 5%;
 }
 
-.dropdown {
-    position: relative;
-    margin: 0 10px;
-    
+.interaction-block-1 {
+    width: 14%;
+    min-height: 45px;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    flex-direction: column; /* Stack elements vertically */
+    border: 1px solid #989898;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
 }
 
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding: 12px 16px;
-    z-index: 10;
+.interaction-block-2 {
+    width: 32%;
+    min-height: 45px;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    flex-direction: column; /* Stack elements vertically */
+    border: 1px solid #989898;
+    box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
 }
 
-.dropdown-content a {
-    padding: 12px 16px;
-    display: block;
+.interaction-block-1:hover {
+    background-color: #f8f8f858;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
+.interaction-block-2:hover {
+    background-color: #f8f8f858;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+
+.block-label {
+  margin-bottom: 5px;
+  font-family: "Roboto Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 550;
+  font-style: normal;
+  font-size: 1vw;
+}
+
+#degreeStartYear {
+    width: 100%; /* Adjust the width as needed */
+}
+
+#degree_button{
+    width: 100%;
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 100;
+    font-style: normal;
+    color: #8b8b8b;
+    font-style: italic;
 }
 
 </style>

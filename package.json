@@ -15,6 +15,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "tdesign-vue-next": "^1.9.3",
     "vue-draggable-plus": "^0.4.0",
     "vuedraggable": "^2.24.3"
   }

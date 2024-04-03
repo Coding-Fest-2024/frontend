@@ -116,12 +116,15 @@ export default defineComponent({
 }
 
 .semester-label {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    font-size: 1rem; /* Adjust font size as needed */
     margin: -10px 0; /* Adjust if necessary */
     text-align: left;
     transform: translate(-180px, 69px);
     position: relative; /* Needed for proper positioning of the span */
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+    font-size: 1vw;
 }
 
 .label-text {
@@ -148,7 +151,6 @@ export default defineComponent({
     gap: 13px; /* Adds some space between the drop zones */
     padding: 20px;
     border-radius: 34px;
-
 }
 
 .drop-zone {
@@ -157,13 +159,12 @@ export default defineComponent({
     background-color: #E0E0E0;
     padding: 0px;
     border-radius: 16px;
-    height: 96.094px;
+    height: 6.4vw;
     pointer-events: auto;
     z-index: 1;
 }
 
 .drag-el {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
     background-color: lightskyblue;
     color: white;
     text-align: center;
@@ -172,40 +173,45 @@ export default defineComponent({
     border-radius: 16px;
     outline: none;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    height: 102.838px;
-    transform: translate(0%, -7%);
+    height: 6.6vw;
+    transform: translate(0%, -4%);
     z-index: inherit;
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1vw;
 }
 
 @keyframes swap-animation {
     0% {
         opacity: 0;
         transform: scale(1.1);
-        transform: translate(0%, -8%);
+        transform: translate(0%, -7%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
     50% {
         opacity: 0.5;
         transform: scale(0.98);
-        transform: translate(0%, -14%);
+        transform: translate(0%, -10%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 1);
     }
     100% {
         opacity: 1;
         transform: scale(1.0);
-        transform: translate(0%, -7%);
+        transform: translate(0%, -4%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
 }
 
 @keyframes pulse-animation {
     0%, 100% {
-        transform: scale(1.0) translate(0%, -14%);
+        transform: scale(1.0) translate(0%, -4%);
         box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.7); /* Glowing effect */
         opacity: 1;
     }
     50% {
-        transform: scale(1.001) translate(0%, -15%);
+        transform: scale(1.01) translate(0%, -6%);
         box-shadow: 0px 0px 10px 13px rgb(255, 255, 255); /* More prominent glow */
         opacity: 0.9;
     }
