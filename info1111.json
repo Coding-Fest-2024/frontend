@@ -1,17 +1,21 @@
 {
-    "Code": "INFO1110",
-    "Name": "Introduction to Programming",
-    "Faculty": "Computer Science",
-    "Prerequisites":[],
-    "Corequisites": [],
-    "Prohibitions": [
-        "INFO1910", 
-        "INFO1103", 
-        "INFO1903", 
-        "INFO1105", 
-        "INFO1905", 
-        "ENGG1810"
-    ],
-    "Assumed knowledge:": []
+    "INFO1110":{
+        "Code": "INFO1110",
+        "Name": "Introduction to Programming",
+        "Faculty": "Computer Science",
+        "Prerequisites":[],
+        "Corequisites": [],
+        "Prohibitions": [
+            "INFO1910", 
+            "INFO1103", 
+            "INFO1903", 
+            "INFO1105", 
+            "INFO1905", 
+            "ENGG1810"
+        ],
+        "Assumed knowledge": []
+    }, 
+    "INFO1111":{}
 }
+
   

@@ -19,14 +19,6 @@ export default {
             }
         };
 
-        onMounted(() => {
-            window.addEventListener('scroll', updateSidebarPosition);
-        });
-
-        onUnmounted(() => {
-            window.removeEventListener('scroll', updateSidebarPosition);
-        });
-
         return {
             sidebar
         };
@@ -37,7 +29,7 @@ export default {
 <style>
 .side_bar {
     width: 25vw;
-    height: 1000px;
+    height: 105vh;
     flex-shrink: 0;
     background-color: #E1E1E1;
     border-radius: 35px;
@@ -45,10 +37,9 @@ export default {
     padding: 35px;
     /* Centering the element */
     position: fixed;
-    top: 84%; 
+    /* margin-top: 20%; */
     left: 50%;
-    transform: translate(87%, -50%);
+    transform: translate(87%, -13%);
     z-index: 2;
-    transition: transform 0.3s ease-out;
 }
 </style>

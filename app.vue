@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1>Welcome to the homepage</h1>
   </div>
-  <SemsterBoard></SemsterBoard>
+  <ControlBar></ControlBar>
   <DescriptionBoard></DescriptionBoard>
   <SlotsBoard></SlotsBoard>
   
