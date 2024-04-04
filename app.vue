@@ -1,9 +1,12 @@
 <template>
-  <div>
-  </div>
+
+<div class="container">
+  
   <ControlBar></ControlBar>
   <DescriptionBoard></DescriptionBoard>
   <SlotsBoard></SlotsBoard>
+
+</div>
   
 </template>
 

@@ -29,7 +29,7 @@ export default {
 <style>
 .side_bar {
     width: 25vw;
-    height: 105vh;
+    height: 60.5vw;
     flex-shrink: 0;
     background-color: #E1E1E1;
     border-radius: 35px;

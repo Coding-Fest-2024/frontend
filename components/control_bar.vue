@@ -2,7 +2,7 @@
   <div class="control-bar">
     <div class="interaction-block-1">
       <div class="block-label">Year of Start</div>
-      <t-date-picker id="degreeStartYear" mode="year" allowInput placeholder="Select Year"/>
+      <t-date-picker id="degreeStartYear" mode="year" allowInput placeholder="Years"/>
     </div>
     <div class="interaction-block-2">
       <div class="block-label">Your Degree</div>
@@ -17,17 +17,41 @@
       <t-button id="degree_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedDegree }}</t-button>
       </t-dropdown>
     </div>
+    <div class="interaction-block-3">
+      <div class="block-label">Major 1</div>
+      <t-dropdown
+        id="degree"
+        minColumnWidth="190px"
+        :options="majorOptions"
+        hideAfterItemClick
+        trigger="click"
+        @click="clickHandlerMajor1"
+      >
+      <t-button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor1 }}</t-button>
+      </t-dropdown>
+    </div>
+    <div class="interaction-block-4">
+      <div class="block-label">Major 2</div>
+      <t-dropdown
+        id="degree"
+        minColumnWidth="190px"
+        :options="majorOptions"
+        hideAfterItemClick
+        trigger="click"
+        @click="clickHandlerMajor2"
+      >
+      <t-button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor2 }}</t-button>
+      </t-dropdown>
+    </div>
   </div>
 </template>
-
-  
 
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { MessagePlugin } from 'tdesign-vue-next';
 
-interface DegreeItem {
+interface GroupItem {
   content: string;
   value: number;
 }
@@ -37,21 +61,43 @@ export default defineComponent({
   name: 'ControlBar',
   setup() {
     const selectedDegree = ref<string>('Select Degree');
+    const selectedMajor1 = ref<string>('Select Major');
+    const selectedMajor2 = ref<string>('Select Major');
 
     const buttonStyle = ref({ color: '#8b8b8b'});
 
-    const degreeOptions = ref<DegreeItem[]>([
+    const degreeOptions = ref<GroupItem[]>([
       { content: 'Bachelor of Science', value: 1, },
       { content: 'Bachelor of Advanced Computing', value: 2, }
     ]);
 
-    const clickHandler = (data: DegreeItem) => {
+    const majorOptions = ref<GroupItem[]>([
+      { content: 'Computer Science', value: 1, },
+      { content: 'Software Development', value: 2, },
+      { content: 'Computational Data Science', value: 3, },
+      { content: 'CyberSecurity', value: 4, },
+      { content: 'Information Systems', value: 5},
+    ]);
+
+    const clickHandler = (data: GroupItem) => {
       selectedDegree.value = data.content;
       MessagePlugin.success(`selected: ${data.content}`);
       buttonStyle.value.color = 'black';
     };
+
+    const clickHandlerMajor1 = (data: GroupItem) => {
+      selectedMajor1.value = data.content;
+      MessagePlugin.success(`selected: ${data.content}`);
+      buttonStyle.value.color = 'black';
+    };
+
+    const clickHandlerMajor2 = (data: GroupItem) => {
+      selectedMajor2.value = data.content;
+      MessagePlugin.success(`selected: ${data.content}`);
+      buttonStyle.value.color = 'black';
+    };
         
-    return { selectedDegree, degreeOptions, clickHandler, buttonStyle};
+    return { selectedDegree, degreeOptions, clickHandler, clickHandlerMajor1, clickHandlerMajor2, buttonStyle, majorOptions, selectedMajor1, selectedMajor2};
   }
 });
 </script>
@@ -83,7 +129,7 @@ export default defineComponent({
 }
 
 .interaction-block-1 {
-    width: 14%;
+    width: 12%;
     min-height: 45px;
     padding: 15px;
     border-radius: 20px;
@@ -96,7 +142,31 @@ export default defineComponent({
 }
 
 .interaction-block-2 {
-    width: 32%;
+    width: 26%;
+    min-height: 45px;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    flex-direction: column; /* Stack elements vertically */
+    border: 1px solid #989898;
+    box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
+}
+
+.interaction-block-3 {
+    width: 20%;
+    min-height: 45px;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    flex-direction: column; /* Stack elements vertically */
+    border: 1px solid #989898;
+    box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
+}
+
+.interaction-block-4 {
+    width: 20%;
     min-height: 45px;
     padding: 15px;
     border-radius: 20px;
@@ -117,6 +187,11 @@ export default defineComponent({
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.interaction-block-3:hover {
+    background-color: #f8f8f858;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
 
 .block-label {
   margin-bottom: 5px;
@@ -124,21 +199,31 @@ export default defineComponent({
   font-optical-sizing: auto;
   font-weight: 550;
   font-style: normal;
-  font-size: 1vw;
+  font-size: 0.82vw;
 }
 
 #degreeStartYear {
     width: 100%; /* Adjust the width as needed */
 }
 
-#degree_button{
+#degree_button {
     width: 100%;
     font-family: "Roboto Mono", monospace;
     font-optical-sizing: auto;
-    font-weight: 100;
-    font-style: normal;
+    font-weight: 500;
     color: #8b8b8b;
     font-style: italic;
+    font-size: 0.78vw;
+}
+
+#major_button {
+    width: 100%;
+    font-family: "Roboto Mono", monospace;
+    /* font-optical-sizing: auto; */
+    font-weight: 500;
+    color: #d4d4d4;
+    font-style: italic;
+    font-size: 0.70vw;
 }
 
 </style>

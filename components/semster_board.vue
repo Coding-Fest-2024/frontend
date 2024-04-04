@@ -12,14 +12,17 @@
                         @dragover.prevent
                         @dragenter.prevent>
                         <div v-for="item in getItems(index, semester, year)"
-                             :key="item.id"
-                             class="drag-el"
-                             :class="{ 'selected': item.id === selectedItemId, animating: item.animating }"
-                             :style="{ backgroundColor: item.color }"
-                             draggable="true"
-                             @click="selectItem(item)"
-                             @dragstart="startDrag($event, item)">
-                            {{ item.title }}
+                            :key="item.id"
+                            class="drag-el"
+                            :class="{ 'selected': item.id === selectedItemId, animating: item.animating }"
+                            :style="{ backgroundColor: item.color }"
+                            draggable="true"
+                            @click="selectItem(item)"
+                            @dragstart="startDrag($event, item)">
+                            <div class="text-container">{{ item.title }}</div>
+                            <div class="inner-block">
+                                {{ item.name }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -37,14 +40,19 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
     setup() {
-        const academicYears = ref([1, 2, 3]); // Example: 2 academic years
+        const academicYears = ref([1, 2, 3]); // Example: 3 academic years
         
 
         const selectedItemId = ref(null);
         const items = ref([
             // Example items
-            { id: 0, title: 'INFO1110', slot: 1, semester: 1, year: 1, color: 'darkblue' },
-            { id: 1, title: 'COMP2823', slot: 3, semester: 1, year: 2, color: 'orange' },
+            { id: 1110, title: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
+            { id: 1113, title: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
+            { id: 1111, title: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
+            { id: 1112, title: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
+            { id: 2222, title: 'INFO2222', name: 'Computing 2 Usability and Security', slot: 4, semester: 1, year: 2, color: '#6ED4FF' },
+            { id: 2823, title: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
+            { id: 2017, title: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
         ]);
 
         const selectItem = (item) => {
@@ -109,6 +117,7 @@ export default defineComponent({
 
 <style scoped>
 
+
 .board {
     display: flex;
     justify-content: center;
@@ -118,7 +127,7 @@ export default defineComponent({
 .semester-label {
     margin: -10px 0; /* Adjust if necessary */
     text-align: left;
-    transform: translate(-180px, 69px);
+    transform: translate(-12.5vw, 4.8vw);
     position: relative; /* Needed for proper positioning of the span */
     font-family: "Roboto Mono", monospace;
     font-optical-sizing: auto;
@@ -132,6 +141,7 @@ export default defineComponent({
     color: grey; 
     padding: 5px; 
     border-radius: 5px; 
+    z-index: 10;
 }
 
 .academic-year-container {
@@ -139,36 +149,37 @@ export default defineComponent({
     padding: 5px;
     border-radius: 34px;
     justify-content: center;
-    width: auto; /* Adjust width to content or screen size */
-    flex-wrap: wrap; /* Allow containers to wrap if needed */
+    width: auto;
+    flex-wrap: wrap;
     margin: 15px;
+    min-width: 48vw;
 }
 
 
 .drop-zone-container {
     display: flex; /* This makes the child elements align horizontally */
     justify-content: center; /* This centers the child elements horizontally in the container */
-    gap: 13px; /* Adds some space between the drop zones */
+    gap: 13px;
     padding: 20px;
     border-radius: 34px;
 }
 
 .drop-zone {
-    margin: 0; /* Adjust as needed, removed auto margin to allow flexbox centering */
-    min-width: 23%; /* Adjust as needed */
+    margin: 0;
+    width: 11vw;
     background-color: #E0E0E0;
     padding: 0px;
     border-radius: 16px;
     height: 6.4vw;
     pointer-events: auto;
     z-index: 1;
+    min-width: 11vw;
 }
 
 .drag-el {
+    align-items: center;
     background-color: lightskyblue;
     color: white;
-    text-align: center;
-    padding: 0px;
     margin-bottom: 10px;
     border-radius: 16px;
     outline: none;
@@ -181,8 +192,44 @@ export default defineComponent({
     font-weight: 400;
     font-style: normal;
     font-size: 1vw;
+    min-width: 100%;
+    
 }
 
+.text-container {
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 0.9vw;
+    transform: translate(7%, 40%);
+    min-height: 18%;
+    color: rgba(255, 255, 255, 0.90);
+    margin-bottom: 0.7vw;
+}
+
+.inner-block {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 300;
+    font-style: italic;
+    padding: 10px;
+    margin-left: 0.2vw;
+    margin-right: 0.2vw;
+    margin-bottom: 0.2vw;
+    margin-bottom: 0.2vw;
+    border-radius: 14px; 
+    background-color: rgba(255, 255, 255, 0.90);
+    text-align: left;
+    font-size: 0.8vw;
+    color: rgb(55, 55, 55);
+    width: 10.6vw;
+    overflow: hidden;
+    word-wrap: break-word;
+    height: 68%;
+    min-height: 48%;
+    box-sizing: border-box;
+
+}
 @keyframes swap-animation {
     0% {
         opacity: 0;
@@ -206,13 +253,13 @@ export default defineComponent({
 
 @keyframes pulse-animation {
     0%, 100% {
-        transform: scale(1.0) translate(0%, -4%);
+        transform: scale(1.0) translate(0%, -4.5%);
         box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.7); /* Glowing effect */
         opacity: 1;
     }
     50% {
-        transform: scale(1.01) translate(0%, -6%);
-        box-shadow: 0px 0px 10px 13px rgb(255, 255, 255); /* More prominent glow */
+        transform: scale(1.001) translate(0%, -10%);
+        box-shadow: 0px 0px 10px 10px rgb(255, 255, 255); /* More prominent glow */
         opacity: 0.9;
     }
 }

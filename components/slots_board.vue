@@ -1,12 +1,10 @@
 <template>
-    
     <div class="background-rectangle">
         <SemsterBoard></SemsterBoard>
     </div>
 </template>
 
 <script lang="ts">
-import type { ControlBar } from '#build/components';
 
 </script>
 
@@ -18,7 +16,7 @@ import type { ControlBar } from '#build/components';
     background-color: #F6F6F6;
     border-radius: 35px;
     box-sizing: border-box;
-    padding: 35px;
+    padding: 2vw;
 
     /* Centering the element */
     position: relative;
@@ -26,7 +24,7 @@ import type { ControlBar } from '#build/components';
     transform: translate(-65%);
     z-index: 0;
     margin-top: 1%;
-    align-items: center;
+    align-items: stretch;
 }
 
 
