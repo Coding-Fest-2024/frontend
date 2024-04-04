@@ -61,17 +61,23 @@ export default defineComponent({
             event.dataTransfer.setData('item', JSON.stringify(item));
         };
 
-        // In your main component script
         const onDrop = (event, slot, semester, year) => {
             const itemData = JSON.parse(event.dataTransfer.getData('item'));
             const fromItem = items.value.find(item => item.id === itemData.id);
+            const fromItemIndex = items.value.findIndex(item => item.id === itemData.id);
+            const targetItemIndex = items.value.findIndex(item => item.slot === slot && item.semester === semester && item.year === year);
+
+            if (fromItemIndex === -1 && targetItemIndex !== -1) {
+                console.log("Drop cancelled: Slot is occupied.");
+                return;
+            }
+
             // const existingItem = items.value.find(item => item.id === itemData.id && item.semester === semester && item.year === year && item.slot === slot);
             if (!fromItem) {
-                // Add new properties like slot, semester, and year to the item
                 itemData.slot = slot;
                 itemData.semester = semester;
                 itemData.year = year;
-                items.value.push(itemData); // Add the item to the main board's state
+                items.value.push(itemData);
                 itemData.animating = true;
                 setTimeout(() => {
                         itemData.animating = false;
@@ -82,7 +88,7 @@ export default defineComponent({
             }
             if (fromItem) {
                 // Find if the drop target is within the main board or sidebar
-                const targetIsSidebar = event.currentTarget.classList.contains('side_bar'); // Adjust class checking based on your actual sidebar class
+                const targetIsSidebar = event.currentTarget.classList.contains('side_bar');
                 {
                     const targetItemIndex = items.value.findIndex(
                         item => item.slot === slot && item.semester === semester && item.year === year
@@ -145,10 +151,10 @@ export default defineComponent({
 }
 
 .semester-label {
-    margin: -10px 0; /* Adjust if necessary */
+    margin: -10px 0;
     text-align: left;
     transform: translate(-12.5vw, 4.8vw);
-    position: relative; /* Needed for proper positioning of the span */
+    position: relative;
     font-family: "Roboto Mono", monospace;
     font-optical-sizing: auto;
     font-weight: 200;
@@ -182,8 +188,8 @@ export default defineComponent({
 
 
 .drop-zone-container {
-    display: flex; /* This makes the child elements align horizontally */
-    justify-content: center; /* This centers the child elements horizontally in the container */
+    display: flex; 
+    justify-content: center;
     gap: 13px;
     padding: 20px;
     border-radius: 34px;
@@ -285,7 +291,7 @@ export default defineComponent({
     }
     50% {
         transform: scale(1.001) translate(0%, -7%);
-        box-shadow: 0px 0px 10px 7px rgb(255, 255, 255); /* More prominent glow */
+        box-shadow: 0px 0px 10px 7px rgb(255, 255, 255);
         opacity: 0.9;
         border: 1px solid #525252b7;
     }
@@ -306,7 +312,7 @@ export default defineComponent({
 /* Custom styling for the element when it is being dragged */
 .drag-el:active,
 .drag-el:focus {
-    outline: none; /* Remove outline */
+    outline: none;
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.6;
 }
@@ -322,9 +328,9 @@ export default defineComponent({
     left: -1vw;
     top: 0;
     bottom: 0;
-    width: 0.3vw; /* Or whatever width you prefer for the timeline */
-    background-color: #FF8C4B; /* Or any color you prefer */
-    z-index: 0; /* Ensure it's visible but doesn't interfere */
+    width: 0.3vw; 
+    background-color: #FF8C4B;
+    z-index: 0; 
 }
 
 #add-button {
@@ -332,7 +338,6 @@ export default defineComponent({
     font-size: 1.8vw;
     color: rgba(0, 0, 0, 0.499);
     margin-left: 45%;
-    /* background-color: #FF8C4B; */
     padding: 5px;
     border-radius: 34px;
     justify-content: center;

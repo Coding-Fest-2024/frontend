@@ -78,9 +78,9 @@ export default defineComponent({
 
 .sb-zone-container {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap as needed */
-    justify-content: space-around; /* Distribute space around items */
-    gap: 13px; /* Space between items */
+    flex-wrap: wrap;
+    justify-content: space-around; 
+    gap: 13px; 
     width: 100%;
 }
 
