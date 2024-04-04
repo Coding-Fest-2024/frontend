@@ -1,45 +1,142 @@
 <template>
     <div ref="sidebar" class="side_bar">
-        
+        <div class="sb-zone-container">
+            <div v-for="item in items"
+                :key="item.id"
+                class="sb-el"
+                :style="{ backgroundColor: item.color }"
+                draggable="true"
+                @dragstart="startDrag($event, item)">
+                <div class="sb-text-container">{{ item.title }}</div>
+                <div class="sb-inner-block">
+                    {{ item.name }}
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
-<script lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
 
-export default {
+<script>
+import { defineComponent, ref } from 'vue';
+
+
+export default defineComponent({
     setup() {
-        const sidebar: Ref<HTMLElement | null> = ref(null);
+        const academicYears = ref([1]); // Example: 3 academic years
+        
 
-        const updateSidebarPosition = () => {
-            if (sidebar.value) {
-                const scrollAmount = window.scrollY;
-                const offset = scrollAmount * 0.1;
-                sidebar.value.style.transform = `translate3d(87%, -50%, 0)`;
-            }
+        const items = ref([
+            // Example items
+            { id: 1110, title: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
+            { id: 1113, title: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
+            { id: 1111, title: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
+            { id: 1001, title: 'DATA1001', name: 'Foundations of Data Science', slot: 4, semester: 1, year: 1, color: '#F2A2FF' },
+            { id: 1601, title: 'ELEC1601', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#FF9D9D' },
+            { id: 1061, title: 'MATH1061', name: 'Mathematics 1A', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
+            { id: 1064, title: 'MATH1064', name: 'Discrete Mathematics for Computation', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
+            { id: 1112, title: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
+            { id: 2222, title: 'INFO2222', name: 'Computing 2 Usability and Security', slot: 4, semester: 1, year: 2, color: '#6ED4FF' },
+            { id: 2123, title: 'COMP2123', name: 'Data Structures and Algorithms', slot: 2, semester: 1, year: 2, color: '#F38968' },
+            { id: 2823, title: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
+            { id: 2017, title: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
+        ]);
+
+
+        const startDrag = (event, item) => {
+            event.dataTransfer.setData('item', JSON.stringify(item));
         };
 
         return {
-            sidebar
+            items,
+            startDrag
         };
-  },
-};
+    }
+});
+
 </script>
+
 
 <style>
 .side_bar {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: flex-start; /* Align content to the top */
     width: 25vw;
-    height: 60.5vw;
-    flex-shrink: 0;
-    background-color: #E1E1E1;
+    height: 40vw;
+    background-color: #f6f6f6;
     border-radius: 35px;
-    box-sizing: border-box;
     padding: 35px;
-    /* Centering the element */
     position: fixed;
-    /* margin-top: 20%; */
     left: 50%;
     transform: translate(87%, -13%);
-    z-index: 2;
+    z-index: 0;
+    overflow-y: auto; /* Allows scrolling for overflow content */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+.sb-zone-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    justify-content: space-around; /* Distribute space around items */
+    gap: 13px; /* Space between items */
+    width: 100%;
+}
+
+.sb-el {
+    align-items: center;
+    background-color: lightskyblue;
+    color: white;
+    margin-bottom: 10px;
+    border-radius: 16px;
+    outline: none;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
+    height: 6.6vw;
+    transform: translate(0%, -4%);
+    z-index: inherit;
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1vw;
+    min-width: 9vw;
+    max-width: 9vw;
+    cursor: grab;
+    
+}
+
+.sb-text-container {
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 0.9vw;
+    transform: translate(7%, 40%);
+    min-height: 18%;
+    color: rgba(255, 255, 255, 0.90);
+    margin-bottom: 0.7vw;
+}
+
+.sb-inner-block {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 300;
+    font-style: normal;
+    padding: 10px;
+    margin-left: 0.2vw;
+    margin-right: 0.2vw;
+    margin-bottom: 0.2vw;
+    margin-bottom: 0.2vw;
+    border-radius: 14px; 
+    background-color: rgba(255, 255, 255, 0.90);
+    text-align: left;
+    font-size: 0.75vw;
+    color: rgb(55, 55, 55);
+    width: 8.6vw;
+    overflow: hidden;
+    word-wrap: break-word;
+    height: 68%;
+    min-height: 48%;
+    box-sizing: border-box;
 }
 </style>

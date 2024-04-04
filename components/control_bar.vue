@@ -192,6 +192,11 @@ export default defineComponent({
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.interaction-block-4:hover {
+    background-color: #f8f8f858;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
 
 .block-label {
   margin-bottom: 5px;

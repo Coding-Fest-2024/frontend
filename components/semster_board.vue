@@ -1,10 +1,13 @@
 <template>
     <div class="board">
+        <div class="timeline">
+
+        </div>
         <div class="academic-year-container" 
              v-for="year in academicYears" :key="`year-${year}`">
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
                 <h3 class="semester-label">
-                    <span class="label-text">{{ `Semester ${semester}` }}</span>
+                    <span class="label-text">{{ `Semester ${semester} >` }}</span>
                 </h3>
                 <div class="drop-zone-container">
                     <div v-for="index in 4" :key="`year-${year}-semester-${semester}-slot-${index}`" class="drop-zone"
@@ -28,11 +31,11 @@
                 </div>
             </div>
         </div>
+        <t-button id="add-button" class="add-year-button" @click="addAcademicYear" size="large" shape="round" theme="default">
+            +
+        </t-button>
     </div>
 </template>
-
-
-
 
 
 <script>
@@ -44,16 +47,7 @@ export default defineComponent({
         
 
         const selectedItemId = ref(null);
-        const items = ref([
-            // Example items
-            { id: 1110, title: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
-            { id: 1113, title: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
-            { id: 1111, title: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
-            { id: 1112, title: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
-            { id: 2222, title: 'INFO2222', name: 'Computing 2 Usability and Security', slot: 4, semester: 1, year: 2, color: '#6ED4FF' },
-            { id: 2823, title: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
-            { id: 2017, title: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
-        ]);
+        const items = ref([]);
 
         const selectItem = (item) => {
             selectedItemId.value = selectedItemId.value === item.id ? null : item.id;
@@ -67,36 +61,61 @@ export default defineComponent({
             event.dataTransfer.setData('item', JSON.stringify(item));
         };
 
+        // In your main component script
         const onDrop = (event, slot, semester, year) => {
             const itemData = JSON.parse(event.dataTransfer.getData('item'));
             const fromItem = items.value.find(item => item.id === itemData.id);
-            if (fromItem) {
-                const targetItemIndex = items.value.findIndex(
-                    item => item.slot === slot && item.semester === semester && item.year === year
-                );
-                fromItem.animating = true;
-                if (targetItemIndex !== -1) {
-                    const targetItem = items.value[targetItemIndex];
-
-                    targetItem.animating = true;
-
-                    [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
-                    [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
-                    [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
-
-                } else {
-                    // Move the dragged item to the target slot
-                    fromItem.slot = slot;
-                    fromItem.semester = semester;
-                    fromItem.year = year;
-                }
+            // const existingItem = items.value.find(item => item.id === itemData.id && item.semester === semester && item.year === year && item.slot === slot);
+            if (!fromItem) {
+                // Add new properties like slot, semester, and year to the item
+                itemData.slot = slot;
+                itemData.semester = semester;
+                itemData.year = year;
+                items.value.push(itemData); // Add the item to the main board's state
+                itemData.animating = true;
                 setTimeout(() => {
-                    fromItem.animating = false;
-                    if (targetItemIndex !== -1) {
-                        items.value[targetItemIndex].animating = false;
-                    }
-                }, 500);
+                        itemData.animating = false;
+                        if (targetItemIndex !== -1) {
+                            items.value[targetItemIndex].animating = false;
+                        }
+                    }, 500);
             }
+            if (fromItem) {
+                // Find if the drop target is within the main board or sidebar
+                const targetIsSidebar = event.currentTarget.classList.contains('side_bar'); // Adjust class checking based on your actual sidebar class
+                {
+                    const targetItemIndex = items.value.findIndex(
+                        item => item.slot === slot && item.semester === semester && item.year === year
+                    );
+                    fromItem.animating = true;
+                    if (targetItemIndex !== -1) {
+                        const targetItem = items.value[targetItemIndex];
+
+                        targetItem.animating = true;
+
+                        [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
+                        [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
+                        [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
+
+                    } else {
+                        // Move the dragged item to the target slot
+                        fromItem.slot = slot;
+                        fromItem.semester = semester;
+                        fromItem.year = year;
+                    }
+                    setTimeout(() => {
+                        fromItem.animating = false;
+                        if (targetItemIndex !== -1) {
+                            items.value[targetItemIndex].animating = false;
+                        }
+                    }, 500);
+                }
+            }
+        };
+
+        const addAcademicYear = () => {
+            const maxYear = Math.max(...academicYears.value);
+            academicYears.value.push(maxYear + 1);
         };
 
 
@@ -108,6 +127,7 @@ export default defineComponent({
             items,
             selectedItemId,
             selectItem,
+            addAcademicYear
         };
     }
 });
@@ -137,11 +157,16 @@ export default defineComponent({
 }
 
 .label-text {
-    background-color: #EAEAEA;
-    color: grey; 
+    background-color: None;
+    color: #FF8C4B; 
     padding: 5px; 
     border-radius: 5px; 
     z-index: 10;
+    font-family: "Roboto Mono", monospace;
+    font-size: 1vw;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
 .academic-year-container {
@@ -193,6 +218,7 @@ export default defineComponent({
     font-style: normal;
     font-size: 1vw;
     min-width: 100%;
+    cursor: grab;
     
 }
 
@@ -211,7 +237,7 @@ export default defineComponent({
 .inner-block {
     font-family: "Roboto Mono", monospace;
     font-weight: 300;
-    font-style: italic;
+    font-style: normal;
     padding: 10px;
     margin-left: 0.2vw;
     margin-right: 0.2vw;
@@ -228,7 +254,6 @@ export default defineComponent({
     height: 68%;
     min-height: 48%;
     box-sizing: border-box;
-
 }
 @keyframes swap-animation {
     0% {
@@ -253,14 +278,16 @@ export default defineComponent({
 
 @keyframes pulse-animation {
     0%, 100% {
-        transform: scale(1.0) translate(0%, -4.5%);
-        box-shadow: 0px 0px 10px 2px rgba(255, 255, 255, 0.7); /* Glowing effect */
+        transform: scale(1.0) translate(0%, -7%);
+        box-shadow: 0px 4px 4px 2px rgba(255, 255, 255, 0.6); /* Glowing effect */
         opacity: 1;
+        border: 1px solid #5c5c5cb7;
     }
     50% {
-        transform: scale(1.001) translate(0%, -10%);
-        box-shadow: 0px 0px 10px 10px rgb(255, 255, 255); /* More prominent glow */
+        transform: scale(1.001) translate(0%, -7%);
+        box-shadow: 0px 0px 10px 7px rgb(255, 255, 255); /* More prominent glow */
         opacity: 0.9;
+        border: 1px solid #525252b7;
     }
 }
 
@@ -273,6 +300,7 @@ export default defineComponent({
     transform: translate(0%, -14%);
     box-shadow: 0px 0px 8.8px 8px rgba(255,255,255, 1);
     animation: pulse-animation 1.5s ease-in-out infinite;
+    cursor: grab;
 }
 
 /* Custom styling for the element when it is being dragged */
@@ -287,4 +315,33 @@ export default defineComponent({
 .drag-el:nth-last-of-type(1) {
     margin-bottom: 0;
 }
+
+.timeline {
+    border-radius: 0.15vw;
+    position: absolute;
+    left: -1vw;
+    top: 0;
+    bottom: 0;
+    width: 0.3vw; /* Or whatever width you prefer for the timeline */
+    background-color: #FF8C4B; /* Or any color you prefer */
+    z-index: 0; /* Ensure it's visible but doesn't interfere */
+}
+
+#add-button {
+    margin-top: 0.5vw;
+    font-size: 1.8vw;
+    color: rgba(0, 0, 0, 0.499);
+    margin-left: 45%;
+    /* background-color: #FF8C4B; */
+    padding: 5px;
+    border-radius: 34px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 15px;
+    font-family: "Roboto Mono", monospace;
+    font-weight: 500;
+    cursor: pointer;
+}  
+
+
 </style>
