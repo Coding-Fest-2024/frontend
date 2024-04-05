@@ -32,7 +32,7 @@ export default defineComponent({
             { id: 1113, title: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
             { id: 1111, title: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
             { id: 1001, title: 'DATA1001', name: 'Foundations of Data Science', slot: 4, semester: 1, year: 1, color: '#F2A2FF' },
-            { id: 1601, title: 'ELEC1601', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#FF9D9D' },
+            { id: 1601, title: 'ELEC1601', name: 'Introduction to Computer Systems', slot: 4, semester: 1, year: 1, color: '#FF9D9D' },
             { id: 1061, title: 'MATH1061', name: 'Mathematics 1A', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
             { id: 1064, title: 'MATH1064', name: 'Discrete Mathematics for Computation', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
             { id: 1112, title: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
@@ -95,7 +95,7 @@ export default defineComponent({
     height: 6.6vw;
     transform: translate(0%, -4%);
     z-index: inherit;
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
@@ -107,9 +107,9 @@ export default defineComponent({
 }
 
 .sb-text-container {
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
+    font-weight: 700;
     font-style: normal;
     font-size: 0.9vw;
     transform: translate(7%, 40%);
@@ -119,8 +119,8 @@ export default defineComponent({
 }
 
 .sb-inner-block {
-    font-family: "Roboto Mono", monospace;
-    font-weight: 300;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
     font-style: normal;
     padding: 10px;
     margin-left: 0.2vw;

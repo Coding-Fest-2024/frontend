@@ -105,6 +105,10 @@ export default defineComponent({
   
 <style scoped>
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+
 .control-bar {
     display: flex;
     justify-content: center; /* Center children horizontally */
@@ -213,9 +217,9 @@ export default defineComponent({
 
 #degree_button {
     width: 100%;
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 500;
+    font-weight: 400;
     color: #8b8b8b;
     font-style: italic;
     font-size: 0.78vw;
@@ -223,9 +227,9 @@ export default defineComponent({
 
 #major_button {
     width: 100%;
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     /* font-optical-sizing: auto; */
-    font-weight: 500;
+    font-weight: 400;
     color: #d4d4d4;
     font-style: italic;
     font-size: 0.70vw;

@@ -1,13 +1,14 @@
 <template>
     <div class="board">
         <div class="timeline">
-
         </div>
         <div class="academic-year-container" 
              v-for="year in academicYears" :key="`year-${year}`">
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
                 <h3 class="semester-label">
-                    <span class="label-text">{{ `Semester ${semester} >` }}</span>
+                    <span class="label-text"
+                    :class="roboto-black"
+                    >{{ `Semester ${semester} >` }}</span>
                 </h3>
                 <div class="drop-zone-container">
                     <div v-for="index in 4" :key="`year-${year}-semester-${semester}-slot-${index}`" class="drop-zone"
@@ -22,7 +23,9 @@
                             draggable="true"
                             @click="selectItem(item)"
                             @dragstart="startDrag($event, item)">
-                            <div class="text-container">{{ item.title }}</div>
+                            <div class="text-container"
+                            :class="roboto-black">{{ item.title }}</div> 
+                            
                             <div class="inner-block">
                                 {{ item.name }}
                             </div>
@@ -143,6 +146,9 @@ export default defineComponent({
 
 <style scoped>
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 
 .board {
     display: flex;
@@ -155,7 +161,7 @@ export default defineComponent({
     text-align: left;
     transform: translate(-12.5vw, 4.8vw);
     position: relative;
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
     font-weight: 200;
     font-style: normal;
@@ -168,7 +174,7 @@ export default defineComponent({
     padding: 5px; 
     border-radius: 5px; 
     z-index: 10;
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 1vw;
     font-style: normal;
     font-weight: 500;
@@ -208,6 +214,7 @@ export default defineComponent({
 }
 
 .drag-el {
+    
     align-items: center;
     background-color: lightskyblue;
     color: white;
@@ -229,9 +236,9 @@ export default defineComponent({
 }
 
 .text-container {
-    font-family: "Roboto Mono", monospace;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 400;
+    font-weight: 600;
     font-style: normal;
     font-size: 0.9vw;
     transform: translate(7%, 40%);
@@ -241,8 +248,8 @@ export default defineComponent({
 }
 
 .inner-block {
-    font-family: "Roboto Mono", monospace;
-    font-weight: 300;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
     font-style: normal;
     padding: 10px;
     margin-left: 0.2vw;
@@ -252,8 +259,9 @@ export default defineComponent({
     border-radius: 14px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
-    font-size: 0.8vw;
-    color: rgb(55, 55, 55);
+    font-size: 0.89vw;
+    line-height: normal;
+    color: rgba(55, 55, 55, 0.851);
     width: 10.6vw;
     overflow: hidden;
     word-wrap: break-word;
@@ -284,16 +292,16 @@ export default defineComponent({
 
 @keyframes pulse-animation {
     0%, 100% {
-        transform: scale(1.0) translate(0%, -7%);
+        transform: scale(1.0) translate(-1.5%, -6%);
         box-shadow: 0px 4px 4px 2px rgba(255, 255, 255, 0.6); /* Glowing effect */
         opacity: 1;
-        border: 1px solid #5c5c5cb7;
+        border: 2px solid #5c5c5cb7;
     }
     50% {
-        transform: scale(1.001) translate(0%, -7%);
+        transform: scale(1) translate(-1.5%, -6%);
         box-shadow: 0px 0px 10px 7px rgb(255, 255, 255);
         opacity: 0.9;
-        border: 1px solid #525252b7;
+        border: 2px solid #525252b7;
     }
 }
 
@@ -349,4 +357,79 @@ export default defineComponent({
 }  
 
 
+</style>
+
+<style>
+/* For font styles */
+.roboto-thin {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.roboto-light {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.roboto-regular {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-medium {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.roboto-black {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.roboto-thin-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.roboto-light-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.roboto-regular-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.roboto-medium-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.roboto-bold-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.roboto-black-italic {
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
 </style>

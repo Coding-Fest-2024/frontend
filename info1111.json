@@ -1,5 +1,7 @@
-{
-    "INFO1110":{
+
+
+[
+    {
         "Code": "INFO1110",
         "Name": "Introduction to Programming",
         "Faculty": "Computer Science",
@@ -13,9 +15,9 @@
             "INFO1905", 
             "ENGG1810"
         ],
+        "Prereq-special": { "get >=75% in ...?": "false", "...": "something" },
         "Assumed knowledge": []
-    }, 
-    "INFO1111":{}
-}
+    }
+]
 
   
