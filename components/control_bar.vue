@@ -114,7 +114,7 @@ export default defineComponent({
     justify-content: center; /* Center children horizontally */
     align-items: center; /* Center children vertically */
     padding: 10px;
-    background-color: #eee;
+    background-color: #eaeaea;
     border-radius: 8px;
     /* Ensure the component itself has margins auto to center in its parent */
     transform: translate(0px, -80px);
@@ -140,7 +140,7 @@ export default defineComponent({
     margin: 5px;
     cursor: pointer;
     flex-direction: column; /* Stack elements vertically */
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
 }
@@ -153,7 +153,7 @@ export default defineComponent({
     margin: 5px;
     cursor: pointer;
     flex-direction: column; /* Stack elements vertically */
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
 }
 
@@ -165,7 +165,7 @@ export default defineComponent({
     margin: 5px;
     cursor: pointer;
     flex-direction: column; /* Stack elements vertically */
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
 }
 
@@ -177,7 +177,7 @@ export default defineComponent({
     margin: 5px;
     cursor: pointer;
     flex-direction: column; /* Stack elements vertically */
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
 }
 

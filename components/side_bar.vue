@@ -1,6 +1,17 @@
 <template>
     <div ref="sidebar" class="side_bar">
-        <div class="description-panel"></div>
+        <div class="description-panel" :class="{ expanded: store.selectedItemId }">
+            <transition name="fade" @after-enter="afterEnter" @before-leave="beforeLeave">
+                <div v-if="store.selectedItemId" class="panel-title">
+                    {{ selectedItem.title }} - {{ selectedItem.name }}
+                </div>
+            </transition>
+            <transition name="fade">
+            <button v-if="store.selectedItemId" class="minimize-button" @click.stop="togglePanel" @after-enter="afterEnter" @before-leave="beforeLeave">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            </transition>
+        </div>
         <div class="interaction-block">
             <span class="material-symbols-outlined">
                 search
@@ -34,13 +45,11 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-
+import { store } from '../store';
 
 export default defineComponent({
     setup() {
-        const academicYears = ref([1]); // Example: 3 academic years
-        
-
+        const sidebar = ref(null);
         const items = ref([
             // Example items
             { id: 1110, title: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
@@ -57,14 +66,49 @@ export default defineComponent({
             { id: 2017, title: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
         ]);
 
+        const hasSelectedItem = computed(() => store.selectedItemId !== null);
+
+        const selectedItem = computed(() => {
+            return store.items.find(item => item.id === store.selectedItemId);
+        });
 
         const startDrag = (event, item) => {
             event.dataTransfer.setData('item', JSON.stringify(item));
         };
 
+        const togglePanel = () => {
+            if (store.selectedItemId) {
+                store.selectedItemId = null;
+            }
+        };
+
+        watch(() => store.selectedItemId, (newVal, oldVal) => {
+            if (newVal !== null && sidebar.value) {
+                sidebar.value.scrollTop = 0;
+            }
+        });
+
+        const showContent = ref(false); 
+
+        const afterEnter = () => {
+            showContent.value = true; 
+        };
+
+        const beforeLeave = () => {
+            showContent.value = false; 
+        };
+
         return {
+            sidebar,
             items,
-            startDrag
+            startDrag,
+            hasSelectedItem,
+            store,
+            togglePanel,
+            selectedItem,
+            showContent,
+            afterEnter,
+            beforeLeave,
         };
     }
 });
@@ -79,7 +123,7 @@ export default defineComponent({
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
-
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,0");
 
 .side_bar {
     display: flex; /* Use flexbox layout */
@@ -87,13 +131,13 @@ export default defineComponent({
     align-items: center; /* Center children horizontally */
     justify-content: flex-start; /* Align content to the top */
     width: 25vw;
-    height: 47vw;
+    height: 86%;
     background-color: #f6f6f6;
     border-radius: 35px;
     padding: 30px;
     position: fixed;
     left: 50%;
-    transform: translate(87%, -18%);
+    transform: translate(87%, -16.5%);
     z-index: 0;
     overflow-y: auto; /* Allows scrolling for overflow content */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
@@ -110,7 +154,7 @@ export default defineComponent({
     padding: 5px;
     border-radius: 28px;
     margin: 5px;
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
     padding-top: 1.2vw;
@@ -163,7 +207,7 @@ export default defineComponent({
     transform: translate(10%, 40%);
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
-    margin-bottom: 0.7vw;
+    margin-bottom: 0.79vw;
 }
 
 .sb-inner-block {
@@ -171,16 +215,16 @@ export default defineComponent({
     font-weight: 400;
     font-style: normal;
     padding: 10px;
-    margin-left: 0.2vw;
+    margin-left: 1.6%;
     margin-right: 0.2vw;
     margin-bottom: 0.2vw;
     margin-bottom: 0.2vw;
-    border-radius: 14px; 
+    border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
     font-size: 0.75vw;
     color: rgb(55, 55, 55);
-    width: 7.57vw;
+    width: 97%;
     overflow: hidden;
     word-wrap: break-word;
     height: 65%;
@@ -201,6 +245,7 @@ export default defineComponent({
     align-items: start;
     width: 100%;
     min-height: 45px;
+    max-height: 45px;
     border-radius: 50px;
     flex-direction: column; /* Stack elements vertically */
     border: 1px solid #989898;
@@ -210,13 +255,13 @@ export default defineComponent({
     background-color: #b1b1b156;
     padding: 5px;
     margin: 5px;
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     box-shadow: 0px 6px 6px 0.0px rgba(167, 167, 167, 0.2);
     background-color: none;
 }
 
 .interaction-block:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px rgba(93, 93, 93, 0.2);
 }
 
 .interaction-block .material-symbols-outlined {
@@ -226,21 +271,76 @@ export default defineComponent({
 }
 
 .description-panel {
-    border: 1px solid #989898;
+    border: 2px solid #989898;
     border-radius: 20px;
-    min-width: 90%;
-    min-height: 1.5px;
-    margin-top: -0px;
+    min-width: 30%;
+    min-height: 0px;
+    margin-top: -12px;
     margin-bottom: 5px;
-    transition: 0.2s;
+    transition: 0.3s;
+    overflow: hidden;
 }
-.description-panel:hover{
-    border: 1px solid #989898;
+.description-panel.expanded {
+    border: 2px solid #989898;
     border-radius: 20px;
     min-width: 100%;
     min-height: 100%;
-    margin-top: 0px;
+    margin-top: -3px;
     margin-bottom: 5px;
-    transition: 0.3s;
+    transition: 0.4s;
+    overflow: hidden;
+
+    /* background-color: #b1b1b156; */
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
+
+.panel-title {
+    display: flex;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 1.0vw;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+.minimize-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(29, 29, 29, 0.725);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    opacity: 1;
+    margin-right: 33px;
+    margin-top: 34px;
+    height: 5%;
+    width: 10%;
+    overflow: visible;
+    transition: 0.2s;
+}
+
+.minimize-button:hover {
+    color: rgba(232, 66, 66, 0.888);
+    transition: 0.2s;
+}
+
+.fade-enter-active {
+    transition: opacity 0.5s ease;
+}
+.fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+    opacity: 1;
+}
+
+
 </style>
