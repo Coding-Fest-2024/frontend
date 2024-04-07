@@ -48,7 +48,7 @@ export default defineComponent({
     setup() {
         const academicYears = ref([1, 2, 3]); // Example: 3 academic years
         
-        const items = ref([]);
+        const items = store.items;
 
         const selectItem = (item) => {
             store.selectedItemId = store.selectedItemId === item.id ? null : item.id;
@@ -64,59 +64,46 @@ export default defineComponent({
 
         const onDrop = (event, slot, semester, year) => {
             const itemData = JSON.parse(event.dataTransfer.getData('item'));
-            const fromItem = store.items.find(item => item.id === itemData.id);
-            const fromItemIndex = store.items.findIndex(item => item.id === itemData.id);
-            const targetItemIndex = store.items.findIndex(item => item.slot === slot && item.semester === semester && item.year === year);
+            let fromItemIndex = store.items.findIndex(item => item.id === itemData.id);
+            let fromItem = store.items[fromItemIndex];
+            let targetItemIndex = store.items.findIndex(item => item.slot === slot && item.semester === semester && item.year === year);
 
             if (fromItemIndex === -1 && targetItemIndex !== -1) {
                 console.log("Drop cancelled: Slot is occupied.");
                 return;
             }
 
-            // const existingItem = items.value.find(item => item.id === itemData.id && item.semester === semester && item.year === year && item.slot === slot);
-            if (!fromItem) {
+            // Dragging from outside into the board
+            if (fromItemIndex === -1) {
                 const newItem = { ...itemData, slot, semester, year };
-                store.items.push(newItem); // Update data in the Vuex store
+                store.items.push(newItem);
+                // Handle animation or other state updates if necessary
                 newItem.animating = true;
-                setTimeout(() => {
-                    newItem.animating = false;
-                    if (targetItemIndex !== -1) {
-                        store.items[targetItemIndex].animating = false;
-                    }
-                }, 500);
+                setTimeout(() => newItem.animating = false, 500);
+                return;
             }
 
-            if (fromItem) {
-                const targetIsSidebar = event.currentTarget.classList.contains('side_bar');
-                {
-                    const targetItemIndex = items.value.findIndex(
-                        item => item.slot === slot && item.semester === semester && item.year === year
-                    );
-                    fromItem.animating = true;
-                    if (targetItemIndex !== -1) {
-                        const targetItem = items.value[targetItemIndex];
+            // If target slot is occupied and different from the fromItem's slot
+            if (targetItemIndex !== -1 && fromItemIndex !== targetItemIndex) {
+                const targetItem = store.items[targetItemIndex];
 
-                        targetItem.animating = true;
-
-                        [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
-                        [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
-                        [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
-
-                    } else {
-                        // Move the dragged item to the target slot
-                        fromItem.slot = slot;
-                        fromItem.semester = semester;
-                        fromItem.year = year;
-                    }
-                    setTimeout(() => {
-                        fromItem.animating = false;
-                        if (targetItemIndex !== -1) {
-                            items.value[targetItemIndex].animating = false;
-                        }
-                    }, 500);
-                }
+                // Swapping slots, semesters, and years
+                [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
+                [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
+                [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
             }
+            // Moving to an empty slot within the board
+            else if (targetItemIndex === -1) {
+                fromItem.slot = slot;
+                fromItem.semester = semester;
+                fromItem.year = year;
+            }
+
+            // Handle animation for moving or swapping
+            fromItem.animating = true;
+            setTimeout(() => fromItem.animating = false, 500);
         };
+
 
         const addAcademicYear = () => {
             const maxYear = Math.max(...academicYears.value);
@@ -165,7 +152,7 @@ export default defineComponent({
 .semester-label {
     margin: -10px 0;
     text-align: left;
-    transform: translate(-12.5vw, 4.8vw);
+    transform: translate(-13vw, 4.8vw);
     position: relative;
     font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
@@ -361,10 +348,10 @@ export default defineComponent({
     border-radius: 12px;
     cursor: pointer;
     opacity: 0.0;
-    transform: translate(-0.16vw, 0.2vw);
+    margin: 2%;
     height: 22%;
-    width: 20%;
-    overflow: visible;
+    width: 17%;
+    overflow: hidden;
     transition: 0.2s;
 }
 

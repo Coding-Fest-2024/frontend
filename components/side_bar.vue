@@ -1,30 +1,46 @@
 <template>
     <div ref="sidebar" class="side_bar">
-        <div class="description-panel" :class="{ expanded: store.selectedItemId }">
-            <transition name="fade" @after-enter="afterEnter" @before-leave="beforeLeave">
-                <div v-if="store.selectedItemId" class="panel-title">
-                    {{ selectedItem.title }} - {{ selectedItem.name }}
-                </div>
-            </transition>
+        <div class="description-panel" 
+        :class="{ expanded: store.selectedItemId }"
+        :style="{ backgroundColor: backgroundColor }">
             <transition name="fade">
-            <button v-if="store.selectedItemId" class="minimize-button" @click.stop="togglePanel" @after-enter="afterEnter" @before-leave="beforeLeave">
-                <span class="material-symbols-outlined">close</span>
-            </button>
+            <div v-if="showContent">
+                <div class="panel-title">
+                    {{ selectedItem.title }}
+                </div>
+                <div class="pn-unit-name"> {{ selectedItem.name }}
+                </div>
+                <button class="minimize-button" @click.stop="togglePanel">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="pn-content-tab">
+                    Prerequisites:
+                </div>
+                <div class="pn-content-tab">
+                    Corequisites:
+                </div>
+                <div class="pn-content-tab">
+                    Prohibitions:
+                </div>
+                <div class="pn-content-tab">
+                    Settings:
+                </div>
+            </div>
             </transition>
+                
+
         </div>
         <div class="interaction-block">
-            <span class="material-symbols-outlined">
-                search
-            </span>
-            <t-input
-                id="SearchBar"
-                clearable
-                size="medium"
-                placeholder="search your unit"
-                align="left"
-                variant="outline" theme="default"
-                type="search"
-            />
+            <div class="search-container">
+                <span class="material-symbols-outlined">search</span>
+                <input
+                    class="search-input"
+                    type="search"
+                    placeholder="search your unit ..."
+                    v-model="searchQuery"
+                    @input="onSearchInput"
+                />
+            </div>
         </div>
         <div class="sb-zone-container">
             <div v-for="item in items"
@@ -50,6 +66,7 @@ import { store } from '../store';
 export default defineComponent({
     setup() {
         const sidebar = ref(null);
+        const searchQuery = ref('');
         const items = ref([
             // Example items
             { id: 1110, title: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
@@ -81,22 +98,42 @@ export default defineComponent({
                 store.selectedItemId = null;
             }
         };
+        
+
+        const showContent = ref(false); 
 
         watch(() => store.selectedItemId, (newVal, oldVal) => {
             if (newVal !== null && sidebar.value) {
                 sidebar.value.scrollTop = 0;
+                setTimeout(() => {
+                    showContent.value = true;
+                }, 300); 
+            }
+            else {
+                showContent.value = false;
             }
         });
 
-        const showContent = ref(false); 
-
-        const afterEnter = () => {
-            showContent.value = true; 
+        const getTransparentColor = (hexColor, opacity) => {
+            if (!hexColor) return 'rgba(0, 0, 0, 0)'; // Fallback in case of no color
+            let r = parseInt(hexColor.slice(1, 3), 16);
+            let g = parseInt(hexColor.slice(3, 5), 16);
+            let b = parseInt(hexColor.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${opacity})`;
         };
 
-        const beforeLeave = () => {
-            showContent.value = false; 
+        const backgroundColor = computed(() => {
+            return getTransparentColor(selectedItem.value?.color, 0.75); // 50% transparency
+        });
+
+        const onSearchInput = () => {
+            console.log("Searching for:", searchQuery.value); //TODO
         };
+
+        watch(searchQuery, (newValue, oldValue) => {
+            console.log("Search changed from", oldValue, "to", newValue);
+            // TODO
+        });
 
         return {
             sidebar,
@@ -107,10 +144,12 @@ export default defineComponent({
             togglePanel,
             selectedItem,
             showContent,
-            afterEnter,
-            beforeLeave,
+            backgroundColor,
+            searchQuery,
+            onSearchInput,
         };
     }
+
 });
 
 </script>
@@ -203,7 +242,7 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 0.9vw;
+    font-size: 0.85vw;
     transform: translate(10%, 40%);
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
@@ -215,16 +254,15 @@ export default defineComponent({
     font-weight: 400;
     font-style: normal;
     padding: 10px;
-    margin-left: 1.6%;
+    margin-left: 1.9%;
     margin-right: 0.2vw;
-    margin-bottom: 0.2vw;
     margin-bottom: 0.2vw;
     border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
     font-size: 0.75vw;
     color: rgb(55, 55, 55);
-    width: 97%;
+    width: 96%;
     overflow: hidden;
     word-wrap: break-word;
     height: 65%;
@@ -232,22 +270,39 @@ export default defineComponent({
     box-sizing: border-box;
 }
 
-#SearchBar {
-    width: 55%;
-    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff; /* Or any color you prefer for the search bar */
+    border-radius: 50px; /* Rounded corners for the search bar */
+    padding: 5px;
+    box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.582);
 }
+
+.search-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding-left: 10px; /* Give some space between the icon and the text */
+    color: #b8b8b8;
+    font-size: 1rem;
+}
+
+.material-symbols-outlined {
+    margin-right: 10px; /* Space before the input text starts */
+    color: rgba(122, 122, 122, 0.747); /* Color of the icon */
+}
+
 
 .interaction-block {
     display: flex;
-    align-items: start;
+    align-items: center;
     width: 100%;
     min-height: 45px;
     max-height: 45px;
     border-radius: 50px;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: row;
     border: 1px solid #989898;
     flex-wrap: wrap;
     justify-content: space-around; 
@@ -264,11 +319,6 @@ export default defineComponent({
     box-shadow: 0 4px 8px rgba(93, 93, 93, 0.2);
 }
 
-.interaction-block .material-symbols-outlined {
-    color: rgb(122, 122, 122);
-    margin-left: 15%;
-    margin-right: -18%;
-}
 
 .description-panel {
     border: 2px solid #989898;
@@ -289,8 +339,6 @@ export default defineComponent({
     margin-bottom: 5px;
     transition: 0.4s;
     overflow: hidden;
-
-    /* background-color: #b1b1b156; */
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
 
@@ -300,9 +348,45 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 1.0vw;
+    font-size: 2.0vw;
     margin-left: 15px;
     margin-top: 10px;
+    margin-right: 20px;
+    color: #ffffff;
+}
+.pn-unit-name {
+    display: flex;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 2.0vw;
+    margin-left: 15px;
+    margin-top: 3px;
+    margin-right: 20px;
+    margin-bottom: 18px;
+    color: #ffffff;
+}
+
+.pn-content-tab {
+    display: flex;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 1vw;
+    border: 2px solid #989898;
+    background-color: #ffffffcf;
+    border-radius: 20px;
+    min-height: 100%;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    transition: 0.4s;
+    overflow: hidden;
+    padding: 4%;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
 
 .minimize-button {
@@ -323,16 +407,16 @@ export default defineComponent({
     transition: 0.2s;
 }
 
-.minimize-button:hover {
-    color: rgba(232, 66, 66, 0.888);
+.minimize-button:hover .material-symbols-outlined {
+    color: rgba(252, 52, 52, 0.888);
     transition: 0.2s;
 }
 
 .fade-enter-active {
-    transition: opacity 0.5s ease;
+    transition: 0.25s ease;
 }
 .fade-leave-active {
-    transition: opacity 0.2s ease;
+    transition: 0.01s ease;
 }
 
 .fade-enter-from, .fade-leave-to {
