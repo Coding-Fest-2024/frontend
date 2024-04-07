@@ -3,7 +3,7 @@
 <div class="container">
   
   <ControlBar></ControlBar>
-  <DescriptionBoard></DescriptionBoard>
+  <SideBar></SideBar>
   <SlotsBoard></SlotsBoard>
 
 </div>

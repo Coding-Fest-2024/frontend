@@ -6,9 +6,7 @@
              v-for="year in academicYears" :key="`year-${year}`">
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
                 <h3 class="semester-label">
-                    <span class="label-text"
-                    :class="roboto-black"
-                    >{{ `Semester ${semester} >` }}</span>
+                    <span class="label-text">{{ `Semester ${semester} >` }}</span>
                 </h3>
                 <div class="drop-zone-container">
                     <div v-for="index in 4" :key="`year-${year}-semester-${semester}-slot-${index}`" class="drop-zone"
@@ -23,9 +21,10 @@
                             draggable="true"
                             @click="selectItem(item)"
                             @dragstart="startDrag($event, item)">
-                            <div class="text-container"
-                            :class="roboto-black">{{ item.title }}</div> 
-                            
+                            <div class="text-container">{{ item.title }}</div> 
+                            <button class="delete-button" @click.stop="deleteItem(item)">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
                             <div class="inner-block">
                                 {{ item.name }}
                             </div>
@@ -127,6 +126,12 @@ export default defineComponent({
             academicYears.value.push(maxYear + 1);
         };
 
+        const deleteItem = (itemToDelete) => {
+            const index = items.value.findIndex(item => item.id === itemToDelete.id);
+            if (index > -1) {
+                items.value.splice(index, 1);
+            }
+        };
 
         return {
             academicYears,
@@ -136,7 +141,8 @@ export default defineComponent({
             items,
             selectedItemId,
             selectItem,
-            addAcademicYear
+            addAcademicYear,
+            deleteItem
         };
     }
 });
@@ -148,7 +154,7 @@ export default defineComponent({
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 
 .board {
     display: flex;
@@ -190,15 +196,19 @@ export default defineComponent({
     flex-wrap: wrap;
     margin: 15px;
     min-width: 48vw;
+    max-width: 56vw;
 }
 
 
 .drop-zone-container {
     display: flex; 
-    justify-content: center;
+    justify-content: start;
     gap: 13px;
     padding: 20px;
     border-radius: 34px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-left: 1.4vw;
 }
 
 .drop-zone {
@@ -211,6 +221,9 @@ export default defineComponent({
     pointer-events: auto;
     z-index: 1;
     min-width: 11vw;
+    flex-wrap: nowrap;
+    display: inline-flex;
+    align-items: start;
 }
 
 .drag-el {
@@ -221,7 +234,7 @@ export default defineComponent({
     margin-bottom: 10px;
     border-radius: 16px;
     outline: none;
-    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px 4px 2px rgba(45, 45, 45, 0.15));
     height: 6.6vw;
     transform: translate(0%, -4%);
     z-index: inherit;
@@ -232,6 +245,7 @@ export default defineComponent({
     font-size: 1vw;
     min-width: 100%;
     cursor: grab;
+    border: 2px solid #ffffff8f;
     
 }
 
@@ -292,13 +306,13 @@ export default defineComponent({
 
 @keyframes pulse-animation {
     0%, 100% {
-        transform: scale(1.0) translate(-1.5%, -6%);
+        transform: scale(1.0) translate(-0%, -6%);
         box-shadow: 0px 4px 4px 2px rgba(255, 255, 255, 0.6); /* Glowing effect */
         opacity: 1;
         border: 2px solid #5c5c5cb7;
     }
     50% {
-        transform: scale(1) translate(-1.5%, -6%);
+        transform: scale(1) translate(-0%, -6%);
         box-shadow: 0px 0px 10px 7px rgb(255, 255, 255);
         opacity: 0.9;
         border: 2px solid #525252b7;
@@ -311,7 +325,6 @@ export default defineComponent({
 }
 
 .drag-el.selected {
-    transform: translate(0%, -14%);
     box-shadow: 0px 0px 8.8px 8px rgba(255,255,255, 1);
     animation: pulse-animation 1.5s ease-in-out infinite;
     cursor: grab;
@@ -323,6 +336,43 @@ export default defineComponent({
     outline: none;
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.6;
+}
+
+.drag-el:hover {
+    border: 2px solid #525252b7;
+    box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
+}
+
+
+.delete-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(87, 87, 87, 0.274);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    opacity: 0.0;
+    
+    transform: translate(-0.16vw, 0.2vw);
+    height: 22%;
+    width: 15%;
+    overflow: visible;
+}
+
+.delete-button:hover {
+    background-color: rgba(255, 96, 96, 0.888);
+}
+
+.delete-button .material-symbols-outlined {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1vw;
+    transform: translate(-0.0vw, 0.1vw);
+}
+
+.drag-el:hover .delete-button {
+    opacity: 1;
 }
 
 
@@ -355,81 +405,4 @@ export default defineComponent({
     font-weight: 500;
     cursor: pointer;
 }  
-
-
-</style>
-
-<style>
-/* For font styles */
-.roboto-thin {
-  font-family: "Roboto", sans-serif;
-  font-weight: 100;
-  font-style: normal;
-}
-
-.roboto-light {
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-  font-style: normal;
-}
-
-.roboto-regular {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.roboto-medium {
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
-.roboto-bold {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.roboto-black {
-  font-family: "Roboto", sans-serif;
-  font-weight: 900;
-  font-style: normal;
-}
-
-.roboto-thin-italic {
-  font-family: "Roboto", sans-serif;
-  font-weight: 100;
-  font-style: italic;
-}
-
-.roboto-light-italic {
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.roboto-regular-italic {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-style: italic;
-}
-
-.roboto-medium-italic {
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  font-style: italic;
-}
-
-.roboto-bold-italic {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-style: italic;
-}
-
-.roboto-black-italic {
-  font-family: "Roboto", sans-serif;
-  font-weight: 900;
-  font-style: italic;
-}
 </style>

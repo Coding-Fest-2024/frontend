@@ -1,5 +1,20 @@
 <template>
     <div ref="sidebar" class="side_bar">
+        <div class="description-panel"></div>
+        <div class="interaction-block">
+            <span class="material-symbols-outlined">
+                search
+            </span>
+            <t-input
+                id="SearchBar"
+                clearable
+                size="medium"
+                placeholder="search your unit"
+                align="left"
+                variant="outline" theme="default"
+                type="search"
+            />
+        </div>
         <div class="sb-zone-container">
             <div v-for="item in items"
                 :key="item.id"
@@ -58,52 +73,85 @@ export default defineComponent({
 
 
 <style>
+
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
+
+
 .side_bar {
     display: flex; /* Use flexbox layout */
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center children horizontally */
     justify-content: flex-start; /* Align content to the top */
     width: 25vw;
-    height: 40vw;
+    height: 47vw;
     background-color: #f6f6f6;
     border-radius: 35px;
-    padding: 35px;
+    padding: 30px;
     position: fixed;
     left: 50%;
-    transform: translate(87%, -13%);
+    transform: translate(87%, -18%);
     z-index: 0;
     overflow-y: auto; /* Allows scrolling for overflow content */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    overflow-x:hidden; /* Allows scrolling for overflow content */
 }
 
 .sb-zone-container {
-    display: flex;
+    display:ruby;
     flex-wrap: wrap;
     justify-content: space-around; 
-    gap: 13px; 
+    gap: 5px; 
     width: 100%;
+    background-color: #b1b1b156;
+    padding: 5px;
+    border-radius: 28px;
+    margin: 5px;
+    border: 1px solid #989898;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
+    padding-top: 1.2vw;
+    padding-bottom: 1.2vw;
+}
+.sb-zone-container:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .sb-el {
     align-items: center;
     background-color: lightskyblue;
     color: white;
-    margin-bottom: 10px;
+    margin: 10px;
     border-radius: 16px;
     outline: none;
     filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
-    height: 6.6vw;
-    transform: translate(0%, -4%);
+    height: 5.9vw;
+    transform: translate(0%, -0%);
     z-index: inherit;
     font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
     font-size: 1vw;
-    min-width: 9vw;
-    max-width: 9vw;
+    min-width: 8vw;
+    max-width: 8vw;
     cursor: grab;
-    
+    border: 2px solid #ffffff8f;
+}
+
+.sb-el:active,
+.sb-el:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
+    opacity: 0.6;
+}
+
+.sb-el:hover {
+    border: 2.5px solid #525252b7;
+    box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
 }
 
 .sb-text-container {
@@ -112,7 +160,7 @@ export default defineComponent({
     font-weight: 700;
     font-style: normal;
     font-size: 0.9vw;
-    transform: translate(7%, 40%);
+    transform: translate(10%, 40%);
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
     margin-bottom: 0.7vw;
@@ -132,11 +180,67 @@ export default defineComponent({
     text-align: left;
     font-size: 0.75vw;
     color: rgb(55, 55, 55);
-    width: 8.6vw;
+    width: 7.57vw;
     overflow: hidden;
     word-wrap: break-word;
-    height: 68%;
+    height: 65%;
     min-height: 48%;
     box-sizing: border-box;
+}
+
+#SearchBar {
+    width: 55%;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+
+}
+
+.interaction-block {
+    display: flex;
+    align-items: start;
+    width: 100%;
+    min-height: 45px;
+    border-radius: 50px;
+    flex-direction: column; /* Stack elements vertically */
+    border: 1px solid #989898;
+    flex-wrap: wrap;
+    justify-content: space-around; 
+    width: 100%;
+    background-color: #b1b1b156;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #989898;
+    box-shadow: 0px 6px 6px 0.0px rgba(167, 167, 167, 0.2);
+    background-color: none;
+}
+
+.interaction-block:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.interaction-block .material-symbols-outlined {
+    color: rgb(122, 122, 122);
+    margin-left: 15%;
+    margin-right: -18%;
+}
+
+.description-panel {
+    border: 1px solid #989898;
+    border-radius: 20px;
+    min-width: 90%;
+    min-height: 1.5px;
+    margin-top: -0px;
+    margin-bottom: 5px;
+    transition: 0.2s;
+}
+.description-panel:hover{
+    border: 1px solid #989898;
+    border-radius: 20px;
+    min-width: 100%;
+    min-height: 100%;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    transition: 0.3s;
 }
 </style>
