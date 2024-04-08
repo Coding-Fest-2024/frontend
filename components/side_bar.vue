@@ -38,12 +38,14 @@
                     type="search"
                     placeholder="search your unit ..."
                     v-model="searchQuery"
-                    @input="onSearchInput"
                 />
+                <button v-if="searchQuery" class="clear-button" @click="clearSearch">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
             </div>
         </div>
         <div class="sb-zone-container">
-            <div v-for="item in items"
+            <div v-for="item in filtered_items"
                 :key="item.id"
                 class="sb-el"
                 :style="{ backgroundColor: item.color }"
@@ -82,6 +84,16 @@ export default defineComponent({
             { id: 2823, title: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
             { id: 2017, title: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
         ]);
+
+        const filtered_items = computed(() => {
+            if (!searchQuery.value) {
+                return items.value;
+            }
+            const query = searchQuery.value.toLowerCase();
+            return items.value.filter(item =>
+                item.name.toLowerCase().includes(query) || item.title.toLowerCase().includes(query)
+            );
+        });
 
         const hasSelectedItem = computed(() => store.selectedItemId !== null);
 
@@ -123,21 +135,16 @@ export default defineComponent({
         };
 
         const backgroundColor = computed(() => {
-            return getTransparentColor(selectedItem.value?.color, 0.75); // 50% transparency
+            return getTransparentColor(selectedItem.value?.color, 0.75);
         });
 
-        const onSearchInput = () => {
-            console.log("Searching for:", searchQuery.value); //TODO
+        const clearSearch = () => {
+            searchQuery.value = '';
         };
-
-        watch(searchQuery, (newValue, oldValue) => {
-            console.log("Search changed from", oldValue, "to", newValue);
-            // TODO
-        });
 
         return {
             sidebar,
-            items,
+            filtered_items,
             startDrag,
             hasSelectedItem,
             store,
@@ -146,7 +153,7 @@ export default defineComponent({
             showContent,
             backgroundColor,
             searchQuery,
-            onSearchInput,
+            clearSearch,
         };
     }
 
@@ -163,6 +170,10 @@ export default defineComponent({
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,0");
+
+.search-input::-webkit-search-cancel-button {
+    display: none;
+}
 
 .side_bar {
     display: flex; /* Use flexbox layout */
@@ -233,7 +244,7 @@ export default defineComponent({
 }
 
 .sb-el:hover {
-    border: 2.5px solid #525252b7;
+    border: 2.0px solid #525252b7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
 }
 
@@ -271,12 +282,14 @@ export default defineComponent({
 }
 
 .search-container {
+    position: relative;
     display: flex;
     align-items: center;
     background-color: #fff; /* Or any color you prefer for the search bar */
     border-radius: 50px; /* Rounded corners for the search bar */
     padding: 5px;
-    box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.582);
+    box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.236);
+    border: 1.8px solid #9a9a9ab7;
 }
 
 .search-input {
@@ -287,11 +300,30 @@ export default defineComponent({
     padding-left: 10px; /* Give some space between the icon and the text */
     color: #b8b8b8;
     font-size: 1rem;
+    padding-right: 20px;
+    max-width: 83%;
+}
+
+.clear-button {
+    position: absolute;
+    right: 0%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 2.0%;
+    margin-left: -10px;
+}
+
+.clear-button:hover .material-symbols-outlined {
+    color: rgba(252, 52, 52, 0.888);
+    transition: 0.2s;
 }
 
 .material-symbols-outlined {
-    margin-right: 10px; /* Space before the input text starts */
-    color: rgba(122, 122, 122, 0.747); /* Color of the icon */
+    margin-right: 0px;
+    color: rgba(122, 122, 122, 0.747);
+    margin-left: 0px;
 }
 
 
