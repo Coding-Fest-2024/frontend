@@ -75,18 +75,22 @@ export default defineComponent({
       { content: 'Computer Science', value: 1, },
       { content: 'Software Development', value: 2, },
       { content: 'Computational Data Science', value: 3, },
-      { content: 'CyberSecurity', value: 4, },
+      { content: 'Cyber Security', value: 4, },
       { content: 'Information Systems', value: 5},
     ]);
 
     const clickHandler = (data: GroupItem) => {
       selectedDegree.value = data.content;
-      MessagePlugin.success(`selected: ${data.content}`);
+      store.degree = data.content;
+      MessagePlugin.success(`selected: ${store.degree}`);
     };
 
     const clickHandlerMajor1 = (data: GroupItem) => {
       if (data.content == store.selectedMajor[1] && data.content != null) {
-        MessagePlugin.warning(`already selected in major 2`);
+        store.selectedMajor[1] = store.selectedMajor[0];
+        store.selectedMajor[0] = data.content
+        selectedMajor2.value = selectedMajor1.value;
+        selectedMajor1.value = data.content;
         return;
       }
       selectedMajor1.value = data.content;
@@ -96,8 +100,10 @@ export default defineComponent({
 
     const clickHandlerMajor2 = (data: GroupItem) => {
       if (data.content == store.selectedMajor[0] && data.content != null) {
-        MessagePlugin.warning(`already selected in major 1`);
-        return;
+        store.selectedMajor[1] = store.selectedMajor[0];
+        store.selectedMajor[0] = data.content
+        selectedMajor1.value = selectedMajor2.value;
+        selectedMajor2.value = data.content;
       }
       selectedMajor2.value = data.content;
       store.selectedMajor[1] = data.content;
@@ -127,22 +133,16 @@ export default defineComponent({
     display: flex;
     justify-content: center; /* Center children horizontally */
     align-items: center; /* Center children vertically */
-    padding: 10px;
     background-color: #eaeaea;
-    border-radius: 8px;
     /* Ensure the component itself has margins auto to center in its parent */
-    transform: translate(0px, -80px);
     width: 58vw;
     min-height: 7vw;
     flex-shrink: 0;
-    border-radius: 35px;
+    border-radius: 80px;
     box-sizing: border-box;
-
+    margin-left: 12.5%;
     /* Centering the element */
     position: relative;
-    left: 50%;
-    transform: translate(-65%);
-    margin-top: 5%;
 }
 
 .interaction-block-1 {
@@ -237,6 +237,7 @@ export default defineComponent({
     color: rgb(244, 244, 244);
     border: 2px solid #ffffff00;
     transition: 0.2s;
+    transform: scale(1.05);
 }
 
 .viewMajor_button .material-symbols-outlined:active{
@@ -244,6 +245,7 @@ export default defineComponent({
     box-shadow: 0px 0px 12px rgba(255, 102, 0, 0.885);
     color: rgb(244, 244, 244);
     transition: 0.2s;
+    transform: scale(0.98);
 }
 
 

@@ -300,38 +300,21 @@ export default defineComponent({
 @keyframes swap-animation {
     0% {
         opacity: 0;
-        transform: scale(1.1);
-        transform: translate(-0.7%, -7%);
+        transform: scale(0.7) translate(-0.7%, -7%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
     50% {
         opacity: 0.5;
-        transform: scale(0.98);
-        transform: translate(-0.7%, -10%);
+        transform: scale(1.02) translate(-0.7%, -10%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 1);
     }
     100% {
         opacity: 1;
-        transform: scale(1.0);
-        transform: translate(-0.7%, -5%);
+        transform: scale(1) translate(-0.7%, -5%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
 }
 
-@keyframes pulse-animation {
-    0%, 100% {
-        transform: scale(1.0) translate(-0.7%, -6%);
-        box-shadow: 0px 4px 4px 2px rgba(255, 255, 255, 0.6); /* Glowing effect */
-        opacity: 1;
-        border: 2px solid #5c5c5cb7;
-    }
-    50% {
-        transform: scale(1) translate(-0.7%, -6%);
-        box-shadow: 0px 0px 10px 7px rgb(255, 255, 255);
-        opacity: 0.9;
-        border: 2px solid #525252b7;
-    }
-}
 
 
 .drag-el.animating {
@@ -339,24 +322,33 @@ export default defineComponent({
 }
 
 .drag-el.selected {
-    box-shadow: 0px 0px 8.8px 8px rgba(255,255,255, 1);
-    animation: pulse-animation 1.5s ease-in-out infinite;
+    box-shadow: 0px 0px 10px 5px rgba(255,255,255, 1);
     cursor: grab;
+    transform: scale(1.03) translate(-0.7%, -5%);
+    transition: 0.1s;
 }
 
 /* Custom styling for the element when it is being dragged */
-.drag-el:active,
+.drag-el:active {
+    outline: none;
+    box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
+    opacity: 0.8;
+    transition: 0.15s;
+    transform: scale(1) translate(-0.7%, -5%);
+}
 .drag-el:focus {
     outline: none;
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
-    opacity: 0.6;
-    transition: 0.2s;
+    opacity: 0.8;
+    transition: 0.15s;
+    transform: scale(1) translate(-0.7%, -5%);
 }
 
 .drag-el:hover {
     border: 2px solid #525252b7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
-    transition: 0.2s;
+    transition: 0.15s;
+    transform: scale(1.0) translate(-0.7%, -5%);
 }
 
 

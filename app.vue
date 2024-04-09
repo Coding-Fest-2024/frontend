@@ -2,7 +2,7 @@
   
 <div class="container">
   <SideBar></SideBar>
-  <div id="page-container">
+  <div class="page-container">
     <ControlBar></ControlBar>
     <SlotsBoard></SlotsBoard>
   </div>
@@ -47,7 +47,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 ::-webkit-scrollbar {
@@ -56,18 +55,24 @@ export default {
 
 .container {
   display: flex;
-  justify-content: center;
-  align-items: center; 
+  /* justify-content: center; */
+  /* align-items: center;  */
   min-height: 100vh; 
+  height: 100vh;
+  max-height: 100vh;
   overflow: hidden; 
   z-index: 0;
 }
 
-#page-container {
+.page-container {
+  position: absolute;
   width: 100%;
-  overflow: auto; 
+  overflow: auto;
   transform-origin: top left;
   z-index:1;
+  height: 100vh;
+  padding-bottom: 10vh;
+  padding-top: 5vh;
 }
 
 </style>

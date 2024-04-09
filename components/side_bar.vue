@@ -2,15 +2,63 @@
     <div ref="sidebar" class="side_bar">
         <div class="major-panel" :class="{ view: viewMajor }">
             <transition name="fade">
-                <div v-if="store.viewMajor">
-                <div class="m-panel-title">
-                    Majors:
-                </div>
-                <button class="minimize-button" @click.stop="toggleMajorPanel">
+                <div v-if="MshowContent">
+                <button class="minimize-button" @click.stop="toggleViewMajor">
                     <span class="material-symbols-outlined">close</span>
                 </button>
-                <div class="pn-content-tab">
-                    Major details or other related information
+                <div class="m-panel-title">
+                    {{ store.degree }}:
+                </div>
+                <div class="m-zone">
+                    <div class="m-tab">
+                        View Degree Core Units <br> >>
+                    </div>
+                    <div v-for="item in advancedComputingCoreUnits"
+                        :key="item.id"
+                        class="sb-el"
+                        :style="{ backgroundColor: item.color }"
+                        draggable="true"
+                        @dragstart="startDrag($event, item)">
+                        <div class="sb-text-container">{{ item.id }}</div>
+                        <div class="sb-inner-block">
+                            {{ item.name }}
+                        </div>
+                    </div>
+                </div>
+                <div class="m-panel-title">
+                    <br>Majors:
+                </div>
+                <div class="m-zone-b">
+                    <div class="m-tab">
+                        View {{ store.selectedMajor[0] }} Units <br> >>
+                    </div>
+                    <div v-for="item in advancedComputingCoreUnits"
+                        :key="item.id"
+                        class="sb-el"
+                        :style="{ backgroundColor: item.color }"
+                        draggable="true"
+                        @dragstart="startDrag($event, item)">
+                        <div class="sb-text-container">{{ item.id }}</div>
+                        <div class="sb-inner-block">
+                            {{ item.name }}
+                        </div>
+                    </div>
+                </div>
+                <div class="m-zone-b">
+                    <div class="m-tab">
+                        View {{ store.selectedMajor[1] }} Units <br> >>
+                    </div>
+                    <div v-for="item in advancedComputingCoreUnits"
+                        :key="item.id"
+                        class="sb-el"
+                        :style="{ backgroundColor: item.color }"
+                        draggable="true"
+                        @dragstart="startDrag($event, item)">
+                        <div class="sb-text-container">{{ item.id }}</div>
+                        <div class="sb-inner-block">
+                            {{ item.name }}
+                        </div>
+                    </div>
                 </div>
                 </div>
             </transition>
@@ -20,14 +68,14 @@
         :style="{ backgroundColor: backgroundColor }">
             <transition name="fade">
             <div v-if="showContent">
+                <button class="minimize-button" @click.stop="togglePanel">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
                 <div class="panel-title">
                     {{ selectedItem.id }}
                 </div>
                 <div class="pn-unit-name"> {{ selectedItem.name }}
                 </div>
-                <button class="minimize-button" @click.stop="togglePanel">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
                 <div class="pn-content-tab">
                     Prerequisites: <br> {{ selectedItem.Prerequisites }}
                 </div>
@@ -51,6 +99,7 @@
                     type="search"
                     placeholder="search your unit ..."
                     v-model="searchQuery"
+
                 />
                 <button v-if="searchQuery" class="clear-button" @click="clearSearch">
                     <span class="material-symbols-outlined">close</span>
@@ -78,26 +127,12 @@
 import { defineComponent, ref } from 'vue';
 import { store } from '../store';
 import aggregatedUnits from '../aggregated_units.json';
+import aggregatedCourses from '../aggregated_courses.json';
 
 export default defineComponent({
     setup() {
         const sidebar = ref(null);
         const searchQuery = ref('');
-        // const items = ref([
-        //     // Example items
-        //     { id: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
-        //     { id: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
-        //     { id: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
-        //     { id: 'DATA1001', name: 'Foundations of Data Science', slot: 4, semester: 1, year: 1, color: '#F2A2FF' },
-        //     { id: 'ELEC1601', name: 'Introduction to Computer Systems', slot: 4, semester: 1, year: 1, color: '#FF9D9D' },
-        //     { id: 'MATH1061', name: 'Mathematics 1A', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
-        //     { id: 'MATH1064', name: 'Discrete Mathematics for Computation', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
-        //     { id: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
-        //     { id: 'INFO2222', name: 'Computing 2 Usability and Security', slot: 4, semester: 1, year: 2, color: '#6ED4FF' },
-        //     { id: 'COMP2123', name: 'Data Structures and Algorithms', slot: 2, semester: 1, year: 2, color: '#F38968' },
-        //     { id: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
-        //     { id: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
-        // ]);
 
         const items = ref(aggregatedUnits);
 
@@ -109,6 +144,14 @@ export default defineComponent({
             return items.value.filter(item =>
                 item.name.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
             );
+        });
+
+        const advancedComputingCoreUnits = computed(() => {
+            const coreIds = aggregatedCourses["Advanced Computing Degree Core"].Core;
+            const advancedIds = aggregatedCourses["Advanced Computing Degree Core"].Advanced;
+            const degreeUnitIds = coreIds.concat(advancedIds);
+
+            return aggregatedUnits.filter(unit => degreeUnitIds.includes(unit.id));
         });
 
         const hasSelectedItem = computed(() => store.selectedItemId !== null);
@@ -142,6 +185,20 @@ export default defineComponent({
             }
         });
 
+        const MshowContent = ref(false);
+
+        watch(() => store.viewMajor, (newVal, oldVal) => {
+            if (newVal !== false && sidebar.value) {
+                sidebar.value.scrollTop = 0;
+                setTimeout(() => {
+                    MshowContent.value = true;
+                }, 300); 
+            }
+            else {
+                MshowContent.value = false;
+            }
+        });
+
         const getTransparentColor = (hexColor, opacity) => {
             if (!hexColor) return 'rgba(0, 0, 0, 0)'; // Fallback in case of no color
             let r = parseInt(hexColor.slice(1, 3), 16);
@@ -160,6 +217,9 @@ export default defineComponent({
 
         const viewMajor = computed(() => store.viewMajor);
 
+        const toggleViewMajor = () => {
+            store.viewMajor = !store.viewMajor;
+        };
 
         return {
             sidebar,
@@ -174,6 +234,9 @@ export default defineComponent({
             searchQuery,
             clearSearch,
             viewMajor,
+            MshowContent,
+            toggleViewMajor,
+            advancedComputingCoreUnits,
         };
     }
 
@@ -191,8 +254,6 @@ export default defineComponent({
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,0");
 
-import 
-
 .search-input::-webkit-search-cancel-button {
     display: none;
 }
@@ -203,14 +264,14 @@ import
     align-items: center; /* Center children horizontally */
     justify-content: flex-start; /* Align content to the top */
     width: 25vw;
-    height: 85vh;
+    height: 90%;
     background-color: #f6f6f6;
     border-radius: 35px;
     padding: 30px;
     position: fixed;
     left: 50%;
     margin-top: 5vh;
-    transform: translate(87%, -15vw);
+    margin-left: 23%;
     z-index: 10;
     overflow-y: auto; /* Allows scrolling for overflow content */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
@@ -229,6 +290,90 @@ import
     transition: 0.4s;
     overflow-y: auto;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+}
+
+.m-zone {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 0px; 
+    width: 40%;
+    max-height: 4.6vw;
+    background-color: #b1b1b156;
+    border-radius: 18px;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
+    margin-top: 4.5%;
+    padding-top: 0%;
+    padding-bottom: 1%;
+    margin-left: 4.5%;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.m-zone:hover {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 0px; 
+    width: 90%;
+    height: fit-content;
+    max-height: fit-content;
+    min-height: fit-content;
+    background-color: #b1b1b156;
+    border-radius: 18px;
+    border: 2px solid #ffffff;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
+    margin-top: 4.5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-left: 4.5%;
+    overflow-y: auto;
+    transition: 0.2s;
+}
+
+.m-zone-b {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 0px; 
+    width: 60%;
+    max-height: 5.5vw;
+    background-color: #b1b1b156;
+    border-radius: 18px;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
+    margin-top: 4.5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-left: 4.5%;
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.m-zone-b:hover {
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 0px; 
+    width: 90%;
+    height: fit-content;
+    max-height: fit-content;
+    min-height: fit-content;
+    background-color: #b1b1b156;
+    border-radius: 18px;
+    border: 2px solid #ffffff;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
+    margin-top: 4.5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-left: 4.5%;
+    overflow-y: auto;
+    transition: 0.2s;
 }
 
 .sb-zone-container {
@@ -280,12 +425,14 @@ import
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.6;
     transition: 0.2s;
+    transform: scale(0.98);
 }
 
 .sb-el:hover {
     border: 2.0px solid #525252b7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
     transition: 0.2s;
+    transform: scale(1.05);
 }
 
 .sb-text-container {
@@ -406,16 +553,17 @@ import
 .major-panel.view {
     border: 2px solid #989898;
     border-radius: 20px;
-    min-width: 100%;
-    min-height: 70%;
+    min-width: 105%;
+    min-height: 90%;
     /* display: flex; */
-    max-height: 100%;
+    max-height: 150%;
     margin-top: -3px;
     margin-bottom: 25px;
     transition: 0.4s;
     overflow-y: auto;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     opacity: 1;
+    background-color: rgb(62, 62, 84);
 }
 
 
@@ -433,7 +581,7 @@ import
     border: 2px solid #989898;
     border-radius: 20px;
     min-width: 100%;
-    min-height: 70%;
+    min-height: 80%;
     /* display: flex; */
     max-height: 100%;
     margin-top: -3px;
@@ -449,9 +597,9 @@ import
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 2.0vw;
+    font-size: 1.8vw;
     margin-left: 15px;
-    margin-top: 10px;
+    margin-top: -25px;
     margin-right: 20px;
     color: #ffffff;
 }
@@ -464,7 +612,7 @@ import
     font-style: normal;
     font-size: 2.0vw;
     margin-left: 15px;
-    margin-top: 10px;
+    margin-top: -20px;
     margin-right: 20px;
     color: #ffffff;
 }
@@ -482,6 +630,29 @@ import
     color: #ffffff;
 }
 
+.m-tab {
+    display: flex;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 0.95vw;
+    border: 2px solid #f1f1f1af;
+    background-color: #ffffff;
+    border-radius: 10px;
+    min-height: 3vw;
+    height:3vw;
+    max-height: 3vw;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 3%;
+    margin-top: 4.5%;
+    transition: 0.25s;
+    overflow: hidden;
+    padding: 4%;
+    box-shadow: 0px 0px 18px 0.0px rgba(255, 255, 255, 0.2);
+}
+
 .pn-content-tab {
     display: flex;
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -489,7 +660,7 @@ import
     font-weight: 500;
     font-style: normal;
     font-size: 1vw;
-    border: 2px solid #989898;
+    border: 2px solid #f1f1f1af;
     background-color: #ffffffcf;
     border-radius: 20px;
     min-height: 100%;
@@ -500,23 +671,21 @@ import
     transition: 0.4s;
     overflow: hidden;
     padding: 4%;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    box-shadow: 0px 0px 8px 0.0px rgba(255, 255, 255, 0.2);
     transition: 0.2s;
 }
 
 .minimize-button {
-    position: absolute;
-    top: 0;
-    right: 0;
+    position:relative;
+    margin-left: 87%;
     background-color: rgba(0, 0, 0, 0);
     color: rgba(29, 29, 29, 0.725);
     border: none;
     border-radius: 30px;
     cursor: pointer;
     opacity: 1;
-    margin-right: 33px;
-    margin-top: 34px;
-    height: 5%;
+    margin-top: 3%;
+    height: 0px;
     width: 10%;
     overflow: visible;
     transition: 0.2s;

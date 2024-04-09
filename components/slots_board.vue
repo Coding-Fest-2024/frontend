@@ -14,14 +14,16 @@
     min-height: 100vh;
     flex-shrink: 0;
     background-color: #F6F6F6;
-    border-radius: 35px;
     box-sizing: border-box;
     padding: 2vw;
-
+    width: 58vw;
+    min-height: 7vw;
+    flex-shrink: 0;
+    border-radius: 70px;
+    box-sizing: border-box;
+    margin-left: 12.5%;
     /* Centering the element */
     position: relative;
-    left: 50%;
-    transform: translate(-65%);
     z-index: 0;
     margin-top: 1%;
     align-items: stretch;

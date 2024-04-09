@@ -5,4 +5,5 @@ export const store = reactive({
     items: [],
     selectedMajor: [],
     viewMajor: false,
+    degree: null,
 });
