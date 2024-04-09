@@ -1,12 +1,27 @@
 <template>
     <div ref="sidebar" class="side_bar">
+        <div class="major-panel" :class="{ view: viewMajor }">
+            <transition name="fade">
+                <div v-if="store.viewMajor">
+                <div class="m-panel-title">
+                    Majors:
+                </div>
+                <button class="minimize-button" @click.stop="toggleMajorPanel">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="pn-content-tab">
+                    Major details or other related information
+                </div>
+                </div>
+            </transition>
+        </div>
         <div class="description-panel" 
         :class="{ expanded: store.selectedItemId }"
         :style="{ backgroundColor: backgroundColor }">
             <transition name="fade">
             <div v-if="showContent">
                 <div class="panel-title">
-                    {{ selectedItem.title }}
+                    {{ selectedItem.id }}
                 </div>
                 <div class="pn-unit-name"> {{ selectedItem.name }}
                 </div>
@@ -14,21 +29,19 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
                 <div class="pn-content-tab">
-                    Prerequisites:
+                    Prerequisites: <br> {{ selectedItem.Prerequisites }}
                 </div>
                 <div class="pn-content-tab">
-                    Corequisites:
+                    Corequisites: <br> {{ selectedItem.Corequisites }}
                 </div>
                 <div class="pn-content-tab">
-                    Prohibitions:
+                    Prohibitions: <br> {{ selectedItem.Prohibitions }}
                 </div>
                 <div class="pn-content-tab">
                     Settings:
                 </div>
             </div>
             </transition>
-                
-
         </div>
         <div class="interaction-block">
             <div class="search-container">
@@ -51,7 +64,7 @@
                 :style="{ backgroundColor: item.color }"
                 draggable="true"
                 @dragstart="startDrag($event, item)">
-                <div class="sb-text-container">{{ item.title }}</div>
+                <div class="sb-text-container">{{ item.id }}</div>
                 <div class="sb-inner-block">
                     {{ item.name }}
                 </div>
@@ -64,26 +77,29 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { store } from '../store';
+import aggregatedUnits from '../aggregated_units.json';
 
 export default defineComponent({
     setup() {
         const sidebar = ref(null);
         const searchQuery = ref('');
-        const items = ref([
-            // Example items
-            { id: 1110, title: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
-            { id: 1113, title: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
-            { id: 1111, title: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
-            { id: 1001, title: 'DATA1001', name: 'Foundations of Data Science', slot: 4, semester: 1, year: 1, color: '#F2A2FF' },
-            { id: 1601, title: 'ELEC1601', name: 'Introduction to Computer Systems', slot: 4, semester: 1, year: 1, color: '#FF9D9D' },
-            { id: 1061, title: 'MATH1061', name: 'Mathematics 1A', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
-            { id: 1064, title: 'MATH1064', name: 'Discrete Mathematics for Computation', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
-            { id: 1112, title: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
-            { id: 2222, title: 'INFO2222', name: 'Computing 2 Usability and Security', slot: 4, semester: 1, year: 2, color: '#6ED4FF' },
-            { id: 2123, title: 'COMP2123', name: 'Data Structures and Algorithms', slot: 2, semester: 1, year: 2, color: '#F38968' },
-            { id: 2823, title: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
-            { id: 2017, title: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
-        ]);
+        // const items = ref([
+        //     // Example items
+        //     { id: 'INFO1110', name: 'Introduction to Programming', slot: 1, semester: 1, year: 1, color: '#BBDA62' },
+        //     { id: 'INFO1113', name: 'Object-oriented Programming', slot: 1, semester: 2, year: 1, color: '#BBDA62' },
+        //     { id: 'INFO1111', name: 'Computing 1A Professionalism', slot: 4, semester: 1, year: 1, color: '#6ED4FF' },
+        //     { id: 'DATA1001', name: 'Foundations of Data Science', slot: 4, semester: 1, year: 1, color: '#F2A2FF' },
+        //     { id: 'ELEC1601', name: 'Introduction to Computer Systems', slot: 4, semester: 1, year: 1, color: '#FF9D9D' },
+        //     { id: 'MATH1061', name: 'Mathematics 1A', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
+        //     { id: 'MATH1064', name: 'Discrete Mathematics for Computation', slot: 4, semester: 1, year: 1, color: '#84C5C1' },
+        //     { id: 'INFO1112', name: 'Computing 1B OS and Network Platforms', slot: 4, semester: 2, year: 1, color: '#6ED4FF' },
+        //     { id: 'INFO2222', name: 'Computing 2 Usability and Security', slot: 4, semester: 1, year: 2, color: '#6ED4FF' },
+        //     { id: 'COMP2123', name: 'Data Structures and Algorithms', slot: 2, semester: 1, year: 2, color: '#F38968' },
+        //     { id: 'COMP2823', name: 'Data Structures and Algorithms (Adv)', slot: 2, semester: 1, year: 2, color: '#F38968' },
+        //     { id: 'COMP2017', name: 'System Programming', slot: 1, semester: 1, year: 2, color: '#F3D568' },
+        // ]);
+
+        const items = ref(aggregatedUnits);
 
         const filtered_items = computed(() => {
             if (!searchQuery.value) {
@@ -91,7 +107,7 @@ export default defineComponent({
             }
             const query = searchQuery.value.toLowerCase();
             return items.value.filter(item =>
-                item.name.toLowerCase().includes(query) || item.title.toLowerCase().includes(query)
+                item.name.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
             );
         });
 
@@ -142,6 +158,9 @@ export default defineComponent({
             searchQuery.value = '';
         };
 
+        const viewMajor = computed(() => store.viewMajor);
+
+
         return {
             sidebar,
             filtered_items,
@@ -154,6 +173,7 @@ export default defineComponent({
             backgroundColor,
             searchQuery,
             clearSearch,
+            viewMajor,
         };
     }
 
@@ -171,6 +191,8 @@ export default defineComponent({
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,0");
 
+import 
+
 .search-input::-webkit-search-cancel-button {
     display: none;
 }
@@ -181,17 +203,32 @@ export default defineComponent({
     align-items: center; /* Center children horizontally */
     justify-content: flex-start; /* Align content to the top */
     width: 25vw;
-    height: 86%;
+    height: 85vh;
     background-color: #f6f6f6;
     border-radius: 35px;
     padding: 30px;
     position: fixed;
     left: 50%;
-    transform: translate(87%, -16.5%);
-    z-index: 0;
+    margin-top: 5vh;
+    transform: translate(87%, -15vw);
+    z-index: 10;
     overflow-y: auto; /* Allows scrolling for overflow content */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
     overflow-x:hidden; /* Allows scrolling for overflow content */
+}
+
+.tag-lab {
+    border: 2px solid #989898;
+    border-radius: 20px;
+    min-width: 100%;
+    min-height: 20%;
+    /* display: flex; */
+    max-height: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    transition: 0.4s;
+    overflow-y: auto;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
 
 .sb-zone-container {
@@ -234,6 +271,7 @@ export default defineComponent({
     max-width: 8vw;
     cursor: grab;
     border: 2px solid #ffffff8f;
+    transition: 0.2s;
 }
 
 .sb-el:active,
@@ -241,11 +279,13 @@ export default defineComponent({
     outline: none;
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.6;
+    transition: 0.2s;
 }
 
 .sb-el:hover {
     border: 2.0px solid #525252b7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
+    transition: 0.2s;
 }
 
 .sb-text-container {
@@ -302,6 +342,7 @@ export default defineComponent({
     font-size: 1rem;
     padding-right: 20px;
     max-width: 83%;
+    min-width: 30%;
 }
 
 .clear-button {
@@ -351,6 +392,32 @@ export default defineComponent({
     box-shadow: 0 4px 8px rgba(93, 93, 93, 0.2);
 }
 
+.major-panel {
+    border: 2px solid #989898;
+    border-radius: 20px;
+    min-width: 30%;
+    min-height: 0px;
+    margin-top: -3px;
+    margin-bottom: 0px;
+    transition: 0.3s;
+    overflow: hidden;
+    opacity: 0;
+}
+.major-panel.view {
+    border: 2px solid #989898;
+    border-radius: 20px;
+    min-width: 100%;
+    min-height: 70%;
+    /* display: flex; */
+    max-height: 100%;
+    margin-top: -3px;
+    margin-bottom: 25px;
+    transition: 0.4s;
+    overflow-y: auto;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    opacity: 1;
+}
+
 
 .description-panel {
     border: 2px solid #989898;
@@ -366,12 +433,27 @@ export default defineComponent({
     border: 2px solid #989898;
     border-radius: 20px;
     min-width: 100%;
-    min-height: 100%;
+    min-height: 70%;
+    /* display: flex; */
+    max-height: 100%;
     margin-top: -3px;
     margin-bottom: 5px;
     transition: 0.4s;
-    overflow: hidden;
+    overflow-y: auto;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+}
+
+.m-panel-title {
+    display: flex;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 2.0vw;
+    margin-left: 15px;
+    margin-top: 10px;
+    margin-right: 20px;
+    color: #ffffff;
 }
 
 .panel-title {
@@ -404,7 +486,7 @@ export default defineComponent({
     display: flex;
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 700;
+    font-weight: 500;
     font-style: normal;
     font-size: 1vw;
     border: 2px solid #989898;
@@ -419,6 +501,7 @@ export default defineComponent({
     overflow: hidden;
     padding: 4%;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    transition: 0.2s;
 }
 
 .minimize-button {

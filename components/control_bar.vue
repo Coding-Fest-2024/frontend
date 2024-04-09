@@ -1,9 +1,9 @@
 <template>
   <div class="control-bar">
-    <div class="interaction-block-1">
+    <!-- <div class="interaction-block-1">
       <div class="block-label">Year of Start</div>
       <t-date-picker id="degreeStartYear" mode="year" allowInput placeholder="Years"/>
-    </div>
+    </div> -->
     <div class="interaction-block-2">
       <div class="block-label">Your Degree</div>
       <t-dropdown
@@ -43,6 +43,7 @@
       <t-button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor2 }}</t-button>
       </t-dropdown>
     </div>
+    <div class="viewMajor_button" :class="{ 'displayMP': viewMajor }" @click="toggleViewMajor"> <span class="material-symbols-outlined"> list </span> </div>
   </div>
 </template>
 
@@ -50,12 +51,12 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { MessagePlugin } from 'tdesign-vue-next';
+import { store } from '../store';
 
 interface GroupItem {
   content: string;
   value: number;
 }
-
 
 export default defineComponent({
   name: 'ControlBar',
@@ -63,7 +64,6 @@ export default defineComponent({
     const selectedDegree = ref<string>('Select Degree');
     const selectedMajor1 = ref<string>('Select Major');
     const selectedMajor2 = ref<string>('Select Major');
-
     const buttonStyle = ref({ color: '#8b8b8b'});
 
     const degreeOptions = ref<GroupItem[]>([
@@ -82,22 +82,36 @@ export default defineComponent({
     const clickHandler = (data: GroupItem) => {
       selectedDegree.value = data.content;
       MessagePlugin.success(`selected: ${data.content}`);
-      buttonStyle.value.color = 'black';
     };
 
     const clickHandlerMajor1 = (data: GroupItem) => {
+      if (data.content == store.selectedMajor[1] && data.content != null) {
+        MessagePlugin.warning(`already selected in major 2`);
+        return;
+      }
       selectedMajor1.value = data.content;
-      MessagePlugin.success(`selected: ${data.content}`);
-      buttonStyle.value.color = 'black';
+      store.selectedMajor[0] = data.content;
+      MessagePlugin.success(`selected: ${store.selectedMajor[0]}`);
     };
 
     const clickHandlerMajor2 = (data: GroupItem) => {
+      if (data.content == store.selectedMajor[0] && data.content != null) {
+        MessagePlugin.warning(`already selected in major 1`);
+        return;
+      }
       selectedMajor2.value = data.content;
-      MessagePlugin.success(`selected: ${data.content}`);
-      buttonStyle.value.color = 'black';
+      store.selectedMajor[1] = data.content;
+      MessagePlugin.success(`selected: ${store.selectedMajor[1]}`);
     };
+
+    const toggleViewMajor = () => {
+      store.viewMajor = !store.viewMajor;
+    };
+
+    const viewMajor = computed(() => store.viewMajor);
         
-    return { selectedDegree, degreeOptions, clickHandler, clickHandlerMajor1, clickHandlerMajor2, buttonStyle, majorOptions, selectedMajor1, selectedMajor2};
+    return { selectedDegree, degreeOptions, clickHandler, clickHandlerMajor1, clickHandlerMajor2, buttonStyle, majorOptions, 
+      selectedMajor1, selectedMajor2, toggleViewMajor, viewMajor};
   }
 });
 </script>
@@ -119,7 +133,7 @@ export default defineComponent({
     /* Ensure the component itself has margins auto to center in its parent */
     transform: translate(0px, -80px);
     width: 58vw;
-    min-height: 14vh;
+    min-height: 7vw;
     flex-shrink: 0;
     border-radius: 35px;
     box-sizing: border-box;
@@ -128,7 +142,6 @@ export default defineComponent({
     position: relative;
     left: 50%;
     transform: translate(-65%);
-    z-index: 1;
     margin-top: 5%;
 }
 
@@ -143,6 +156,7 @@ export default defineComponent({
     border: 2px solid #989898;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
+    transition: 0.2s;
 }
 
 .interaction-block-2 {
@@ -155,6 +169,7 @@ export default defineComponent({
     flex-direction: column; /* Stack elements vertically */
     border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
+    transition: 0.2s;
 }
 
 .interaction-block-3 {
@@ -167,6 +182,7 @@ export default defineComponent({
     flex-direction: column; /* Stack elements vertically */
     border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
+    transition: 0.2s;
 }
 
 .interaction-block-4 {
@@ -179,26 +195,55 @@ export default defineComponent({
     flex-direction: column; /* Stack elements vertically */
     border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
+    transition: 0.2s;
 }
+.viewMajor_button .material-symbols-outlined {
+    width: 24px;
+    min-height: 24px;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    flex-direction: column; /* Stack elements vertically */
+    border: 2px solid #989898;
+    box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
+    transition: 0.2s;
+}
+
 
 .interaction-block-1:hover {
     background-color: #f8f8f858;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: 0.2s;
 }
-
 .interaction-block-2:hover {
     background-color: #f8f8f858;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: 0.2s;
 }
-
 .interaction-block-3:hover {
     background-color: #f8f8f858;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: 0.2s;
 }
-
 .interaction-block-4:hover {
     background-color: #f8f8f858;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: 0.2s;
+}
+.viewMajor_button .material-symbols-outlined:hover{
+    background-color: rgba(255, 94, 0, 0.9);
+    box-shadow: 0px 0px 8px rgba(255, 102, 0, 0.885);
+    color: rgb(244, 244, 244);
+    border: 2px solid #ffffff00;
+    transition: 0.2s;
+}
+
+.viewMajor_button .material-symbols-outlined:active{
+    background-color: rgb(255, 102, 0);
+    box-shadow: 0px 0px 12px rgba(255, 102, 0, 0.885);
+    color: rgb(244, 244, 244);
+    transition: 0.2s;
 }
 
 

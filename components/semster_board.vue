@@ -3,7 +3,10 @@
         <div class="timeline">
         </div>
         <div class="academic-year-container" 
-             v-for="year in academicYears" :key="`year-${year}`">
+            v-for="year in academicYears" :key="`year-${year}`">
+            <h3 class="yr-label">
+                <span class="yr-label-text">{{ `YEAR ${year} >` }}</span>
+            </h3>
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
                 <h3 class="semester-label">
                     <span class="label-text">{{ `Semester ${semester} >` }}</span>
@@ -21,7 +24,7 @@
                             draggable="true"
                             @click="selectItem(item)"
                             @dragstart="startDrag($event, item)">
-                            <div class="text-container">{{ item.title }}</div> 
+                            <div class="text-container">{{ item.id }}</div> 
                             <button class="delete-button" @click.stop="deleteItem(item)">
                                 <span class="material-symbols-outlined">delete</span>
                             </button>
@@ -86,11 +89,12 @@ export default defineComponent({
             // If target slot is occupied and different from the fromItem's slot
             if (targetItemIndex !== -1 && fromItemIndex !== targetItemIndex) {
                 const targetItem = store.items[targetItemIndex];
-
+                
                 // Swapping slots, semesters, and years
                 [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
                 [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
                 [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
+                targetItem.animating = true;
             }
             // Moving to an empty slot within the board
             else if (targetItemIndex === -1) {
@@ -102,6 +106,9 @@ export default defineComponent({
             // Handle animation for moving or swapping
             fromItem.animating = true;
             setTimeout(() => fromItem.animating = false, 500);
+            if (targetItem.animating) {
+                setTimeout(() => targetItem.animating = false, 500);
+            }
         };
 
 
@@ -152,13 +159,28 @@ export default defineComponent({
 .semester-label {
     margin: -10px 0;
     text-align: left;
-    transform: translate(-13vw, 4.8vw);
+    transform: translate(-12.5vw, 4.7vw);
     position: relative;
+}
+
+.yr-label {
+    margin: -10px 0;
+    text-align: left;
+    transform: translate(-12vw, 0vw);
+    position: relative;
+}
+
+.yr-label-text {
+    background-color: None;
+    color: #FF8C4B; 
+    padding: 5px; 
+    border-radius: 5px; 
+    z-index: 10;
     font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
+    font-size: 1.2vw;
     font-style: normal;
-    font-size: 1vw;
+    font-weight: 700;
+    line-height: normal;
 }
 
 .label-text {
@@ -166,9 +188,9 @@ export default defineComponent({
     color: #FF8C4B; 
     padding: 5px; 
     border-radius: 5px; 
-    z-index: 10;
+    z-index: 0;
     font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 1vw;
+    font-size: 0.9vw;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -192,7 +214,7 @@ export default defineComponent({
     display: flex; 
     justify-content: start;
     gap: 13px;
-    padding-top: 15px;
+    padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
