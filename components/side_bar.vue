@@ -9,8 +9,8 @@
                 <div class="m-panel-title">
                     {{ store.degree }}:
                 </div>
-                <div class="m-zone">
-                    <div class="m-tab">
+                <div class="m-zone" :class="{exp: isDegreeExpanded}">
+                    <div class="m-tab" @click="toggleDg">
                         View Degree Core Units <br> >>
                     </div>
                     <div v-for="item in advancedComputingCoreUnits"
@@ -28,11 +28,11 @@
                 <div class="m-panel-title">
                     <br>Majors:
                 </div>
-                <div class="m-zone-b">
-                    <div class="m-tab">
+                <div class="m-zone-b" :class="{ exp: isMajorExpanded1 }">
+                    <div class="m-tab" @click="toggleMajor1">
                         View {{ store.selectedMajor[0] }} Units <br> >>
                     </div>
-                    <div v-for="item in advancedComputingCoreUnits"
+                    <div v-for="item in majorUnits1"
                         :key="item.id"
                         class="sb-el"
                         :style="{ backgroundColor: item.color }"
@@ -44,11 +44,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="m-zone-b">
-                    <div class="m-tab">
+                <div class="m-zone-b" :class="{ exp: isMajorExpanded2 }">
+                    <div class="m-tab" @click="toggleMajor2">
                         View {{ store.selectedMajor[1] }} Units <br> >>
                     </div>
-                    <div v-for="item in advancedComputingCoreUnits"
+                    <div v-for="item in majorUnits2"
                         :key="item.id"
                         class="sb-el"
                         :style="{ backgroundColor: item.color }"
@@ -154,6 +154,18 @@ export default defineComponent({
             return aggregatedUnits.filter(unit => degreeUnitIds.includes(unit.id));
         });
 
+        const majorUnits1 = computed(() => {
+            if (!store.selectedMajor[0]) return [];
+            const unitIds = aggregatedCourses[store.selectedMajor[0]].Core.concat(aggregatedCourses[store.selectedMajor[0]].Advanced);
+            return aggregatedUnits.filter(unit => unitIds.includes(unit.id));
+        });
+
+        const majorUnits2 = computed(() => {
+            if (!store.selectedMajor[1]) return [];
+            const unitIds = aggregatedCourses[store.selectedMajor[1]].Core.concat(aggregatedCourses[store.selectedMajor[1]].Advanced);
+            return aggregatedUnits.filter(unit => unitIds.includes(unit.id));
+        });
+
         const hasSelectedItem = computed(() => store.selectedItemId !== null);
 
         const selectedItem = computed(() => {
@@ -208,7 +220,7 @@ export default defineComponent({
         };
 
         const backgroundColor = computed(() => {
-            return getTransparentColor(selectedItem.value?.color, 0.75);
+            return getTransparentColor(selectedItem.value?.color, 1);
         });
 
         const clearSearch = () => {
@@ -220,6 +232,25 @@ export default defineComponent({
         const toggleViewMajor = () => {
             store.viewMajor = !store.viewMajor;
         };
+
+
+        const isDegreeExpanded = ref(false)
+        const isMajorExpanded1 = ref(false); 
+        const isMajorExpanded2 = ref(false); 
+
+        const toggleDg = () => {
+            isDegreeExpanded.value = !isDegreeExpanded.value;
+        }
+
+        const toggleMajor1 = () => {
+            if (store.selectedMajor[0] != null) isMajorExpanded1.value = !isMajorExpanded1.value;
+            console.log(isMajorExpanded1.value);
+        }
+
+        const toggleMajor2 = () => {
+            if (store.selectedMajor[1] != null) isMajorExpanded2.value = !isMajorExpanded2.value;
+            console.log(isMajorExpanded2.value);
+        }
 
         return {
             sidebar,
@@ -237,6 +268,14 @@ export default defineComponent({
             MshowContent,
             toggleViewMajor,
             advancedComputingCoreUnits,
+            majorUnits1,
+            majorUnits2,
+            toggleMajor1,
+            toggleMajor2,
+            isMajorExpanded1,
+            isMajorExpanded2,
+            toggleDg,
+            isDegreeExpanded,
         };
     }
 
@@ -312,7 +351,7 @@ export default defineComponent({
     transition: 0.2s;
 }
 
-.m-zone:hover {
+.m-zone.exp {
     display:flex;
     flex-wrap: wrap;
     justify-content: center; 
@@ -354,7 +393,7 @@ export default defineComponent({
     transition: 0.2s;
 }
 
-.m-zone-b:hover {
+.m-zone-b.exp {
     display:flex;
     flex-wrap: wrap;
     justify-content: center; 
@@ -374,7 +413,11 @@ export default defineComponent({
     margin-left: 4.5%;
     overflow-y: auto;
     transition: 0.2s;
+    margin-bottom: 5%;
 }
+
+
+
 
 .sb-zone-container {
     display:ruby;
@@ -412,11 +455,11 @@ export default defineComponent({
     font-weight: 400;
     font-style: normal;
     font-size: 1vw;
-    min-width: 8vw;
-    max-width: 8vw;
+    min-width: 7.4vw;
+    max-width: 7.4vw;
     cursor: grab;
     border: 2px solid #ffffff8f;
-    transition: 0.2s;
+    transition: 0.14s;
 }
 
 .sb-el:active,
@@ -452,13 +495,13 @@ export default defineComponent({
     font-weight: 400;
     font-style: normal;
     padding: 10px;
-    margin-left: 1.9%;
+    margin-left: 1.94%;
     margin-right: 0.2vw;
     margin-bottom: 0.2vw;
     border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
-    font-size: 0.75vw;
+    font-size: 0.69vw;
     color: rgb(55, 55, 55);
     width: 96%;
     overflow: hidden;
@@ -477,6 +520,7 @@ export default defineComponent({
     padding: 5px;
     box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.236);
     border: 1.8px solid #9a9a9ab7;
+    width: 80%;
 }
 
 .search-input {
@@ -599,7 +643,7 @@ export default defineComponent({
     font-style: normal;
     font-size: 1.8vw;
     margin-left: 15px;
-    margin-top: -25px;
+    margin-top: -15px;
     margin-right: 20px;
     color: #ffffff;
 }
@@ -651,6 +695,18 @@ export default defineComponent({
     overflow: hidden;
     padding: 4%;
     box-shadow: 0px 0px 18px 0.0px rgba(255, 255, 255, 0.2);
+}
+
+.m-tab:hover {
+    transition: 0.2s;
+    transform: scale(1.03);
+    box-shadow: 0px 0px 18px 0.0px rgb(213, 213, 213);
+}
+
+.m-tab:focus, .m-tab:active {
+    transition: 0.2s;
+    transform: scale(0.97);
+    box-shadow: 0px 0px 18px 0.0px rgba(255, 161, 72, 0.663);
 }
 
 .pn-content-tab {

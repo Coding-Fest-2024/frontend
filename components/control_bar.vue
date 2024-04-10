@@ -76,7 +76,7 @@ export default defineComponent({
       { content: 'Software Development', value: 2, },
       { content: 'Computational Data Science', value: 3, },
       { content: 'Cyber Security', value: 4, },
-      { content: 'Information Systems', value: 5},
+      { content: null, value: 0},
     ]);
 
     const clickHandler = (data: GroupItem) => {
@@ -161,7 +161,6 @@ export default defineComponent({
 
 .interaction-block-2 {
     width: 26%;
-    min-height: 45px;
     padding: 15px;
     border-radius: 20px;
     margin: 5px;
@@ -174,7 +173,6 @@ export default defineComponent({
 
 .interaction-block-3 {
     width: 20%;
-    min-height: 45px;
     padding: 15px;
     border-radius: 20px;
     margin: 5px;
@@ -187,7 +185,6 @@ export default defineComponent({
 
 .interaction-block-4 {
     width: 20%;
-    min-height: 45px;
     padding: 15px;
     border-radius: 20px;
     margin: 5px;
