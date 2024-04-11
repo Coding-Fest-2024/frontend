@@ -1,46 +1,34 @@
 <template>
     <div class="board">
-        <div class="timeline">
-        </div>
         <div class="academic-year-container" 
             v-for="year in academicYears" :key="`year-${year}`">
-            <h3 class="yr-label">
-                <span class="yr-label-text">{{ `YEAR ${year} >` }}</span>
-            </h3>
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
-                <h3 class="semester-label">
-                    <span class="label-text">{{ `Semester ${semester} >` }}</span>
-                </h3>
-                <div class="drop-zone-container">
-                    <div v-for="index in 4" :key="`year-${year}-semester-${semester}-slot-${index}`" class="drop-zone"
-                        @drop="onDrop($event, index, semester, year)"
-                        @dragover.prevent
-                        @dragenter.prevent>
-                        <div v-for="item in getItems(index, semester, year)"
-                            :key="item.id"
-                            class="drag-el"
-                            :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
-                            :style="{ backgroundColor: item.color }"
-                            draggable="true"
-                            @click="selectItem(item)"
-                            @dragstart="startDrag($event, item)">
-                            <div class="text-container">{{ item.id }}</div> 
-                            <button class="delete-button" @click.stop="deleteItem(item)">
-                                <span class="material-symbols-outlined">delete</span>
-                            </button>
-                            <div class="inner-block">
-                                {{ item.name }}
-                            </div>
+                <div class="drop-zone-container"
+                     @drop="onDrop($event, semester, year)"
+                     @dragover.prevent
+                     @dragenter.prevent>
+                    <div v-for="item in getItems(semester, year)"
+                        :key="item.id"
+                        class="drag-el"
+                        :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
+                        :style="{ backgroundColor: item.color }"
+                        draggable="true"
+                        @click="selectItem(item)"
+                        @dragstart="startDrag($event, item)">
+                        <div class="text-container">{{ item.id }}</div>
+                        <button class="delete-button" @click.stop="deleteItem(item)">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <div class="inner-block">
+                            {{ item.name }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <t-button id="add-button" class="add-year-button" @click="addAcademicYear" size="large" shape="round" theme="default">
-            +
-        </t-button>
     </div>
 </template>
+
 
 
 <script>
@@ -71,10 +59,10 @@ export default defineComponent({
             let fromItem = store.items[fromItemIndex];
             let targetItemIndex = store.items.findIndex(item => item.slot === slot && item.semester === semester && item.year === year);
 
-            if (fromItemIndex === -1 && targetItemIndex !== -1) {
-                console.log("Drop cancelled: Slot is occupied.");
-                return;
-            }
+            // if (fromItemIndex === -1 && targetItemIndex !== -1) {
+            //     console.log("Drop cancelled: Slot is occupied.");
+            //     return;
+            // }
 
             // Dragging from outside into the board
             if (fromItemIndex === -1) {
@@ -91,13 +79,17 @@ export default defineComponent({
                 const targetItem = store.items[targetItemIndex];
                 
                 // Swapping slots, semesters, and years
-                [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
-                [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
-                [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
-                targetItem.animating = true;
+                // [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
+                // [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
+                // [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
+                // targetItem.animating = true;
+                fromItem.slot = slot;
+                fromItem.semester = semester;
+                fromItem.year = year;
             }
             // Moving to an empty slot within the board
-            else if (targetItemIndex === -1) {
+            else
+            if (targetItemIndex === -1) {
                 fromItem.slot = slot;
                 fromItem.semester = semester;
                 fromItem.year = year;
@@ -127,6 +119,28 @@ export default defineComponent({
             }
         };
 
+        const dropZoneCounts = ref({});
+
+        academicYears.value.forEach(year => {
+            [1, 2].forEach(semester => {
+                const key = `year-${year}-semester-${semester}`;
+                dropZoneCounts.value[key] = 4;
+            });
+        });
+
+        const getDropZoneCount = (year, semester) => {
+            const key = `year-${year}-semester-${semester}`;
+            return dropZoneCounts.value[key] || 0;
+        };
+
+        const totalCredits = 24;
+
+        const calculateWidth = (year, semester) => {
+            const items = getItems(semester, year);
+            const total = items.reduce((sum, item) => sum + item.credit, 0);
+            return total / totalCredits * 1000;
+        };
+
         return {
             academicYears,
             getItems,
@@ -136,7 +150,13 @@ export default defineComponent({
             selectItem,
             addAcademicYear,
             deleteItem,
-            store
+            store,
+            academicYears,
+            dropZoneCounts,
+            getDropZoneCount,
+            academicYears,
+            calculateWidth,
+            totalCredits,
         };
     }
 });
@@ -154,6 +174,8 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     flex-direction: column;
+    width: 100%;
+    border: 2px solid #FF8C4B;
 }
 
 .semester-label {
@@ -198,14 +220,11 @@ export default defineComponent({
 
 .academic-year-container {
     background-color: #EAEAEA;
-    padding: 5px;
     border-radius: 34px;
     justify-content: center;
     width: auto;
     flex-wrap: wrap;
     margin: 15px;
-    min-width: 48vw;
-    max-width: 56vw;
     border: 2px solid #989898a8;
 }
 
@@ -213,27 +232,36 @@ export default defineComponent({
 .drop-zone-container {
     display: flex; 
     justify-content: start;
-    gap: 13px;
+    min-height: 100px;
+    max-height: 100px;
     padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 34px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 32px;
     overflow-x: auto;
-    overflow-y: hidden;
-    margin-left: 0%;
+    overflow-y: auto;
+    
+    flex-wrap: wrap;
+    
+    background-color: #b1b1b156;
+    border-radius: 28px;
+    margin: 1%;
+    border: 2px solid #989898;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
 }
 
 .drop-zone {
-    margin: 0.3vw;
-    width: 11vw;
+    margin: 10%;
+    min-width: 10%;
+    /* width: 22%; */
     background-color: #E0E0E0;
     padding: 0px;
     border-radius: 16px;
     height: 6.4vw;
     pointer-events: auto;
     z-index: 1;
-    min-width: 9vw;
     flex-wrap: nowrap;
     display: inline-flex;
     align-items: start;
@@ -245,22 +273,22 @@ export default defineComponent({
     align-items: center;
     background-color: lightskyblue;
     color: white;
-    margin-bottom: 10px;
     border-radius: 16px;
-    outline: none;
-    filter: drop-shadow(0px 4px 2px rgba(45, 45, 45, 0.15));
+    filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
     height: 6.6vw;
-    transform: translate(-0.7%, -5%);
     z-index: inherit;
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 1vw;
-    min-width: 100%;
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.2s;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-radius: 16px;
+    outline: none;
+    min-width: 10%;
+    max-width: 100%;
+    cursor: grab;
+    border: 2px solid #ffffff8f;
+    transition: 0.14s;
     
 }
 
@@ -324,7 +352,7 @@ export default defineComponent({
 .drag-el.selected {
     box-shadow: 0px 0px 10px 5px rgba(255,255,255, 1);
     cursor: grab;
-    transform: scale(1.03) translate(-0.7%, -5%);
+    transform: scale(1.03);
     transition: 0.1s;
 }
 
@@ -334,21 +362,21 @@ export default defineComponent({
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.8;
     transition: 0.15s;
-    transform: scale(1) translate(-0.7%, -5%);
+    transform: scale(1) translate(-0.0%, -0%);
 }
 .drag-el:focus {
     outline: none;
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.8;
     transition: 0.15s;
-    transform: scale(1) translate(-0.7%, -5%);
+    transform: scale(1) translate(-0.0%, -0%);
 }
 
 .drag-el:hover {
     border: 2px solid #525252b7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
     transition: 0.15s;
-    transform: scale(1.0) translate(-0.7%, -5%);
+    transform: scale(1.0) translate(0%, -0%);
 }
 
 

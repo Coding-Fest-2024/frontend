@@ -4,7 +4,7 @@
       <div class="block-label">Year of Start</div>
       <t-date-picker id="degreeStartYear" mode="year" allowInput placeholder="Years"/>
     </div> -->
-    <div class="interaction-block-2">
+    <!-- <div class="interaction-block-2">
       <div class="block-label">Your Degree</div>
       <t-dropdown
         id="degree"
@@ -42,8 +42,10 @@
       >
       <t-button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor2 }}</t-button>
       </t-dropdown>
+    </div> -->
+    <div class="viewMajor_button" :class="{ 'displayMP': viewMajor }" @click="toggleViewMajor">
+      <span class="material-symbols-outlined"> list </span>
     </div>
-    <div class="viewMajor_button" :class="{ 'displayMP': viewMajor }" @click="toggleViewMajor"> <span class="material-symbols-outlined"> list </span> </div>
   </div>
 </template>
 
@@ -135,13 +137,10 @@ export default defineComponent({
     align-items: center; /* Center children vertically */
     background-color: #eaeaea;
     /* Ensure the component itself has margins auto to center in its parent */
-    width: 58vw;
-    min-height: 7vw;
+    width: 100%;
     flex-shrink: 0;
     border-radius: 80px;
     box-sizing: border-box;
-    margin-left: 12.5%;
-    /* Centering the element */
     position: relative;
 }
 
@@ -195,16 +194,20 @@ export default defineComponent({
     transition: 0.2s;
 }
 .viewMajor_button .material-symbols-outlined {
-    width: 24px;
-    min-height: 24px;
-    padding: 15px;
-    border-radius: 20px;
-    margin: 5px;
+    min-width: 40px;
+    max-height: 10px;
+    padding-left: 20px;
+    padding-bottom: 15px;
+    padding-top: 5px;
+    border-radius: 50px;
+    margin: 10px;
     cursor: pointer;
     flex-direction: column; /* Stack elements vertically */
     border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
     transition: 0.2s;
+    font-size: 20px;
+    user-select: none;
 }
 
 

@@ -302,19 +302,17 @@ export default defineComponent({
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center children horizontally */
     justify-content: flex-start; /* Align content to the top */
-    width: 25vw;
-    height: 90%;
+    width: 100%;
+    height: 92%;
     background-color: #f6f6f6;
     border-radius: 35px;
     padding: 30px;
-    position: fixed;
+    margin-top: 3%;
     left: 50%;
-    margin-top: 5vh;
-    margin-left: 23%;
     z-index: 10;
     overflow-y: auto; /* Allows scrolling for overflow content */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-    overflow-x:hidden; /* Allows scrolling for overflow content */
+    overflow-x: hidden; /* Allows scrolling for overflow content */
 }
 
 .tag-lab {

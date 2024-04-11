@@ -23,7 +23,8 @@
         "slot": 0,
         "semester": "1",
         "year": "1",
-        "color": "#BBDA62"
+        "color": "#BBDA62",
+        "credit": 6
     },
     {
         "id": "INFO1111",
