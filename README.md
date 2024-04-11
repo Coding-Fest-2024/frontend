@@ -11,9 +11,10 @@ We're introducing a new course selection web app for the University of Sydney, d
 Our roadmap includes expanding to include comprehensive course information and integrating a complete database, committing to continuous development and maintenance for in-depth educational planning.
 
 ---
-# Running the project:
-#### Github update-to-date Version Currently running on:
+# Project access and setups:
+#### Tabs V2 (This Repo!) Currently running at:
 https://tabs-usyd.vercel.app/
+---
 ## Setup locally:
 ### Setup
 

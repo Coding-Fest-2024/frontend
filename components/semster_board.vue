@@ -278,7 +278,7 @@ export default defineComponent({
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 13px;
-    border-radius: 32px;
+    border-radius: 22px;
     overflow-x: auto;
     overflow-y: auto;
     
