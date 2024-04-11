@@ -1,4 +1,4 @@
-# Building the new CUSP/Unit of Study Selection Helper - USYD TABS site V2
+# Building the new CUSP/Unit of Study Selection Helper - USYD TABS site Ver2
 ---
 README V2.00 Apr 11th 2024
 This is version 2 stream of https://github.com/Coding-Fest-2024/frontend
@@ -12,11 +12,10 @@ Our roadmap includes expanding to include comprehensive course information and i
 
 ---
 # Project access and setups:
----
-## Tabs V2 (This Repo) Currently running at:
-https://tabs-usyd.vercel.app/
 
----
+## Tabs V2 (This Repo) Currently running at: https://tabs-usyd.vercel.app/
+
+
 ## Setup locally:
 ### Setup
 
