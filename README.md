@@ -13,11 +13,12 @@ Our roadmap includes expanding to include comprehensive course information and i
 
 ---
 # Project access and setups:
-
-#### Tabs V2 Currently up and running !
- **https://tabs-usyd.vercel.app/
-##### Tabs V1 (This repo) Currently running at:
+---
+## Tabs V2 Currently up and running !
+ https://tabs-usyd.vercel.app/
+### Tabs V1 (This repo) Currently running at:
 https://definitely-not-cusp.vercel.app/
+
 ---
 ## Setup locally:
 ### Setup
