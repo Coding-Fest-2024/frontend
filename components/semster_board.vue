@@ -245,6 +245,7 @@ export default defineComponent({
     padding-top: 18px;
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 13px;
     border-radius: 32px;
     overflow-x: auto;
     overflow-y: auto;
@@ -267,8 +268,8 @@ export default defineComponent({
     color: white;
     border-radius: 16px;
     filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-    min-height: 78px;
-    max-height: 78px;
+    min-height: 90px;
+    max-height: 90px;
     z-index: inherit;
     cursor: grab;
     border: 2px solid #ffffff8f;
@@ -280,7 +281,7 @@ export default defineComponent({
     padding-right: 2px;
     outline: none;
     min-width: 10%;
-    max-width: 23%;
+    max-width: 24%;
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.14s;
@@ -309,13 +310,13 @@ export default defineComponent({
     border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
-    font-size: 0.89vw;
+    font-size: 12px;
     line-height: normal;
     color: rgba(55, 55, 55, 0.851);
     width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 68%;
+    height: 72%;
     min-height: 48%;
     box-sizing: border-box;
 }
