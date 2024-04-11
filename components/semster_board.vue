@@ -11,10 +11,11 @@
                         :key="item.id"
                         class="drag-el"
                         :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
-                        :style="{ backgroundColor: item.color }"
+                        :style="{ backgroundColor: item.color, width: getItemWidth(semester, year) + '%' }"
                         draggable="true"
                         @click="selectItem(item)"
-                        @dragstart="startDrag($event, item)">
+                        @dragstart="startDrag($event, item)"
+                        >
                         <div class="text-container">{{ item.id }}</div>
                         <button class="delete-button" @click.stop="deleteItem(item)">
                             <span class="material-symbols-outlined">delete</span>
@@ -38,6 +39,7 @@ import { store } from '../store';
 export default defineComponent({
     setup() {
         const academicYears = ref([1, 2, 3]); // Example: 3 academic years
+        const draggingItem = ref(null);
         
         const items = store.items;
 
@@ -50,6 +52,7 @@ export default defineComponent({
         };
 
         const startDrag = (event, item) => {
+            draggingItem.value = item;
             event.dataTransfer.setData('item', JSON.stringify(item));
         };
 
@@ -86,6 +89,14 @@ export default defineComponent({
                 fromItem.slot = slot;
                 fromItem.semester = semester;
                 fromItem.year = year;
+
+                const targetIndex = getItems(semester, year).length;
+                fromItem.order = targetIndex;
+                store.items.splice(fromItemIndex, 1); 
+                store.items.push(fromItem); 
+
+                fromItem.animating = true;
+                setTimeout(() => fromItem.animating = false, 500);
             }
             // Moving to an empty slot within the board
             else
@@ -101,6 +112,7 @@ export default defineComponent({
             if (targetItem.animating) {
                 setTimeout(() => targetItem.animating = false, 500);
             }
+            store.items.splice(fromItemIndex, 1, fromItem);
         };
 
 
@@ -133,12 +145,9 @@ export default defineComponent({
             return dropZoneCounts.value[key] || 0;
         };
 
-        const totalCredits = 24;
-
-        const calculateWidth = (year, semester) => {
-            const items = getItems(semester, year);
-            const total = items.reduce((sum, item) => sum + item.credit, 0);
-            return total / totalCredits * 1000;
+        const getItemWidth = (semester, year) => {
+            const itemCount = getItems(semester, year).length;
+            return itemCount > 0 ? 100 / itemCount : 100; // Prevent division by zero
         };
 
         return {
@@ -155,8 +164,7 @@ export default defineComponent({
             dropZoneCounts,
             getDropZoneCount,
             academicYears,
-            calculateWidth,
-            totalCredits,
+            getItemWidth,
         };
     }
 });
@@ -234,15 +242,14 @@ export default defineComponent({
     justify-content: start;
     min-height: 100px;
     max-height: 100px;
-    padding-top: 10px;
-    padding-bottom: 0px;
+    padding-top: 18px;
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 32px;
     overflow-x: auto;
     overflow-y: auto;
     
-    flex-wrap: wrap;
+    flex-wrap:nowrap;
     
     background-color: #b1b1b156;
     border-radius: 28px;
@@ -252,30 +259,16 @@ export default defineComponent({
     background-color: none;
 }
 
-.drop-zone {
-    margin: 10%;
-    min-width: 10%;
-    /* width: 22%; */
-    background-color: #E0E0E0;
-    padding: 0px;
-    border-radius: 16px;
-    height: 6.4vw;
-    pointer-events: auto;
-    z-index: 1;
-    flex-wrap: nowrap;
-    display: inline-flex;
-    align-items: start;
-    border: 2px solid #bdbdbd2b;
-}
 
 .drag-el {
     
-    align-items: center;
+    align-content: space-around;
     background-color: lightskyblue;
     color: white;
     border-radius: 16px;
     filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-    height: 6.6vw;
+    min-height: 78px;
+    max-height: 78px;
     z-index: inherit;
     cursor: grab;
     border: 2px solid #ffffff8f;
@@ -283,9 +276,11 @@ export default defineComponent({
     margin-left: 2px;
     margin-right: 2px;
     border-radius: 16px;
+    padding-left: 2px;
+    padding-right: 2px;
     outline: none;
     min-width: 10%;
-    max-width: 100%;
+    max-width: 23%;
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.14s;
@@ -297,28 +292,27 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
-    font-size: 0.9vw;
-    transform: translate(7%, 40%);
+    font-size: 12px;
+    margin-top: 2px;
+    margin-left: 7.6px;
+    margin-bottom: 3px;
+    transform: translate(0%, 0%);
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
-    margin-bottom: 0.75vw;
 }
 
 .inner-block {
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     font-style: normal;
-    padding: 10px;
-    margin-left: 1.7%;
-    margin-right: 0.2vw;
-    margin-bottom: 0.2vw;
+    padding: 8px;
     border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
     font-size: 0.89vw;
     line-height: normal;
     color: rgba(55, 55, 55, 0.851);
-    width: 96.5%;
+    width: 100%;
     overflow: hidden;
     word-wrap: break-word;
     height: 68%;
@@ -328,17 +322,17 @@ export default defineComponent({
 @keyframes swap-animation {
     0% {
         opacity: 0;
-        transform: scale(0.7) translate(-0.7%, -7%);
+        transform: scale(0.7) translate(-0.0%, -7%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
     50% {
         opacity: 0.5;
-        transform: scale(1.02) translate(-0.7%, -10%);
+        transform: scale(1.02) translate(-0.0%, -10%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 1);
     }
     100% {
         opacity: 1;
-        transform: scale(1) translate(-0.7%, -5%);
+        transform: scale(1) translate(-0.0%, 0%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
 }
@@ -352,7 +346,7 @@ export default defineComponent({
 .drag-el.selected {
     box-shadow: 0px 0px 10px 5px rgba(255,255,255, 1);
     cursor: grab;
-    transform: scale(1.03);
+    transform: scale(1.02);
     transition: 0.1s;
 }
 
@@ -390,9 +384,10 @@ export default defineComponent({
     border-radius: 12px;
     cursor: pointer;
     opacity: 0.0;
-    margin: 2%;
-    height: 22%;
-    width: 17%;
+    margin: 4px;
+    height: 24px;
+    width: 28px;
+    
     overflow: hidden;
     transition: 0.2s;
 }
@@ -404,8 +399,8 @@ export default defineComponent({
 
 .delete-button .material-symbols-outlined {
     color: rgba(255, 255, 255, 0.85);
-    font-size: 1vw;
     transform: translate(-0.0vw, 0.1vw);
+    font-size: 16px;
 }
 
 .drag-el:hover .delete-button {

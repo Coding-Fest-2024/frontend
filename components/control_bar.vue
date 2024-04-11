@@ -49,48 +49,42 @@
   </div>
 </template>
 
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script>
+import { defineComponent, ref, computed } from 'vue';
 import { MessagePlugin } from 'tdesign-vue-next';
 import { store } from '../store';
-
-interface GroupItem {
-  content: string;
-  value: number;
-}
 
 export default defineComponent({
   name: 'ControlBar',
   setup() {
-    const selectedDegree = ref<string>('Select Degree');
-    const selectedMajor1 = ref<string>('Select Major');
-    const selectedMajor2 = ref<string>('Select Major');
+    const selectedDegree = ref('Select Degree');
+    const selectedMajor1 = ref('Select Major');
+    const selectedMajor2 = ref('Select Major');
     const buttonStyle = ref({ color: '#8b8b8b'});
 
-    const degreeOptions = ref<GroupItem[]>([
-      { content: 'Bachelor of Science', value: 1, },
-      { content: 'Bachelor of Advanced Computing', value: 2, }
+    const degreeOptions = ref([
+      { content: 'Bachelor of Science', value: 1 },
+      { content: 'Bachelor of Advanced Computing', value: 2 }
     ]);
 
-    const majorOptions = ref<GroupItem[]>([
-      { content: 'Computer Science', value: 1, },
-      { content: 'Software Development', value: 2, },
-      { content: 'Computational Data Science', value: 3, },
-      { content: 'Cyber Security', value: 4, },
-      { content: null, value: 0},
+    const majorOptions = ref([
+      { content: 'Computer Science', value: 1 },
+      { content: 'Software Development', value: 2 },
+      { content: 'Computational Data Science', value: 3 },
+      { content: 'Cyber Security', value: 4 },
+      { content: null, value: 0 }
     ]);
 
-    const clickHandler = (data: GroupItem) => {
+    const clickHandler = (data) => {
       selectedDegree.value = data.content;
       store.degree = data.content;
       MessagePlugin.success(`selected: ${store.degree}`);
     };
 
-    const clickHandlerMajor1 = (data: GroupItem) => {
+    const clickHandlerMajor1 = (data) => {
       if (data.content == store.selectedMajor[1] && data.content != null) {
         store.selectedMajor[1] = store.selectedMajor[0];
-        store.selectedMajor[0] = data.content
+        store.selectedMajor[0] = data.content;
         selectedMajor2.value = selectedMajor1.value;
         selectedMajor1.value = data.content;
         return;
@@ -100,15 +94,15 @@ export default defineComponent({
       MessagePlugin.success(`selected: ${store.selectedMajor[0]}`);
     };
 
-    const clickHandlerMajor2 = (data: GroupItem) => {
+    const clickHandlerMajor2 = (data) => {
       if (data.content == store.selectedMajor[0] && data.content != null) {
-        store.selectedMajor[1] = store.selectedMajor[0];
-        store.selectedMajor[0] = data.content
+        store.selectedMajor[0] = data.content;
         selectedMajor1.value = selectedMajor2.value;
         selectedMajor2.value = data.content;
+      } else {
+        selectedMajor2.value = data.content;
+        store.selectedMajor[1] = data.content;
       }
-      selectedMajor2.value = data.content;
-      store.selectedMajor[1] = data.content;
       MessagePlugin.success(`selected: ${store.selectedMajor[1]}`);
     };
 
@@ -118,11 +112,11 @@ export default defineComponent({
 
     const viewMajor = computed(() => store.viewMajor);
         
-    return { selectedDegree, degreeOptions, clickHandler, clickHandlerMajor1, clickHandlerMajor2, buttonStyle, majorOptions, 
-      selectedMajor1, selectedMajor2, toggleViewMajor, viewMajor};
+    return { selectedDegree, degreeOptions, clickHandler, clickHandlerMajor1, clickHandlerMajor2, buttonStyle, majorOptions, selectedMajor1, selectedMajor2, toggleViewMajor, viewMajor };
   }
 });
 </script>
+
 
   
 <style scoped>
