@@ -2,6 +2,7 @@
     <div class="board">
         <div class="academic-year-container" 
             v-for="year in academicYears" :key="`year-${year}`">
+            <div class="sem-tag"> Year-{{ year }} </div>
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
                 <div class="drop-zone-container"
                      @drop="onDrop($event, semester, year)"
@@ -236,6 +237,37 @@ export default defineComponent({
     border: 2px solid #989898a8;
 }
 
+.sem-tag {
+    display: flex; 
+    justify-content: start;
+    min-height: 40px;
+    max-height: 40px;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 90%;
+    flex-wrap:nowrap;
+    z-index: -1;
+    /* background-color: #b1b1b156; */
+    border-radius: 10px 10px 0px 0px;
+    margin: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 5%;
+    /* border: 2px solid #989898; */
+    border-bottom: 2px dashed #9898985b;
+    background-color: none;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    color: #9898989e;
+    line-height: normal;
+}
+
 
 .drop-zone-container {
     display: flex; 
@@ -251,8 +283,8 @@ export default defineComponent({
     overflow-y: auto;
     
     flex-wrap:nowrap;
-    
-    background-color: #b1b1b156;
+    z-index: 3;
+    background-color: #ededed9c;
     border-radius: 28px;
     margin: 1%;
     border: 2px solid #989898;
