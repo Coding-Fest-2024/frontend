@@ -2,7 +2,8 @@
 ---
 README V1.02 Apr 11th 2024
 USYD tabs v2 - check: https://github.com/cheese-zj/tabs-v2-stream
-Moving v2 content currently...
+V2 running at: https://tabs-usyd.vercel.app/
+Building v2 content currently...
 ### Why we need need a new CUSP anyway?
 The current course selection system, CUSP, is complex and unintuitive, often requiring information from various sources for course selection. This manual process is especially challenging for freshmen, gap year students, students attending exchange programs or combined degrees, or those who have failed courses.
 ### The Solution:
@@ -11,9 +12,13 @@ We're introducing a new course selection web app for the University of Sydney, d
 Our roadmap includes expanding to include comprehensive course information and integrating a complete database, committing to continuous development and maintenance for in-depth educational planning.
 
 ---
-# Running the project:
-#### Github update-to-date Version Currently running on:
+# Project access and setups:
+
+#### Tabs V2 Currently up and running !
+ **https://tabs-usyd.vercel.app/
+##### Tabs V1 (This repo) Currently running at:
 https://definitely-not-cusp.vercel.app/
+---
 ## Setup locally:
 ### Setup
 
