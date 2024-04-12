@@ -58,7 +58,7 @@ npm run preview
 # Functions v2 (early):
 Apr 10th Wed Version:
 ### Overlook at the page:
-![[Screenshot 2024-04-12 at 3.50.39 am.png]]
+![[readme.pic/Screenshot 2024-04-12 at 3.50.39 am.png]]
 ### Course Selection Area:
 - Year and Semester Layout: The system organises courses into "Year 1," "Year 2," etc., further subdivided into "Semester 1" and "Semester 2," visually arranging students' course plans for each term.
 - Course Unit Area: Each semester features multiple boxes where different course units are placed. These units are colour-coded by category, with units sharing the same course prefix displayed in the same colour. Users can add courses by dragging and dropping units; duplicate courses cannot be added, and any course can be removed by clicking its top right corner. Clicking on a course unit reveals detailed information on the right side.
@@ -71,10 +71,10 @@ Apr 10th Wed Version:
 - Below the search box, the sidebar serves as a reservoir of courses from which users can drag and drop to refine their selection.
 
 #### Dragging unit items around!
-![[Screenshot 2024-04-12 at 3.52.23 am.png]]
+![[readme.pic/Screenshot 2024-04-12 at 3.52.23 am.png]]
 #### Selected unit description (not fully finished):
-![[Screenshot 2024-04-12 at 3.53.29 am.png]]
+![[readme.pic/Screenshot 2024-04-12 at 3.53.29 am.png]]
 #### Degree and major core unit helper (now only supports Bachelor of Advanced Computing)
-![[Screenshot 2024-04-12 at 5.04.01 pm.png]]
+![[readme.pic/Screenshot 2024-04-12 at 5.04.01 pm.png]]
 #### Search your unit up:
-![[Screenshot 2024-04-12 at 3.54.39 am.png]]
+![[readme.pic/Screenshot 2024-04-12 at 3.54.39 am.png]]
