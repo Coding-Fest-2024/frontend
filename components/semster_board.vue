@@ -1,46 +1,47 @@
 <template>
     <div class="board">
-        <div class="timeline">
-        </div>
         <div class="academic-year-container" 
             v-for="year in academicYears" :key="`year-${year}`">
-            <h3 class="yr-label">
-                <span class="yr-label-text">{{ `YEAR ${year} >` }}</span>
-            </h3>
+            <div class="yr-tag"> Year-{{ year }} </div>
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
-                <h3 class="semester-label">
-                    <span class="label-text">{{ `Semester ${semester} >` }}</span>
-                </h3>
-                <div class="drop-zone-container">
-                    <div v-for="index in 4" :key="`year-${year}-semester-${semester}-slot-${index}`" class="drop-zone"
-                        @drop="onDrop($event, index, semester, year)"
-                        @dragover.prevent
-                        @dragenter.prevent>
-                        <div v-for="item in getItems(index, semester, year)"
-                            :key="item.id"
-                            class="drag-el"
-                            :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
-                            :style="{ backgroundColor: item.color }"
-                            draggable="true"
-                            @click="selectItem(item)"
-                            @dragstart="startDrag($event, item)">
-                            <div class="text-container">{{ item.id }}</div> 
-                            <button class="delete-button" @click.stop="deleteItem(item)">
-                                <span class="material-symbols-outlined">delete</span>
-                            </button>
-                            <div class="inner-block">
-                                {{ item.name }}
-                            </div>
+                <div class="drop-zone-container"
+                     @drop="onDrop($event, semester, year)"
+                     @dragover.prevent
+                     @dragenter.prevent>
+                    <div v-for="item in getItems(semester, year)"
+                        :key="item.id"
+                        class="drag-el"
+                        :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
+                        :style="{ backgroundColor: item.color, width: getItemWidth(semester, year) + '%' }"
+                        draggable="true"
+                        @click="selectItem(item)"
+                        @dragstart="startDrag($event, item)"
+                        >
+                        <div class="text-container">{{ item.id }}</div>
+                        <button class="delete-button" @click.stop="deleteItem(item)">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                        <div class="inner-block">
+                            {{ item.name }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <t-button id="add-button" class="add-year-button" @click="addAcademicYear" size="large" shape="round" theme="default">
-            +
-        </t-button>
+        <div class="button-container">
+            <button class="add-year-button" @click="addAcademicYear">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <button class="add-year-button" @click="minusAcademicYear">
+                <span class="material-symbols-outlined">remove</span>
+            </button>
+            <button class="add-year-button" @click="cleanBoard">
+                <span class="material-symbols-outlined">delete_sweep</span>
+            </button>
+        </div>
     </div>
 </template>
+
 
 
 <script>
@@ -50,6 +51,7 @@ import { store } from '../store';
 export default defineComponent({
     setup() {
         const academicYears = ref([1, 2, 3]); // Example: 3 academic years
+        const draggingItem = ref(null);
         
         const items = store.items;
 
@@ -62,6 +64,7 @@ export default defineComponent({
         };
 
         const startDrag = (event, item) => {
+            draggingItem.value = item;
             event.dataTransfer.setData('item', JSON.stringify(item));
         };
 
@@ -71,10 +74,10 @@ export default defineComponent({
             let fromItem = store.items[fromItemIndex];
             let targetItemIndex = store.items.findIndex(item => item.slot === slot && item.semester === semester && item.year === year);
 
-            if (fromItemIndex === -1 && targetItemIndex !== -1) {
-                console.log("Drop cancelled: Slot is occupied.");
-                return;
-            }
+            // if (fromItemIndex === -1 && targetItemIndex !== -1) {
+            //     console.log("Drop cancelled: Slot is occupied.");
+            //     return;
+            // }
 
             // Dragging from outside into the board
             if (fromItemIndex === -1) {
@@ -91,13 +94,25 @@ export default defineComponent({
                 const targetItem = store.items[targetItemIndex];
                 
                 // Swapping slots, semesters, and years
-                [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
-                [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
-                [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
-                targetItem.animating = true;
+                // [fromItem.slot, targetItem.slot] = [targetItem.slot, fromItem.slot];
+                // [fromItem.semester, targetItem.semester] = [targetItem.semester, fromItem.semester];
+                // [fromItem.year, targetItem.year] = [targetItem.year, fromItem.year];
+                // targetItem.animating = true;
+                fromItem.slot = slot;
+                fromItem.semester = semester;
+                fromItem.year = year;
+
+                const targetIndex = getItems(semester, year).length;
+                fromItem.order = targetIndex;
+                store.items.splice(fromItemIndex, 1); 
+                store.items.push(fromItem); 
+
+                fromItem.animating = true;
+                setTimeout(() => fromItem.animating = false, 500);
             }
             // Moving to an empty slot within the board
-            else if (targetItemIndex === -1) {
+            else
+            if (targetItemIndex === -1) {
                 fromItem.slot = slot;
                 fromItem.semester = semester;
                 fromItem.year = year;
@@ -109,13 +124,28 @@ export default defineComponent({
             if (targetItem.animating) {
                 setTimeout(() => targetItem.animating = false, 500);
             }
+            store.items.splice(fromItemIndex, 1, fromItem);
         };
 
 
         const addAcademicYear = () => {
+            if (academicYears.value.length <= 0) {
+                academicYears.value.push(1);
+                return ;
+            }
             const maxYear = Math.max(...academicYears.value);
             academicYears.value.push(maxYear + 1);
         };
+
+        const minusAcademicYear = () => {
+            if (academicYears.value.length > 0) {
+                academicYears.value.pop();
+            }
+        };
+
+        const cleanBoard = () => {
+            store.items = [];
+        }
 
         const deleteItem = (itemToDelete) => {
             const index = store.items.findIndex(item => item.id === itemToDelete.id);
@@ -127,6 +157,25 @@ export default defineComponent({
             }
         };
 
+        const dropZoneCounts = ref({});
+
+        academicYears.value.forEach(year => {
+            [1, 2].forEach(semester => {
+                const key = `year-${year}-semester-${semester}`;
+                dropZoneCounts.value[key] = 4;
+            });
+        });
+
+        const getDropZoneCount = (year, semester) => {
+            const key = `year-${year}-semester-${semester}`;
+            return dropZoneCounts.value[key] || 0;
+        };
+
+        const getItemWidth = (semester, year) => {
+            const itemCount = getItems(semester, year).length;
+            return itemCount > 0 ? 100 / itemCount : 100; // Prevent division by zero
+        };
+
         return {
             academicYears,
             getItems,
@@ -135,8 +184,15 @@ export default defineComponent({
             items,
             selectItem,
             addAcademicYear,
+            minusAcademicYear,
             deleteItem,
-            store
+            store,
+            academicYears,
+            dropZoneCounts,
+            getDropZoneCount,
+            academicYears,
+            getItemWidth,
+            cleanBoard
         };
     }
 });
@@ -152,115 +208,104 @@ export default defineComponent({
 
 .board {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     flex-direction: column;
+    width: 100%;
+    /* border: 2px solid #FF8C4B; */
 }
 
-.semester-label {
-    margin: -10px 0;
-    text-align: left;
-    transform: translate(-12.5vw, 4.7vw);
-    position: relative;
-}
-
-.yr-label {
-    margin: -10px 0;
-    text-align: left;
-    transform: translate(-12vw, 0vw);
-    position: relative;
-}
-
-.yr-label-text {
-    background-color: None;
-    color: #FF8C4B; 
-    padding: 5px; 
-    border-radius: 5px; 
-    z-index: 10;
-    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 1.2vw;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-}
-
-.label-text {
-    background-color: None;
-    color: #FF8C4B; 
-    padding: 5px; 
-    border-radius: 5px; 
-    z-index: 0;
-    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 0.9vw;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
 
 .academic-year-container {
     background-color: #EAEAEA;
-    padding: 5px;
     border-radius: 34px;
     justify-content: center;
     width: auto;
     flex-wrap: wrap;
     margin: 15px;
-    min-width: 48vw;
-    max-width: 56vw;
     border: 2px solid #989898a8;
+    transition: 0.2s;
+}
+
+.yr-tag {
+    display: flex; 
+    justify-content: start;
+    min-height: 40px;
+    max-height: 40px;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 90%;
+    flex-wrap:nowrap;
+    z-index: -1;
+    /* background-color: #b1b1b156; */
+    border-radius: 10px 10px 0px 0px;
+    margin: 1%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 5%;
+    /* border: 2px solid #989898; */
+    border-bottom: 2px dashed #9898985b;
+    background-color: none;
+    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    color: #9898989e;
+    line-height: normal;
 }
 
 
 .drop-zone-container {
     display: flex; 
     justify-content: start;
-    gap: 13px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 34px;
+    min-height: 100px;
+    max-height: 100px;
+    padding-top: 18px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 13px;
+    border-radius: 22px;
     overflow-x: auto;
-    overflow-y: hidden;
-    margin-left: 0%;
+    overflow-y: auto;
+    
+    flex-wrap:nowrap;
+    z-index: 3;
+    background-color: #ededed9c;
+    border-radius: 28px;
+    margin: 1%;
+    border: 2px solid #989898;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
 }
 
-.drop-zone {
-    margin: 0.3vw;
-    width: 11vw;
-    background-color: #E0E0E0;
-    padding: 0px;
-    border-radius: 16px;
-    height: 6.4vw;
-    pointer-events: auto;
-    z-index: 1;
-    min-width: 9vw;
-    flex-wrap: nowrap;
-    display: inline-flex;
-    align-items: start;
-    border: 2px solid #bdbdbd2b;
-}
 
 .drag-el {
     
-    align-items: center;
+    align-content: space-around;
     background-color: lightskyblue;
     color: white;
-    margin-bottom: 10px;
     border-radius: 16px;
-    outline: none;
-    filter: drop-shadow(0px 4px 2px rgba(45, 45, 45, 0.15));
-    height: 6.6vw;
-    transform: translate(-0.7%, -5%);
+    filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
+    min-height: 90px;
+    max-height: 90px;
     z-index: inherit;
-    font-family: "Roboto Mono", monospace;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 1vw;
-    min-width: 100%;
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.2s;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-radius: 16px;
+    padding-left: 2px;
+    padding-right: 2px;
+    outline: none;
+    min-width: 10%;
+    max-width: 24%;
+    cursor: grab;
+    border: 2px solid #ffffff8f;
+    transition: 0.14s;
     
 }
 
@@ -269,48 +314,47 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
-    font-size: 0.9vw;
-    transform: translate(7%, 40%);
+    font-size: 12px;
+    margin-top: 2px;
+    margin-left: 7.6px;
+    margin-bottom: 3px;
+    transform: translate(0%, 0%);
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
-    margin-bottom: 0.75vw;
 }
 
 .inner-block {
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     font-style: normal;
-    padding: 10px;
-    margin-left: 1.7%;
-    margin-right: 0.2vw;
-    margin-bottom: 0.2vw;
+    padding: 8px;
     border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
-    font-size: 0.89vw;
+    font-size: 12px;
     line-height: normal;
     color: rgba(55, 55, 55, 0.851);
-    width: 96.5%;
+    width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 68%;
+    height: 72%;
     min-height: 48%;
     box-sizing: border-box;
 }
 @keyframes swap-animation {
     0% {
         opacity: 0;
-        transform: scale(0.7) translate(-0.7%, -7%);
+        transform: scale(0.7) translate(-0.0%, -7%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
     50% {
         opacity: 0.5;
-        transform: scale(1.02) translate(-0.7%, -10%);
+        transform: scale(1.02) translate(-0.0%, -10%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 1);
     }
     100% {
         opacity: 1;
-        transform: scale(1) translate(-0.7%, -5%);
+        transform: scale(1) translate(-0.0%, 0%);
         box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
     }
 }
@@ -324,7 +368,7 @@ export default defineComponent({
 .drag-el.selected {
     box-shadow: 0px 0px 10px 5px rgba(255,255,255, 1);
     cursor: grab;
-    transform: scale(1.03) translate(-0.7%, -5%);
+    transform: scale(1.02);
     transition: 0.1s;
 }
 
@@ -334,21 +378,21 @@ export default defineComponent({
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.8;
     transition: 0.15s;
-    transform: scale(1) translate(-0.7%, -5%);
+    transform: scale(1) translate(-0.0%, -0%);
 }
 .drag-el:focus {
     outline: none;
     box-shadow: 0px 0px 0px 0px rgba(255,255,255, 0);
     opacity: 0.8;
     transition: 0.15s;
-    transform: scale(1) translate(-0.7%, -5%);
+    transform: scale(1) translate(-0.0%, -0%);
 }
 
 .drag-el:hover {
     border: 2px solid #525252b7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
     transition: 0.15s;
-    transform: scale(1.0) translate(-0.7%, -5%);
+    transform: scale(1.0) translate(0%, -0%);
 }
 
 
@@ -362,9 +406,10 @@ export default defineComponent({
     border-radius: 12px;
     cursor: pointer;
     opacity: 0.0;
-    margin: 2%;
-    height: 22%;
-    width: 17%;
+    margin: 4px;
+    height: 24px;
+    width: 28px;
+    
     overflow: hidden;
     transition: 0.2s;
 }
@@ -376,8 +421,8 @@ export default defineComponent({
 
 .delete-button .material-symbols-outlined {
     color: rgba(255, 255, 255, 0.85);
-    font-size: 1vw;
     transform: translate(-0.0vw, 0.1vw);
+    font-size: 16px;
 }
 
 .drag-el:hover .delete-button {
@@ -400,18 +445,46 @@ export default defineComponent({
     z-index: 0; 
 }
 
-#add-button {
-    margin-top: 0.5vw;
-    font-size: 1.8vw;
-    color: rgba(0, 0, 0, 0.499);
-    margin-left: 45%;
+.button-container {
+    display: flex;
+    width: 40%;
+    max-height: 40px;
+    margin-top: 8px;
+    margin-left: 30%;
+    /* border: black solid 2px; */
+    align-content: space-around;
+}
+
+.add-year-button {
+    font-size: 10px;
+    color: rgba(216, 216, 216, 0.499);
+    background-color: #ffffff;
     padding: 5px;
-    border-radius: 34px;
+    border-radius: 10px;
+    border: dashed 2px #d4d4d4;
     justify-content: center;
-    flex-wrap: wrap;
-    margin: 15px;
-    font-family: "Roboto Mono", monospace;
-    font-weight: 500;
     cursor: pointer;
+    width: 100%;
+    margin: 2px;
+    transition: 0.3s;
 }  
+
+.add-year-button:hover {
+    border: solid 2px #ff4f04e8;
+    transition: 0.3s;
+    background-color: #ffbe9833;
+}
+
+.add-year-button:hover .material-symbols-outlined {
+    color: rgba(255, 106, 0, 0.883);
+    transition: 0.3s;
+}
+
+.add-year-button:active {
+    border: solid 2px #ff7236;
+    transition: 0.3s;
+    background-color: #ffd5bdb7;
+    transform: scale(0.95);
+}
+
 </style>

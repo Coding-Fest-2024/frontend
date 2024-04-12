@@ -7,7 +7,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
                 <div class="m-panel-title">
-                    {{ store.degree }}:
+                    {{ store.degree }} Bachelor of Advanced Computing:
                 </div>
                 <div class="m-zone" :class="{exp: isDegreeExpanded}">
                     <div class="m-tab" @click="toggleDg">
@@ -302,19 +302,17 @@ export default defineComponent({
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center children horizontally */
     justify-content: flex-start; /* Align content to the top */
-    width: 25vw;
-    height: 90%;
+    width: 100%;
+    height: 92%;
     background-color: #f6f6f6;
     border-radius: 35px;
     padding: 30px;
-    position: fixed;
+    margin-top: 3%;
     left: 50%;
-    margin-top: 5vh;
-    margin-left: 23%;
     z-index: 10;
     overflow-y: auto; /* Allows scrolling for overflow content */
     box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-    overflow-x:hidden; /* Allows scrolling for overflow content */
+    overflow-x: hidden; /* Allows scrolling for overflow content */
 }
 
 .tag-lab {
@@ -440,26 +438,29 @@ export default defineComponent({
 }
 
 .sb-el {
-    align-items: center;
+    align-content: space-around;
     background-color: lightskyblue;
     color: white;
-    margin: 10px;
     border-radius: 16px;
-    outline: none;
-    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.1));
-    height: 5.9vw;
-    transform: translate(0%, -0%);
+    filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
+    min-height: 90px;
+    max-height: 90px;
     z-index: inherit;
-    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 1vw;
-    min-width: 7.4vw;
-    max-width: 7.4vw;
+    cursor: grab;
+    border: 2px solid #ffffff8f;
+    transition: 0.2s;
+    margin-left: 2px;
+    margin-right: 2px;
+    border-radius: 16px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-bottom: 6px;
+    outline: none;
+    width: 90%;
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.14s;
+    
 }
 
 .sb-el:active,
@@ -481,32 +482,31 @@ export default defineComponent({
 .sb-text-container {
     font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
-    font-weight: 700;
+    font-weight: 600;
     font-style: normal;
-    font-size: 0.85vw;
-    transform: translate(10%, 40%);
+    font-size: 26px;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-bottom: 3px;
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
-    margin-bottom: 0.79vw;
 }
 
 .sb-inner-block {
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 400;
     font-style: normal;
-    padding: 10px;
-    margin-left: 1.94%;
-    margin-right: 0.2vw;
-    margin-bottom: 0.2vw;
+    padding: 8px;
     border-radius: 12px; 
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
-    font-size: 0.69vw;
-    color: rgb(55, 55, 55);
-    width: 96%;
+    font-size: 14px;
+    line-height: normal;
+    color: rgba(55, 55, 55, 0.851);
+    width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 65%;
+    height: 48px;
     min-height: 48%;
     box-sizing: border-box;
 }

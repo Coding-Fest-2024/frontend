@@ -1,12 +1,15 @@
 <template>
   
 <div class="container">
-  <SideBar></SideBar>
   <div class="page-container">
-    <ControlBar></ControlBar>
     <SlotsBoard></SlotsBoard>
   </div>
+  <div class="sb-container">
+    <ControlBar></ControlBar>
+    <SideBar></SideBar>
+  </div>
 </div>
+
   
 </template>
 
@@ -41,13 +44,6 @@ export default {
 
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
 ::-webkit-scrollbar {
     display: none;
@@ -55,24 +51,35 @@ export default {
 
 .container {
   display: flex;
-  /* justify-content: center; */
-  /* align-items: center;  */
-  min-height: 100vh; 
-  height: 100vh;
-  max-height: 100vh;
+  /* justify-content: center;
+  align-items: center;  */
+  height: 98vh; 
   overflow: hidden; 
   z-index: 0;
+  width: 100%;
+  /* border: 2px solid #2c3e50; */
+  /* margin-top: 3%; */
 }
 
 .page-container {
-  position: absolute;
-  width: 100%;
+  position:static;
+  width: 68%;
   overflow: auto;
   transform-origin: top left;
   z-index:1;
-  height: 100vh;
-  padding-bottom: 10vh;
-  padding-top: 5vh;
+  /* margin-left: 1%; */
+  padding: 1%;
 }
+
+.sb-container {
+  width: 31%;
+  padding: 1%;
+}
+
+/* test borders */
+.sb-container, .page-container {
+  border: 2px solid #2c3e50;
+}
+
 
 </style>
