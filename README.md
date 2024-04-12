@@ -74,9 +74,7 @@ Apr 10th Wed Version:
 ![[Screenshot 2024-04-12 at 3.52.23 am.png]]
 #### Selected unit description (not fully finished):
 ![[Screenshot 2024-04-12 at 3.53.29 am.png]]
-#### Degree and major core unit helper (now only supports Bachelor of Advanced Computing) (screenshot from v1):
-![[major_panel_boom.png.png]]![[major_panel_view.png.png]]
-![[Screenshot 2024-04-12 at 3.56.22 am.png]]
-New pic from v2*
+#### Degree and major core unit helper (now only supports Bachelor of Advanced Computing)
+![[Screenshot 2024-04-12 at 5.04.01 pm.png]]
 #### Search your unit up:
 ![[Screenshot 2024-04-12 at 3.54.39 am.png]]
