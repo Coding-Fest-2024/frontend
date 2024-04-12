@@ -1,8 +1,8 @@
-# Building the new CUSP/Unit of Study Selection Helper - USYD TABS site Ver2
+# Building the new CUSP/Unit of Study Selection Helper - USYD TABS v2 merged! (Name not finalised)
 ---
-README V2.00 Apr 11th 2024
-This is version 2 stream of https://github.com/Coding-Fest-2024/frontend
-This version runs at: https://tabs-usyd.vercel.app/
+README V1.03 Apr 12th 2024
+USYD tabs v2 dev - check: https://github.com/cheese-zj/tabs-v2-stream
+V2 running at: https://tabs-usyd.vercel.app/
 ### Why we need need a new CUSP anyway?
 The current course selection system, CUSP, is complex and unintuitive, often requiring information from various sources for course selection. This manual process is especially challenging for freshmen, gap year students, students attending exchange programs or combined degrees, or those who have failed courses.
 ### The Solution:
