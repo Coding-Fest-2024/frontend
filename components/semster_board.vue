@@ -2,7 +2,7 @@
     <div class="board">
         <div class="academic-year-container" 
             v-for="year in academicYears" :key="`year-${year}`">
-            <div class="sem-tag"> Year-{{ year }} </div>
+            <div class="yr-tag"> Year-{{ year }} </div>
             <div class="semester-container" v-for="semester in [1, 2]" :key="`year-${year}-semester-${semester}`">
                 <div class="drop-zone-container"
                      @drop="onDrop($event, semester, year)"
@@ -27,6 +27,17 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="button-container">
+            <button class="add-year-button" @click="addAcademicYear">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+            <button class="add-year-button" @click="minusAcademicYear">
+                <span class="material-symbols-outlined">remove</span>
+            </button>
+            <button class="add-year-button" @click="cleanBoard">
+                <span class="material-symbols-outlined">delete_sweep</span>
+            </button>
         </div>
     </div>
 </template>
@@ -118,9 +129,23 @@ export default defineComponent({
 
 
         const addAcademicYear = () => {
+            if (academicYears.value.length <= 0) {
+                academicYears.value.push(1);
+                return ;
+            }
             const maxYear = Math.max(...academicYears.value);
             academicYears.value.push(maxYear + 1);
         };
+
+        const minusAcademicYear = () => {
+            if (academicYears.value.length > 0) {
+                academicYears.value.pop();
+            }
+        };
+
+        const cleanBoard = () => {
+            store.items = [];
+        }
 
         const deleteItem = (itemToDelete) => {
             const index = store.items.findIndex(item => item.id === itemToDelete.id);
@@ -159,6 +184,7 @@ export default defineComponent({
             items,
             selectItem,
             addAcademicYear,
+            minusAcademicYear,
             deleteItem,
             store,
             academicYears,
@@ -166,6 +192,7 @@ export default defineComponent({
             getDropZoneCount,
             academicYears,
             getItemWidth,
+            cleanBoard
         };
     }
 });
@@ -181,51 +208,12 @@ export default defineComponent({
 
 .board {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     flex-direction: column;
     width: 100%;
-    border: 2px solid #FF8C4B;
+    /* border: 2px solid #FF8C4B; */
 }
 
-.semester-label {
-    margin: -10px 0;
-    text-align: left;
-    transform: translate(-12.5vw, 4.7vw);
-    position: relative;
-}
-
-.yr-label {
-    margin: -10px 0;
-    text-align: left;
-    transform: translate(-12vw, 0vw);
-    position: relative;
-}
-
-.yr-label-text {
-    background-color: None;
-    color: #FF8C4B; 
-    padding: 5px; 
-    border-radius: 5px; 
-    z-index: 10;
-    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 1.2vw;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-}
-
-.label-text {
-    background-color: None;
-    color: #FF8C4B; 
-    padding: 5px; 
-    border-radius: 5px; 
-    z-index: 0;
-    font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 0.9vw;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
 
 .academic-year-container {
     background-color: #EAEAEA;
@@ -235,9 +223,10 @@ export default defineComponent({
     flex-wrap: wrap;
     margin: 15px;
     border: 2px solid #989898a8;
+    transition: 0.2s;
 }
 
-.sem-tag {
+.yr-tag {
     display: flex; 
     justify-content: start;
     min-height: 40px;
@@ -456,18 +445,46 @@ export default defineComponent({
     z-index: 0; 
 }
 
-#add-button {
-    margin-top: 0.5vw;
-    font-size: 1.8vw;
-    color: rgba(0, 0, 0, 0.499);
-    margin-left: 45%;
+.button-container {
+    display: flex;
+    width: 40%;
+    max-height: 40px;
+    margin-top: 8px;
+    margin-left: 30%;
+    /* border: black solid 2px; */
+    align-content: space-around;
+}
+
+.add-year-button {
+    font-size: 10px;
+    color: rgba(216, 216, 216, 0.499);
+    background-color: #ffffff;
     padding: 5px;
-    border-radius: 34px;
+    border-radius: 10px;
+    border: dashed 2px #d4d4d4;
     justify-content: center;
-    flex-wrap: wrap;
-    margin: 15px;
-    font-family: "Roboto Mono", monospace;
-    font-weight: 500;
     cursor: pointer;
+    width: 100%;
+    margin: 2px;
+    transition: 0.3s;
 }  
+
+.add-year-button:hover {
+    border: solid 2px #ff4f04e8;
+    transition: 0.3s;
+    background-color: #ffbe9833;
+}
+
+.add-year-button:hover .material-symbols-outlined {
+    color: rgba(255, 106, 0, 0.883);
+    transition: 0.3s;
+}
+
+.add-year-button:active {
+    border: solid 2px #ff7236;
+    transition: 0.3s;
+    background-color: #ffd5bdb7;
+    transform: scale(0.95);
+}
+
 </style>

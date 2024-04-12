@@ -1,9 +1,5 @@
 <template>
   <div class="control-bar">
-    <!-- <div class="interaction-block-1">
-      <div class="block-label">Year of Start</div>
-      <t-date-picker id="degreeStartYear" mode="year" allowInput placeholder="Years"/>
-    </div> -->
     <!-- <div class="interaction-block-2">
       <div class="block-label">Your Degree</div>
       <t-dropdown
@@ -16,33 +12,29 @@
       >
       <t-button id="degree_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedDegree }}</t-button>
       </t-dropdown>
-    </div>
+    </div> -->
     <div class="interaction-block-3">
-      <div class="block-label">Major 1</div>
       <t-dropdown
-        id="degree"
         minColumnWidth="190px"
         :options="majorOptions"
         hideAfterItemClick
         trigger="click"
         @click="clickHandlerMajor1"
       >
-      <t-button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor1 }}</t-button>
+      <button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor1 }}</button>
       </t-dropdown>
     </div>
     <div class="interaction-block-4">
-      <div class="block-label">Major 2</div>
       <t-dropdown
-        id="degree"
         minColumnWidth="190px"
         :options="majorOptions"
         hideAfterItemClick
         trigger="click"
         @click="clickHandlerMajor2"
       >
-      <t-button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor2 }}</t-button>
+      <button id="major_button" variant="outline" theme="default" :style="buttonStyle">{{ selectedMajor2 }}</button>
       </t-dropdown>
-    </div> -->
+    </div>
     <div class="viewMajor_button" :class="{ 'displayMP': viewMajor }" @click="toggleViewMajor">
       <span class="material-symbols-outlined"> list </span>
     </div>
@@ -138,22 +130,10 @@ export default defineComponent({
     position: relative;
 }
 
-.interaction-block-1 {
-    width: 12%;
-    min-height: 45px;
-    padding: 15px;
-    border-radius: 20px;
-    margin: 5px;
-    cursor: pointer;
-    flex-direction: column; /* Stack elements vertically */
-    border: 2px solid #989898;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    background-color: none;
-    transition: 0.2s;
-}
 
 .interaction-block-2 {
-    width: 26%;
+    max-width: 100px;
+    min-width: 20px;
     padding: 15px;
     border-radius: 20px;
     margin: 5px;
@@ -165,27 +145,31 @@ export default defineComponent({
 }
 
 .interaction-block-3 {
-    width: 20%;
-    padding: 15px;
+    max-width: 100px;
+    min-width: 20px;
+    padding: 8px;
     border-radius: 20px;
     margin: 5px;
     cursor: pointer;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column;
     border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
     transition: 0.2s;
+    overflow: hidden;
 }
 
 .interaction-block-4 {
-    width: 20%;
-    padding: 15px;
+    max-width: 100px;
+    min-width: 20px;
+    padding: 8px;
     border-radius: 20px;
     margin: 5px;
     cursor: pointer;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column; 
     border: 2px solid #989898;
     box-shadow: 0px 4px 4px 0.0px rgba(133, 133, 133, 0.2);
     transition: 0.2s;
+    overflow: hidden;
 }
 .viewMajor_button .material-symbols-outlined {
     min-width: 40px;
@@ -267,13 +251,18 @@ export default defineComponent({
 }
 
 #major_button {
-    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
     font-family: "Roboto Mono", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     /* font-optical-sizing: auto; */
     font-weight: 400;
     color: #d4d4d4;
     font-style: italic;
-    font-size: 0.70vw;
+    font-size: 9.0px;
+    border: none;
+    margin-bottom: 2px;
+    background-color: transparent;
+    overflow: hidden;
 }
 
 </style>

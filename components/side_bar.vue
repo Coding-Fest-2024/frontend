@@ -7,7 +7,7 @@
                     <span class="material-symbols-outlined">close</span>
                 </button>
                 <div class="m-panel-title">
-                    {{ store.degree }}:
+                    {{ store.degree }} Bachelor of Advanced Computing:
                 </div>
                 <div class="m-zone" :class="{exp: isDegreeExpanded}">
                     <div class="m-tab" @click="toggleDg">
@@ -454,7 +454,7 @@ export default defineComponent({
     border-radius: 16px;
     padding-left: 2px;
     padding-right: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     outline: none;
     width: 90%;
     cursor: grab;
@@ -484,11 +484,10 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
-    font-size: 12px;
-    margin-top: 2px;
-    margin-left: 7.6px;
+    font-size: 26px;
+    margin-top: 0px;
+    margin-left: 10px;
     margin-bottom: 3px;
-    transform: translate(0%, 0%);
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
 }
@@ -507,7 +506,7 @@ export default defineComponent({
     width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 64px;
+    height: 48px;
     min-height: 48%;
     box-sizing: border-box;
 }
