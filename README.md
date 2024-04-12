@@ -1,5 +1,8 @@
 # Building the new CUSP/Unit of Study Selection Helper - USYD TABS v2 merged! (Name not finalised)
+# Building the new CUSP/Unit of Study Selection Helper - USYD TABS v2 merged! (Name not finalised)
 ---
+README V1.03 Apr 12th 2024
+USYD tabs v2 dev - check: https://github.com/cheese-zj/tabs-v2-stream
 README V1.03 Apr 12th 2024
 USYD tabs v2 dev - check: https://github.com/cheese-zj/tabs-v2-stream
 V2 running at: https://tabs-usyd.vercel.app/
@@ -13,8 +16,8 @@ Our roadmap includes expanding to include comprehensive course information and i
 ---
 # Project access and setups:
 
-## Tabs V2 (This Repo) Currently running at: https://tabs-usyd.vercel.app/
-
+## This Repo is currently running at https://definitely-not-cusp.vercel.app/ 
+## Check https://tabs-usyd.vercel.app/ for v2 updates
 
 ## Setup locally:
 ### Setup
@@ -56,8 +59,13 @@ npm run preview
 
 ---
 # Functions v2 (early):
+# Functions v2 (early):
 Apr 10th Wed Version:
 ### Overlook at the page:
+![screenshot](readme.pic/a1.png)
+### Course Selection Area:
+- Year and Semester Layout: The system organises courses into "Year 1," "Year 2," etc., further subdivided into "Semester 1" and "Semester 2," visually arranging students' course plans for each term.
+- Course Unit Area: Each semester features multiple boxes where different course units are placed. These units are colour-coded by category, with units sharing the same course prefix displayed in the same colour. Users can add courses by dragging and dropping units; duplicate courses cannot be added, and any course can be removed by clicking its top right corner. Clicking on a course unit reveals detailed information on the right side.
 ![screenshot](readme.pic/a1.png)
 ### Course Selection Area:
 - Year and Semester Layout: The system organises courses into "Year 1," "Year 2," etc., further subdivided into "Semester 1" and "Semester 2," visually arranging students' course plans for each term.
@@ -72,9 +80,14 @@ Apr 10th Wed Version:
 
 #### Dragging unit items around!
 ![screenshot](readme.pic/a2.png)
+![screenshot](readme.pic/a2.png)
 #### Selected unit description (not fully finished):
 ![screenshot](readme.pic/a3.png)
 #### Degree and major core unit helper (now only supports Bachelor of Advanced Computing)
 ![screenshot](readme.pic/a6.png)
+![screenshot](readme.pic/a3.png)
+#### Degree and major core unit helper (now only supports Bachelor of Advanced Computing)
+![screenshot](readme.pic/a6.png)
 #### Search your unit up:
+![screenshot](readme.pic/a4.png)
 ![screenshot](readme.pic/a4.png)
