@@ -1,5 +1,19 @@
 <template>
+    
     <div ref="sidebar" class="side_bar">
+        <div class="search-container">
+            <span class="material-symbols-outlined">search</span>
+            <input
+                class="search-input"
+                type="search"
+                placeholder="search your unit ..."
+                v-model="searchQuery"
+
+            />
+            <button v-if="searchQuery" class="clear-button" @click="clearSearch">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
         <div class="major-panel" :class="{ view: viewMajor }">
             <transition name="fade">
                 <div v-if="MshowContent">
@@ -9,7 +23,7 @@
                 <div class="m-panel-title">
                     {{ store.degree }} Bachelor of Advanced Computing:
                 </div>
-                <div class="m-zone" :class="{exp: isDegreeExpanded}">
+                <div class="m-zone-b" :class="{exp: isDegreeExpanded}">
                     <div class="m-tab" @click="toggleDg">
                         View Degree Core Units <br> >>
                     </div>
@@ -91,21 +105,7 @@
             </div>
             </transition>
         </div>
-        <div class="interaction-block">
-            <div class="search-container">
-                <span class="material-symbols-outlined">search</span>
-                <input
-                    class="search-input"
-                    type="search"
-                    placeholder="search your unit ..."
-                    v-model="searchQuery"
-
-                />
-                <button v-if="searchQuery" class="clear-button" @click="clearSearch">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-        </div>
+        
         <div class="sb-zone-container">
             <div v-for="item in filtered_items"
                 :key="item.id"
@@ -293,27 +293,28 @@ export default defineComponent({
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,500,0,0");
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,700,0,0");
 
+* {
+  box-sizing: border-box;
+}
+
 .search-input::-webkit-search-cancel-button {
     display: none;
 }
 
 .side_bar {
-    display: flex; /* Use flexbox layout */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    justify-content: flex-start; /* Align content to the top */
-    width: 100%;
-    height: 92%;
+    width: 37%;
+    height: 100%;
     background-color: #f6f6f6;
     border-radius: 35px;
-    padding: 30px;
-    margin-top: 3%;
-    left: 50%;
     z-index: 10;
-    overflow-y: auto; /* Allows scrolling for overflow content */
-    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
-    overflow-x: hidden; /* Allows scrolling for overflow content */
+    overflow: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding:10px;
+    border: solid #989898 0px;
 }
+
 
 .tag-lab {
     border: 2px solid #989898;
@@ -329,72 +330,30 @@ export default defineComponent({
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
 
-.m-zone {
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: center; 
-    gap: 0px; 
-    width: 40%;
-    max-height: 4.6vw;
-    background-color: #b1b1b156;
-    border-radius: 18px;
-    border: 2px solid #e0e0e0;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    background-color: none;
-    margin-top: 4.5%;
-    padding-top: 0%;
-    padding-bottom: 1%;
-    margin-left: 4.5%;
-    overflow: hidden;
-    transition: 0.2s;
-}
-
-.m-zone.exp {
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: center; 
-    gap: 0px; 
-    width: 90%;
-    height: fit-content;
-    max-height: fit-content;
-    min-height: fit-content;
-    background-color: #b1b1b156;
-    border-radius: 18px;
-    border: 2px solid #ffffff;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    background-color: none;
-    margin-top: 4.5%;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin-left: 4.5%;
-    overflow-y: auto;
-    transition: 0.2s;
-}
-
 .m-zone-b {
     display:flex;
     flex-wrap: wrap;
-    justify-content: center; 
+    justify-content: left; 
+    background-color: transparent;
     gap: 0px; 
     width: 60%;
-    max-height: 5.5vw;
-    background-color: #b1b1b156;
+    max-height: 75px;
     border-radius: 18px;
-    border: 2px solid #e0e0e0;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    background-color: none;
-    margin-top: 4.5%;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin-left: 4.5%;
+    border: 2px solid #e0e0e000;
+    /* box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2); */
+    margin-top: 3%;
+    padding-top: 0%;
+    padding-bottom: 0px;
+    margin-left: 5%;
     overflow: hidden;
+    opacity: 1;
     transition: 0.2s;
 }
 
 .m-zone-b.exp {
     display:flex;
     flex-wrap: wrap;
-    justify-content: center; 
+    justify-content: space-around; 
     gap: 0px; 
     width: 90%;
     height: fit-content;
@@ -414,24 +373,15 @@ export default defineComponent({
     margin-bottom: 5%;
 }
 
-
-
-
 .sb-zone-container {
-    display:ruby;
-    flex-wrap: wrap;
-    justify-content: space-around; 
-    gap: 5px; 
     width: 100%;
-    background-color: #b1b1b156;
-    padding: 5px;
-    border-radius: 28px;
-    margin: 5px;
-    border: 2px solid #989898;
+    border-radius: 30px;
+    border: 3px solid #989898;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
-    padding-top: 1.2vw;
-    padding-bottom: 1.2vw;
+    overflow-x: hidden;
+    padding: 10px;
+    box-sizing: border-box;
 }
 .sb-zone-container:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -441,7 +391,7 @@ export default defineComponent({
     align-content: space-around;
     background-color: lightskyblue;
     color: white;
-    border-radius: 16px;
+    border-radius: 20px;
     filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
     min-height: 90px;
     max-height: 90px;
@@ -449,18 +399,17 @@ export default defineComponent({
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.2s;
-    margin-left: 2px;
-    margin-right: 2px;
-    border-radius: 16px;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
     margin-bottom: 6px;
     outline: none;
-    width: 90%;
+    width: 100%;
     cursor: grab;
     border: 2px solid #ffffff8f;
     transition: 0.14s;
-    
+    user-select: none;
+    box-sizing: border-box;
 }
 
 .sb-el:active,
@@ -485,11 +434,10 @@ export default defineComponent({
     font-weight: 600;
     font-style: normal;
     font-size: 26px;
-    margin-top: 0px;
     margin-left: 10px;
-    margin-bottom: 3px;
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
+    box-sizing: border-box;
 }
 
 .sb-inner-block {
@@ -497,7 +445,7 @@ export default defineComponent({
     font-weight: 400;
     font-style: normal;
     padding: 8px;
-    border-radius: 12px; 
+    border-radius: 15px;
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
     font-size: 14px;
@@ -509,31 +457,31 @@ export default defineComponent({
     height: 48px;
     min-height: 48%;
     box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .search-container {
-    position: relative;
     display: flex;
     align-items: center;
     background-color: #fff; /* Or any color you prefer for the search bar */
-    border-radius: 50px; /* Rounded corners for the search bar */
+    border-radius: 20px; /* Rounded corners for the search bar */
     padding: 5px;
     box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.236);
-    border: 1.8px solid #9a9a9ab7;
-    width: 80%;
+    border: 3px solid #9a9a9ab7;
+    margin: 5px;
+    box-sizing: border-box;
 }
 
 .search-input {
-    flex: 1;
     background-color: transparent;
     border: none;
     outline: none;
-    padding-left: 10px; /* Give some space between the icon and the text */
-    color: #b8b8b8;
+    color: #d5d5d5;
     font-size: 1rem;
-    padding-right: 20px;
-    max-width: 83%;
-    min-width: 30%;
+    padding-right: 0px;
+    min-width: 90%;
+    box-sizing: border-box;
+    height: 50px;
 }
 
 .clear-button {
@@ -558,30 +506,6 @@ export default defineComponent({
     margin-left: 0px;
 }
 
-
-.interaction-block {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-height: 45px;
-    max-height: 45px;
-    border-radius: 50px;
-    flex-direction: row;
-    border: 1px solid #989898;
-    flex-wrap: wrap;
-    justify-content: space-around; 
-    width: 100%;
-    background-color: #b1b1b156;
-    padding: 5px;
-    margin: 5px;
-    border: 2px solid #989898;
-    box-shadow: 0px 6px 6px 0.0px rgba(167, 167, 167, 0.2);
-    background-color: none;
-}
-
-.interaction-block:hover {
-    box-shadow: 0 4px 8px rgba(93, 93, 93, 0.2);
-}
 
 .major-panel {
     border: 2px solid #989898;
@@ -610,26 +534,24 @@ export default defineComponent({
     background-color: rgb(62, 62, 84);
 }
 
-
 .description-panel {
     border: 2px solid #989898;
     border-radius: 20px;
-    min-width: 30%;
+    width: 100%;
     min-height: 0px;
-    margin-top: -12px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     transition: 0.3s;
     overflow: hidden;
+    box-sizing: border-box;
 }
 .description-panel.expanded {
-    border: 2px solid #989898;
-    border-radius: 20px;
+    border: 3px solid #989898;
+    border-radius: 30px;
     min-width: 100%;
     min-height: 80%;
     /* display: flex; */
     max-height: 100%;
-    margin-top: -3px;
-    margin-bottom: 5px;
     transition: 0.4s;
     overflow-y: auto;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
@@ -687,26 +609,27 @@ export default defineComponent({
     min-height: 3vw;
     height:3vw;
     max-height: 3vw;
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 0%;
     margin-bottom: 3%;
     margin-top: 4.5%;
     transition: 0.25s;
     overflow: hidden;
     padding: 4%;
-    box-shadow: 0px 0px 18px 0.0px rgba(255, 255, 255, 0.2);
+    border: solid 2px #ffffffb7;
+    /* box-shadow: 0px 0px 18px 0.0px rgba(255, 255, 255, 0.2); */
 }
 
 .m-tab:hover {
     transition: 0.2s;
     transform: scale(1.03);
-    box-shadow: 0px 0px 18px 0.0px rgb(213, 213, 213);
+    border: solid 2px #525252b7;
+    /* box-shadow: 0px 0px 18px 0.0px rgb(213, 213, 213); */
 }
 
 .m-tab:focus, .m-tab:active {
     transition: 0.2s;
     transform: scale(0.97);
-    box-shadow: 0px 0px 18px 0.0px rgba(255, 161, 72, 0.663);
+    /* box-shadow: 0px 0px 18px 0.0px rgba(255, 248, 241, 0.254); */
 }
 
 .pn-content-tab {
