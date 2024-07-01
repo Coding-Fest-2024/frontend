@@ -303,7 +303,7 @@ export default defineComponent({
 
 .side_bar {
     width: 37%;
-    height: 100%;
+    height: 98%;
     background-color: #f6f6f6;
     border-radius: 35px;
     z-index: 10;

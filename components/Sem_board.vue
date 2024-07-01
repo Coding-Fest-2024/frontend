@@ -185,11 +185,10 @@ export default defineComponent({
 
 .board {
     display: flex;
-    justify-content: space-around;
     flex-direction: column;
     width: 100%;
     overflow: auto;
-    padding: 5px;
+    padding: 10px;
 }
 
 .delete-button {

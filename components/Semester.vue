@@ -70,7 +70,7 @@
   
   const getItemWidth = (semester, year) => {
     const itemCount = getItems(semester, year).length;
-    return itemCount > 0 ? 100 / itemCount : 100;
+    return itemCount > 0 ? 120 / itemCount : 120;
   };
   </script>
   
@@ -80,8 +80,7 @@
 .drop-zone-container {
     display: flex; 
     justify-content: start;
-    min-height: 100px;
-    height:120px;
+    min-height: 60px;
     padding-top: 12px;
     padding-left: 10px;
     padding-right: 10px;
@@ -92,7 +91,7 @@
     z-index: 3;
     background-color: #ededed9c;
     border-radius: 28px;
-    margin: 1%;
+    margin:10px;
     border: 2px solid #989898;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;

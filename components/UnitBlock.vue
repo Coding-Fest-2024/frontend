@@ -63,8 +63,8 @@
       color: white;
       border-radius: 16px;
       filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-      min-height: 90px;
-      max-height: 90px;
+      min-height: 100px;
+      max-height: 100px;
       z-index: inherit;
       cursor: grab;
       border: 2px solid #ffffff8f;
@@ -75,8 +75,8 @@
       padding-left: 2px;
       padding-right: 2px;
       outline: none;
-      min-width: 10%;
-      max-width: 23.33%;
+      min-width: 12%;
+      max-width: 24.5%;
       cursor: grab;
       border: 2px solid #ffffff8f;
       transition: 0.14s;
