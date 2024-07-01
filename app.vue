@@ -13,12 +13,15 @@
   height: 98vh;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .app {
     flex-direction: column;
+    height: 98.0vh;
+    overflow: hidden;
   }
   .side_bar {
     width: 100%;
+    height: 150%;
   }
 }
 </style>

@@ -103,7 +103,7 @@
     width: auto;
     flex-wrap: wrap;
     margin: 5px;
-    border: 2px solid #989898a8;
+    border: 3px solid #989898a8;
     transition: 0.2s;
 }
 
@@ -116,8 +116,7 @@
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow: hidden;
     width: 90%;
     flex-wrap:nowrap;
     z-index: -1;
@@ -138,6 +137,16 @@
     line-height: normal;
 }
 
+
+@media (max-width: 760px) {
+
+.yr-tag {
+    font-size: 20px;
+    min-height: 30px;
+    max-height: 30px;
+}
+
+}
 
 </style>
   

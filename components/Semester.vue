@@ -86,15 +86,32 @@
     padding-right: 10px;
     padding-bottom: 12px;
     border-radius: 22px;
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
     z-index: 3;
-    background-color: #ededed9c;
-    border-radius: 28px;
-    margin:10px;
-    border: 2px solid #989898;
+    background-color: #fafafa9c;
+    border-radius: 20px;
+    margin: 10px;
+    border: 2.5px solid #bababa;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
+}
+
+@media (max-width: 760px) {
+.drop-zone-container {
+    padding-top: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 8px;
+    border-radius: 22px;
+    background-color: #fafafa9c;
+    border-radius: 24px;
+    margin: 5px;
+    border: 2.5px solid #bababa;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    background-color: none;
+    min-height: 40px;
+}
 }
 
 </style>

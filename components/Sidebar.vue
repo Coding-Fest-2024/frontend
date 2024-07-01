@@ -1,82 +1,5 @@
 <template>
-    
     <div ref="sidebar" class="side_bar">
-        <div class="search-container">
-            <span class="material-symbols-outlined">search</span>
-            <input
-                class="search-input"
-                type="search"
-                placeholder="search your unit ..."
-                v-model="searchQuery"
-
-            />
-            <button v-if="searchQuery" class="clear-button" @click="clearSearch">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-        <div class="major-panel" :class="{ view: viewMajor }">
-            <transition name="fade">
-                <div v-if="MshowContent">
-                <button class="minimize-button" @click.stop="toggleViewMajor">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-                <div class="m-panel-title">
-                    {{ store.degree }} Bachelor of Advanced Computing:
-                </div>
-                <div class="m-zone-b" :class="{exp: isDegreeExpanded}">
-                    <div class="m-tab" @click="toggleDg">
-                        View Degree Core Units <br> >>
-                    </div>
-                    <div v-for="item in advancedComputingCoreUnits"
-                        :key="item.id"
-                        class="sb-el"
-                        :style="{ backgroundColor: item.color }"
-                        draggable="true"
-                        @dragstart="startDrag($event, item)">
-                        <div class="sb-text-container">{{ item.id }}</div>
-                        <div class="sb-inner-block">
-                            {{ item.name }}
-                        </div>
-                    </div>
-                </div>
-                <div class="m-panel-title">
-                    <br>Majors:
-                </div>
-                <div class="m-zone-b" :class="{ exp: isMajorExpanded1 }">
-                    <div class="m-tab" @click="toggleMajor1">
-                        View {{ store.selectedMajor[0] }} Units <br> >>
-                    </div>
-                    <div v-for="item in majorUnits1"
-                        :key="item.id"
-                        class="sb-el"
-                        :style="{ backgroundColor: item.color }"
-                        draggable="true"
-                        @dragstart="startDrag($event, item)">
-                        <div class="sb-text-container">{{ item.id }}</div>
-                        <div class="sb-inner-block">
-                            {{ item.name }}
-                        </div>
-                    </div>
-                </div>
-                <div class="m-zone-b" :class="{ exp: isMajorExpanded2 }">
-                    <div class="m-tab" @click="toggleMajor2">
-                        View {{ store.selectedMajor[1] }} Units <br> >>
-                    </div>
-                    <div v-for="item in majorUnits2"
-                        :key="item.id"
-                        class="sb-el"
-                        :style="{ backgroundColor: item.color }"
-                        draggable="true"
-                        @dragstart="startDrag($event, item)">
-                        <div class="sb-text-container">{{ item.id }}</div>
-                        <div class="sb-inner-block">
-                            {{ item.name }}
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </transition>
-        </div>
         <div class="description-panel" 
         :class="{ expanded: store.selectedItemId }"
         :style="{ backgroundColor: backgroundColor }">
@@ -105,17 +28,35 @@
             </div>
             </transition>
         </div>
-        
-        <div class="sb-zone-container">
-            <div v-for="item in filtered_items"
-                :key="item.id"
-                class="sb-el"
-                :style="{ backgroundColor: item.color }"
-                draggable="true"
-                @dragstart="startDrag($event, item)">
-                <div class="sb-text-container">{{ item.id }}</div>
-                <div class="sb-inner-block">
-                    {{ item.name }}
+        <div class="db-panel">
+            <div class="search-container">
+                <span class="material-symbols-outlined">search</span>
+                <input
+                    class="search-input"
+                    type="search"
+                    placeholder="search your unit ..."
+                    v-model="searchQuery"
+                />
+                <button v-if="searchQuery" class="clear-button" @click="clearSearch">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="db-control-panel">
+                <button class="button-browse"></button>
+                <button class="button-filter"></button>
+                <button class="button-bookmark"></button>
+            </div>
+            <div class="sb-zone-container">
+                <div v-for="item in filtered_items"
+                    :key="item.id"
+                    class="sb-el"
+                    :style="{ backgroundColor: item.color }"
+                    draggable="true"
+                    @dragstart="startDrag($event, item)">
+                    <div class="sb-text-container">{{ item.id }}</div>
+                    <div class="sb-inner-block">
+                        {{ item.name }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -297,21 +238,66 @@ export default defineComponent({
   box-sizing: border-box;
 }
 
+.db-control-panel {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 0px;
+    width: 97%;
+    align-items: center;
+}
+
+.button-browse {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 30px;
+    width: 33.3%;
+    margin: 4px;
+    background-color: #f3ba79;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.button-filter {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 30px;
+    width: 33.33%;
+    margin: 4px;
+    background-color: #a3eb52;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.button-bookmark {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 30px;
+    width: 33.33%;
+    margin: 4px;
+    background-color: #89ddeb;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
 .search-input::-webkit-search-cancel-button {
     display: none;
 }
 
 .side_bar {
-    width: 37%;
+    width: 48%;
     height: 98%;
     background-color: #f6f6f6;
     border-radius: 35px;
     z-index: 10;
     overflow: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     display: flex;
+    align-items: center;
     flex-direction: column;
-    padding:10px;
+    padding: 12px;
     border: solid #989898 0px;
 }
 
@@ -330,61 +316,31 @@ export default defineComponent({
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
 
-.m-zone-b {
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: left; 
-    background-color: transparent;
-    gap: 0px; 
-    width: 60%;
-    max-height: 75px;
-    border-radius: 18px;
-    border: 2px solid #e0e0e000;
-    /* box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2); */
-    margin-top: 3%;
-    padding-top: 0%;
-    padding-bottom: 0px;
-    margin-left: 5%;
+.db-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     overflow: hidden;
-    opacity: 1;
-    transition: 0.2s;
-}
-
-.m-zone-b.exp {
-    display:flex;
-    flex-wrap: wrap;
-    justify-content: space-around; 
-    gap: 0px; 
-    width: 90%;
-    height: fit-content;
-    max-height: fit-content;
-    min-height: fit-content;
-    background-color: #b1b1b156;
-    border-radius: 18px;
-    border: 2px solid #ffffff;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    background-color: none;
-    margin-top: 4.5%;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin-left: 4.5%;
-    overflow-y: auto;
-    transition: 0.2s;
-    margin-bottom: 5%;
+    padding: 18px;
+    align-items: center;
+    border: 3px solid #989898;
+    border-radius: 28px;
 }
 
 .sb-zone-container {
+    margin-top: 10px;
     width: 100%;
-    border-radius: 30px;
-    border: 3px solid #989898;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
     overflow-x: hidden;
-    padding: 10px;
+    overflow-y: auto;
+    padding:10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     box-sizing: border-box;
-}
-.sb-zone-container:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: inset 0px 0px 0px 0px rgba(133, 133, 133, 0.2);
+    border-top: solid #9898988a 4px;
+    border-bottom: solid #9898988a 4px;
+    height: 83%;
 }
 
 .sb-el {
@@ -397,7 +353,7 @@ export default defineComponent({
     max-height: 90px;
     z-index: inherit;
     cursor: grab;
-    border: 2px solid #ffffff8f;
+    border: 3px solid #ffffff8f;
     transition: 0.2s;
     padding-left: 4px;
     padding-right: 4px;
@@ -406,7 +362,6 @@ export default defineComponent({
     outline: none;
     width: 100%;
     cursor: grab;
-    border: 2px solid #ffffff8f;
     transition: 0.14s;
     user-select: none;
     box-sizing: border-box;
@@ -422,10 +377,10 @@ export default defineComponent({
 }
 
 .sb-el:hover {
-    border: 2.0px solid #525252b7;
+    border: 3px solid #2c2c2cb7;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
     transition: 0.2s;
-    transform: scale(1.05);
+    transform: scale(1.00);
 }
 
 .sb-text-container {
@@ -442,7 +397,7 @@ export default defineComponent({
 
 .sb-inner-block {
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: 400;
+    font-weight: 700;
     font-style: normal;
     padding: 8px;
     border-radius: 15px;
@@ -454,8 +409,7 @@ export default defineComponent({
     width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 48px;
-    min-height: 48%;
+    height: 45.5px;
     box-sizing: border-box;
     box-sizing: border-box;
 }
@@ -464,12 +418,13 @@ export default defineComponent({
     display: flex;
     align-items: center;
     background-color: #fff; /* Or any color you prefer for the search bar */
-    border-radius: 20px; /* Rounded corners for the search bar */
+    border-radius: 10px; /* Rounded corners for the search bar */
     padding: 5px;
     box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.236);
     border: 3px solid #9a9a9ab7;
-    margin: 5px;
+    min-width: 100%;
     box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 .search-input {
@@ -479,9 +434,9 @@ export default defineComponent({
     color: #d5d5d5;
     font-size: 1rem;
     padding-right: 0px;
-    min-width: 90%;
+    min-width: 100%;
     box-sizing: border-box;
-    height: 50px;
+    height: 35px;
 }
 
 .clear-button {
@@ -506,40 +461,12 @@ export default defineComponent({
     margin-left: 0px;
 }
 
-
-.major-panel {
-    border: 2px solid #989898;
-    border-radius: 20px;
-    min-width: 30%;
-    min-height: 0px;
-    margin-top: -3px;
-    margin-bottom: 0px;
-    transition: 0.3s;
-    overflow: hidden;
-    opacity: 0;
-}
-.major-panel.view {
-    border: 2px solid #989898;
-    border-radius: 20px;
-    min-width: 105%;
-    min-height: 90%;
-    /* display: flex; */
-    max-height: 150%;
-    margin-top: -3px;
-    margin-bottom: 25px;
-    transition: 0.4s;
-    overflow-y: auto;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    opacity: 1;
-    background-color: rgb(62, 62, 84);
-}
-
 .description-panel {
-    border: 2px solid #989898;
+    border: 3px solid #989898;
     border-radius: 20px;
-    width: 100%;
+    width: 30%;
     min-height: 0px;
-    margin-top: 10px;
+    margin-top: 0%;
     margin-bottom: 10px;
     transition: 0.3s;
     overflow: hidden;
@@ -547,27 +474,26 @@ export default defineComponent({
 }
 .description-panel.expanded {
     border: 3px solid #989898;
-    border-radius: 30px;
+    border-radius: 28px;
     min-width: 100%;
-    min-height: 80%;
     /* display: flex; */
-    max-height: 100%;
+    min-height: 88.5%;
     transition: 0.4s;
     overflow-y: auto;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
 }
 
-.m-panel-title {
-    display: flex;
-    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 1.8vw;
-    margin-left: 15px;
-    margin-top: -15px;
-    margin-right: 20px;
-    color: #ffffff;
+@media (max-width: 760px) {
+    .description-panel.expanded {
+        border: 3px solid #989898;
+        border-radius: 30px;
+        min-width: 100%;
+        /* display: flex; */
+        min-height: 85.5%;
+        transition: 0.4s;
+        overflow-y: auto;
+        box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    }
 }
 
 .panel-title {
@@ -576,7 +502,7 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 2.0vw;
+    font-size: 16px;
     margin-left: 15px;
     margin-top: -20px;
     margin-right: 20px;
@@ -588,48 +514,12 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 2.0vw;
+    font-size: 22.5px;
     margin-left: 15px;
     margin-top: 3px;
     margin-right: 20px;
     margin-bottom: 18px;
     color: #ffffff;
-}
-
-.m-tab {
-    display: flex;
-    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-    font-size: 0.95vw;
-    border: 2px solid #f1f1f1af;
-    background-color: #ffffff;
-    border-radius: 10px;
-    min-height: 3vw;
-    height:3vw;
-    max-height: 3vw;
-    margin-left: 0%;
-    margin-bottom: 3%;
-    margin-top: 4.5%;
-    transition: 0.25s;
-    overflow: hidden;
-    padding: 4%;
-    border: solid 2px #ffffffb7;
-    /* box-shadow: 0px 0px 18px 0.0px rgba(255, 255, 255, 0.2); */
-}
-
-.m-tab:hover {
-    transition: 0.2s;
-    transform: scale(1.03);
-    border: solid 2px #525252b7;
-    /* box-shadow: 0px 0px 18px 0.0px rgb(213, 213, 213); */
-}
-
-.m-tab:focus, .m-tab:active {
-    transition: 0.2s;
-    transform: scale(0.97);
-    /* box-shadow: 0px 0px 18px 0.0px rgba(255, 248, 241, 0.254); */
 }
 
 .pn-content-tab {
@@ -638,10 +528,10 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-    font-size: 1vw;
+    font-size: 16px;
     border: 2px solid #f1f1f1af;
     background-color: #ffffffcf;
-    border-radius: 20px;
+    border-radius: 8px;
     min-height: 100%;
     margin-left: 3%;
     margin-right: 3%;
@@ -656,7 +546,7 @@ export default defineComponent({
 
 .minimize-button {
     position:relative;
-    margin-left: 87%;
+    margin-left: 88%;
     background-color: rgba(0, 0, 0, 0);
     color: rgba(29, 29, 29, 0.725);
     border: none;

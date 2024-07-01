@@ -191,6 +191,13 @@ export default defineComponent({
     padding: 10px;
 }
 
+@media (max-width: 760px) {
+    .board {
+        padding: 0px;
+        padding-top: 3px;
+    }
+}
+
 .delete-button {
     position: absolute;
     top: 0;
