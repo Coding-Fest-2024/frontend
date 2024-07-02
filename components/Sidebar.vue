@@ -256,6 +256,9 @@ export default defineComponent({
     background-color: #f3ba79;
     background-size: 100%;
     background-repeat: no-repeat;
+    transition: 0.2s;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    border: solid #ce671d49 3px;
 }
 
 .button-filter {
@@ -268,6 +271,8 @@ export default defineComponent({
     background-color: #a3eb52;
     background-size: 100%;
     background-repeat: no-repeat;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    border: solid #23b34268 3px;
 }
 
 .button-bookmark {
@@ -280,6 +285,13 @@ export default defineComponent({
     background-color: #89ddeb;
     background-size: 100%;
     background-repeat: no-repeat;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    border: solid #1d9cce68 3px;
+}
+
+.button-browse:hover {
+    background-color: white;
+    transition: 0.1s;
 }
 
 .search-input::-webkit-search-cancel-button {
@@ -289,7 +301,7 @@ export default defineComponent({
 .side_bar {
     width: 48%;
     height: 98%;
-    background-color: #f6f6f6;
+    background-color: #efeeee64;
     border-radius: 35px;
     z-index: 10;
     overflow: auto;
@@ -297,7 +309,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 12px;
+    padding: 10px;
     border: solid #989898 0px;
 }
 
@@ -323,7 +335,7 @@ export default defineComponent({
     overflow: hidden;
     padding: 18px;
     align-items: center;
-    border: 3px solid #989898;
+    border: 8px solid #98989853;
     border-radius: 28px;
 }
 
@@ -462,10 +474,10 @@ export default defineComponent({
 }
 
 .description-panel {
-    border: 3px solid #989898;
+    border: 5px solid #98989853;
     border-radius: 20px;
     width: 30%;
-    min-height: 0px;
+    min-height: 1px;
     margin-top: 0%;
     margin-bottom: 10px;
     transition: 0.3s;
@@ -473,7 +485,7 @@ export default defineComponent({
     box-sizing: border-box;
 }
 .description-panel.expanded {
-    border: 3px solid #989898;
+    border: 8px solid #9898985a;
     border-radius: 28px;
     min-width: 100%;
     /* display: flex; */

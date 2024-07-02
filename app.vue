@@ -16,7 +16,7 @@
 @media (max-width: 760px) {
   .app {
     flex-direction: column;
-    height: 98.0vh;
+    height: 93vh;
     overflow: hidden;
   }
   .side_bar {
