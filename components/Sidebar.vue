@@ -5,13 +5,11 @@
         :style="{ backgroundColor: backgroundColor }">
             <transition name="fade">
             <div v-if="showContent">
-                <button class="minimize-button" @click.stop="togglePanel">
+                <div class="minimize-button" @click.stop="togglePanel">
                     <span class="material-symbols-outlined">close</span>
-                </button>
-                <div class="panel-title">
-                    {{ selectedItem.id }}
                 </div>
-                <div class="pn-unit-name"> {{ selectedItem.name }}
+                <div class="panel-title">
+                    {{ selectedItem.id }}: {{ selectedItem.name }}
                 </div>
                 <div class="pn-content-tab">
                     Prerequisites: <br> {{ selectedItem.Prerequisites }}
@@ -415,7 +413,7 @@ export default defineComponent({
     border-radius: 15px;
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
-    font-size: 14px;
+    font-size: 16px;
     line-height: normal;
     color: rgba(55, 55, 55, 0.851);
     width: 100%;
@@ -497,8 +495,6 @@ export default defineComponent({
 
 @media (max-width: 760px) {
     .description-panel.expanded {
-        border: 3px solid #989898;
-        border-radius: 30px;
         min-width: 100%;
         /* display: flex; */
         min-height: 85.5%;
@@ -509,29 +505,16 @@ export default defineComponent({
 }
 
 .panel-title {
-    display: flex;
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 16px;
+    font-size: 30px;
     margin-left: 15px;
-    margin-top: -20px;
+    margin-top: 15px;
     margin-right: 20px;
     color: #ffffff;
-}
-.pn-unit-name {
-    display: flex;
-    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 22.5px;
-    margin-left: 15px;
-    margin-top: 3px;
-    margin-right: 20px;
-    margin-bottom: 18px;
-    color: #ffffff;
+    max-width: 100%;
 }
 
 .pn-content-tab {
@@ -556,20 +539,23 @@ export default defineComponent({
     transition: 0.2s;
 }
 
-.minimize-button {
-    position:relative;
-    margin-left: 88%;
-    background-color: rgba(0, 0, 0, 0);
-    color: rgba(29, 29, 29, 0.725);
+
+.description-panel .material-symbols-outlined{
+    background: none;
     border: none;
-    border-radius: 30px;
+    font-size: 22px;
     cursor: pointer;
-    opacity: 1;
-    margin-top: 3%;
-    height: 0px;
-    width: 10%;
-    overflow: visible;
+    font-weight: bold;
+    position: relative;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 700,
+    'GRAD' 0,
+    'opsz' 24;
     transition: 0.2s;
+    margin-left: 90%;
+    margin-top: 15px;
+    margin-bottom: -200px;
 }
 
 .minimize-button:hover .material-symbols-outlined {

@@ -3,16 +3,16 @@
        @drop="onDrop($event, semester, year)"
        @dragover.prevent
        @dragenter.prevent>
-    <UnitBlock
-      v-for="item in getItems(semester, year)"
-      :key="item.id"
-      :item="item"
-      :semester="semester"
-      :year="year"
-      :getItemWidth="getItemWidth"
-    />
-  </div>
-  </template>
+        <UnitBlock
+        v-for="item in getItems(semester, year)"
+        :key="item.id"
+        :item="item"
+        :semester="semester"
+        :year="year"
+        :getItemWidth="getItemWidth"
+        />
+    </div>
+</template>
   
   <script setup>
   import { store } from '../store';
@@ -78,23 +78,21 @@
 
 
 .drop-zone-container {
-    display: flex; 
-    justify-content: start;
-    min-height: 60px;
+    display: flex;
     padding-top: 12px;
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 12px;
     border-radius: 22px;
-    overflow-x: hidden;
-    overflow-y: hidden;
     z-index: 3;
     background-color: #fafafa9c;
     border-radius: 20px;
-    margin: 10px;
+    margin-top: 10px;
     border: 2.5px solid #bababa;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
+    min-width: 100%;
+    min-height: 55px;
 }
 
 @media (max-width: 760px) {

@@ -1,7 +1,7 @@
 <template>
     <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
-        <button class="modal-close-button" @click="closeModal">X</button>
+        <span class="material-symbols-outlined" @click="closeModal">close</span>
         <slot></slot>
       </div>
     </div>
@@ -38,20 +38,27 @@
 }
   
   .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
+    background: rgb(255, 255, 255);
+    padding: 15px;
+    border-radius: 30px;
     position: relative;
+    border: 5px solid #181818ef;
   }
-  
-  .modal-close-button {
+
+  .material-symbols-outlined {
     position: absolute;
     top: 10px;
     right: 10px;
     background: none;
     border: none;
-    font-size: 16px;
+    font-size: 22px;
     cursor: pointer;
-  }
+    font-weight: bold;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 700,
+    'GRAD' 0,
+    'opsz' 24
+}
   </style>
   
