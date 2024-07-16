@@ -1,20 +1,22 @@
 <template>
-    <div class="board">
-        <AcademicYear
-            v-for="year in academicYears"
-            :key="`year-${year}`"
-            :year="year"
-        />
+    <div class="mainbody">
         <div class="button-container">
-            <button class="add-year-button" @click="addAcademicYear">
-                <span class="material-symbols-outlined">add</span>
-            </button>
-            <button class="add-year-button" @click="minusAcademicYear">
-                <span class="material-symbols-outlined">remove</span>
-            </button>
-            <button class="add-year-button" @click="cleanBoard">
-                <span class="material-symbols-outlined">delete_sweep</span>
-            </button>
+                <button class="add-year-button" @click="addAcademicYear">
+                    <span class="material-symbols-outlined">add</span>
+                </button>
+                <button class="add-year-button" @click="minusAcademicYear">
+                    <span class="material-symbols-outlined">remove</span>
+                </button>
+                <button class="add-year-button" @click="cleanBoard">
+                    <span class="material-symbols-outlined">delete_sweep</span>
+                </button>
+            </div>
+        <div class="board">
+            <AcademicYear
+                v-for="year in academicYears"
+                :key="`year-${year}`"
+                :year="year"
+            />
         </div>
     </div>
 </template>
@@ -191,6 +193,14 @@ export default defineComponent({
     padding: 10px;
 }
 
+.mainbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: auto;
+    padding: 10px;
+}
+
 @media (max-width: 760px) {
     .board {
         padding: 0px;
@@ -251,8 +261,9 @@ export default defineComponent({
     display: flex;
     width: 40%;
     max-height: 40px;
-    margin-top: 8px;
-    margin-left: 30%;
+    margin-top: 2px;
+    margin-bottom: 5px;
+    margin-left: 29.55%;
     /* border: black solid 2px; */
     align-content: space-around;
 }

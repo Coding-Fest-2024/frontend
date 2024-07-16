@@ -21,7 +21,8 @@
   }
   .side_bar {
     width: 100%;
-    height: 150%;
+    min-height: 60vh;
+    max-height: 60vh;
   }
 }
 </style>

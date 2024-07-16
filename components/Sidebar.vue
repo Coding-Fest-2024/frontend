@@ -45,15 +45,39 @@
                 <button class="button-bookmark"></button>
             </div>
             <div class="sb-zone-container">
-                <div v-for="item in filtered_items"
-                    :key="item.id"
-                    class="sb-el"
-                    :style="{ backgroundColor: item.color }"
-                    draggable="true"
-                    @dragstart="startDrag($event, item)">
-                    <div class="sb-text-container">{{ item.id }}</div>
-                    <div class="sb-inner-block">
-                        {{ item.name }}
+                <div v-if="!searchQuery">
+                    <div class="default_board">
+                        <span class="material-symbols-outlined">manage_search</span>
+                        Search
+                        <div class="default_content">Search for every unit at USYD and view detailed information, or browse courses by expanding the browse option</div>
+                    </div>
+                    <div class="default_board">
+                        <span class="material-symbols-outlined">arrow_right_alt</span>
+                        Drag
+                        <div class="default_content">Drag courses from this search area into the semester you want.</div>
+                    </div>
+                    <div class="default_board">
+                        <span class="material-symbols-outlined">task</span>
+                        Progress
+                        <div class="default_content">Check your progress on the chosen majors</div>
+                    </div>
+                    <div class="default_board">
+                        <span class="material-symbols-outlined">steppers</span>
+                        More
+                        <div class="default_content">Saving, sharing and bookmarks coming soon...</div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div v-for="item in filtered_items"
+                        :key="item.id"
+                        class="sb-el"
+                        :style="{ backgroundColor: item.color }"
+                        draggable="true"
+                        @dragstart="startDrag($event, item)">
+                        <div class="sb-text-container">{{ item.id }}</div>
+                        <div class="sb-inner-block">
+                            {{ item.name }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,7 +101,7 @@ export default defineComponent({
 
         const filtered_items = computed(() => {
             if (!searchQuery.value) {
-                return items.value;
+                return items.value.includes("");
             }
             const query = searchQuery.value.toLowerCase();
             return items.value.filter(item =>
@@ -236,6 +260,40 @@ export default defineComponent({
   box-sizing: border-box;
 }
 
+.default_board {
+    display: flex;
+    flex-direction: column;
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 24px;
+    color: #363636a8;
+    background-color: #f7f7f7;
+    /* border: 3px solid #989898a8; */
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px;
+    margin-bottom: 12px;
+    text-align: center;
+    /* box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2); */
+}
+
+.default_content {
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+
+.default_board .material-symbols-outlined {
+    font-size: 38px;
+    color: #363636a8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .db-control-panel {
     display: flex;
     justify-content: space-around;
@@ -248,7 +306,7 @@ export default defineComponent({
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    height: 30px;
+    height: 38px;
     width: 33.3%;
     margin: 4px;
     background-color: #f3ba79;
@@ -263,28 +321,28 @@ export default defineComponent({
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    height: 30px;
+    height: 38px;
     width: 33.33%;
     margin: 4px;
-    background-color: #a3eb52;
+    background-color: #e6e6e6;
     background-size: 100%;
     background-repeat: no-repeat;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    border: solid #23b34268 3px;
+    border: solid #d1d1d1 3px;
 }
 
 .button-bookmark {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    height: 30px;
+    height: 38px;
     width: 33.33%;
     margin: 4px;
-    background-color: #89ddeb;
+    background-color: #e6e6e6;
     background-size: 100%;
     background-repeat: no-repeat;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    border: solid #1d9cce68 3px;
+    border: solid #d1d1d1 3px;
 }
 
 .button-browse:hover {
@@ -359,8 +417,8 @@ export default defineComponent({
     color: white;
     border-radius: 20px;
     filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-    min-height: 90px;
-    max-height: 90px;
+    min-height: 78px;
+    max-height: 7px;
     z-index: inherit;
     cursor: grab;
     border: 3px solid #ffffff8f;
@@ -419,7 +477,7 @@ export default defineComponent({
     width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 45.5px;
+    height: 34px;
     box-sizing: border-box;
     box-sizing: border-box;
 }
