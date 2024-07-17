@@ -191,6 +191,8 @@ export default defineComponent({
     width: 100%;
     overflow: auto;
     padding: 10px;
+    border-top: solid #9898988a 3px;
+    border-bottom: solid #9898988a 3px;
 }
 
 .mainbody {
@@ -262,7 +264,7 @@ export default defineComponent({
     width: 40%;
     max-height: 40px;
     margin-top: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     margin-left: 29.55%;
     /* border: black solid 2px; */
     align-content: space-around;

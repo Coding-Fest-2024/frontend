@@ -10,19 +10,20 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
-  height: 98vh;
+  height: 98.5vh;
 }
 
 @media (max-width: 760px) {
   .app {
     flex-direction: column;
-    height: 93vh;
-    overflow: hidden;
+    /* height: 93vh; */
+    overflow: auto;
+    height:auto;
   }
   .side_bar {
     width: 100%;
-    min-height: 60vh;
-    max-height: 60vh;
+    min-height: 90vh;
+    max-height: 90vh;
   }
 }
 </style>

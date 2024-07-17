@@ -271,10 +271,11 @@ export default defineComponent({
     background-color: #f7f7f7;
     /* border: 3px solid #989898a8; */
     border-radius: 20px;
-    padding: 10px;
-    margin: 5px;
-    margin-bottom: 12px;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 24px;
     text-align: center;
+    margin-top: 24px;
     /* box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2); */
 }
 
@@ -292,6 +293,43 @@ export default defineComponent({
     color: #363636a8;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+@media (max-width: 760px) {
+  
+    .default_board {
+        display: flex;
+        flex-direction: column;
+        font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-weight: 600;
+        font-style: normal;
+        font-size: 20px;
+        color: #363636a8;
+        background-color: #f7f7f7;
+        /* border: 3px solid #989898a8; */
+        border-radius: 20px;
+        padding:0px;
+        margin: 3px;
+        margin-bottom: 12px;
+        text-align: center;
+        /* box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2); */
+    }
+
+    .default_content {
+        font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+
+    .default_board .material-symbols-outlined {
+        font-size: 38px;
+        color: #363636a8;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 }
 
 .db-control-panel {
@@ -408,7 +446,7 @@ export default defineComponent({
     box-shadow: inset 0px 0px 0px 0px rgba(133, 133, 133, 0.2);
     border-top: solid #9898988a 4px;
     border-bottom: solid #9898988a 4px;
-    height: 83%;
+    height: 90vh;
 }
 
 .sb-el {
@@ -417,8 +455,8 @@ export default defineComponent({
     color: white;
     border-radius: 20px;
     filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-    min-height: 78px;
-    max-height: 7px;
+    min-height: 74px;
+    max-height: 74px;
     z-index: inherit;
     cursor: grab;
     border: 3px solid #ffffff8f;
@@ -456,7 +494,7 @@ export default defineComponent({
     font-optical-sizing: auto;
     font-weight: 600;
     font-style: normal;
-    font-size: 26px;
+    font-size: 22px;
     margin-left: 10px;
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
@@ -468,7 +506,7 @@ export default defineComponent({
     font-weight: 700;
     font-style: normal;
     padding: 8px;
-    border-radius: 15px;
+    border-radius: 14px;
     background-color: rgba(255, 255, 255, 0.90);
     text-align: left;
     font-size: 16px;
@@ -508,14 +546,14 @@ export default defineComponent({
 }
 
 .clear-button {
-    position: absolute;
-    right: 0%;
+    position: relative;
     border: none;
     background: transparent;
     cursor: pointer;
     text-align: center;
-    margin-top: 2.0%;
-    margin-left: -10px;
+    right:1px;
+    margin-top: 3px;
+    margin-left: -55px;
 }
 
 .clear-button:hover .material-symbols-outlined {
