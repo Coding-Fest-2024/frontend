@@ -1,7 +1,7 @@
 <template>
     <div class="drag-el"
          :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
-         :style="{ backgroundColor: item.color, width: getItemWidth(semester, year) + '%' }"
+         :style="{ backgroundColor: stringToColorCode(item.id), width: getItemWidth(semester, year) + '%' }"
          draggable="true"
          @click="selectItem(item)"
          @dragstart="startDrag($event, item)">
@@ -54,6 +54,31 @@
       store.items.splice(index, 1);
     }
   };
+  
+  function stringToColorCode(str) {
+    let hash = 0;
+    for (let i = 0; i < 6; i++) {
+      hash = (str.charCodeAt(i) + 1) * 46 + ((hash << 5) - hash);
+    }
+    const hue = hash % 360; // Ensure the hue is between 0 and 360
+    
+    // Adjust lightness for yellow hue range (50 to 70 degrees)
+    let lightness = 60; // Default lightness
+    let saturation = 65; // Default saturation
+    
+    if (hue >= 50 && hue <= 70) {
+      // Adjust yellow to avoid undesirable color
+      lightness = 50; 
+      saturation = 75;
+    } else if ((hue >= 280 && hue <= 320) || (hue >= 330 && hue <= 360)) {
+      // Adjust purple and very bright colors to avoid undesirable color
+      lightness = 60; 
+      saturation = 60;
+    }
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  }
+
   </script>
   
   <style scoped>

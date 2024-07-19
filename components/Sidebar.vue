@@ -40,46 +40,67 @@
                 </button>
             </div>
             <div class="db-control-panel">
-                <button class="button-browse"></button>
+                <button :class="{ active: isBrowseActive }" class="button-browse" @click="toggleBrowse">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
                 <button class="button-filter"></button>
                 <button class="button-bookmark"></button>
             </div>
             <div class="sb-zone-container">
-                <div v-if="!searchQuery">
-                    <div class="default_board">
-                        <span class="material-symbols-outlined">manage_search</span>
-                        Search
-                        <div class="default_content">Search for every unit at USYD and view detailed information, or browse courses by expanding the browse option</div>
-                    </div>
-                    <div class="default_board">
-                        <span class="material-symbols-outlined">arrow_right_alt</span>
-                        Drag
-                        <div class="default_content">Drag courses from this search area into the semester you want.</div>
-                    </div>
-                    <div class="default_board">
-                        <span class="material-symbols-outlined">task</span>
-                        Progress
-                        <div class="default_content">Check your progress on the chosen majors</div>
-                    </div>
-                    <div class="default_board">
-                        <span class="material-symbols-outlined">steppers</span>
-                        More
-                        <div class="default_content">Saving, sharing and bookmarks coming soon...</div>
-                    </div>
-                </div>
-                <div v-else>
-                    <div v-for="item in filtered_items"
-                        :key="item.id"
-                        class="sb-el"
-                        :style="{ backgroundColor: item.color }"
-                        draggable="true"
-                        @dragstart="startDrag($event, item)">
-                        <div class="sb-text-container">{{ item.id }}</div>
-                        <div class="sb-inner-block">
-                            {{ item.name }}
+                <div v-if="isBrowseActive">
+                    <div class="browse-content">
+                        <div class="category">
+                        <h3>Category 1</h3>
+                        <p>Temporary content for category 1.</p>
+                        </div>
+                        <div class="category">
+                        <h3>Category 2</h3>
+                        <p>Temporary content for category 2.</p>
+                        </div>
+                        <div class="category">
+                        <h3>Category 3</h3>
+                        <p>Temporary content for category 3.</p>
                         </div>
                     </div>
                 </div>
+                <div v-else>
+                    <div v-if="!searchQuery">
+                        <div class="default_board">
+                            <span class="material-symbols-outlined">manage_search</span>
+                            Search
+                            <div class="default_content">Search for every unit at USYD and view detailed information, or browse courses by expanding the browse option</div>
+                        </div>
+                        <div class="default_board">
+                            <span class="material-symbols-outlined">arrow_right_alt</span>
+                            Drag
+                            <div class="default_content">Drag courses from this search area into the semester you want.</div>
+                        </div>
+                        <div class="default_board">
+                            <span class="material-symbols-outlined">task</span>
+                            Progress
+                            <div class="default_content">Check your progress on the chosen majors</div>
+                        </div>
+                        <div class="default_board">
+                            <span class="material-symbols-outlined">steppers</span>
+                            More
+                            <div class="default_content">Saving, sharing and bookmarks coming soon...</div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div v-for="item in filtered_items"
+                            :key="item.id"
+                            class="sb-el"
+                            :style="{ backgroundColor: getColorForCode(item.id) }"
+                            draggable="true"
+                            @dragstart="startDrag($event, item)">
+                            <div class="sb-text-container">{{ item.id }}</div>
+                            <div class="sb-inner-block">
+                                {{ item.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -92,10 +113,36 @@ import { store } from '../store';
 import aggregatedUnits from '../aggregated_units.json';
 import aggregatedCourses from '../aggregated_courses.json';
 
+
+function stringToColorCode(str) {
+    let hash = 0;
+    for (let i = 0; i < 6; i++) {
+      hash = (str.charCodeAt(i) + 1) * 46 + ((hash << 5) - hash);
+    }
+    const hue = hash % 360; // Ensure the hue is between 0 and 360
+    
+    // Adjust lightness for yellow hue range (50 to 70 degrees)
+    let lightness = 60; // Default lightness
+    let saturation = 65; // Default saturation
+    
+    if (hue >= 50 && hue <= 70) {
+      // Adjust yellow to avoid undesirable color
+      lightness = 50; 
+      saturation = 75;
+    } else if ((hue >= 280 && hue <= 320) || (hue >= 330 && hue <= 360)) {
+      // Adjust purple and very bright colors to avoid undesirable color
+      lightness = 60; 
+      saturation = 60;
+    }
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
 export default defineComponent({
     setup() {
         const sidebar = ref(null);
         const searchQuery = ref('');
+        const isBrowseActive = ref(false);
 
         const items = ref(aggregatedUnits);
 
@@ -148,6 +195,10 @@ export default defineComponent({
 
         const showContent = ref(false); 
 
+        const toggleBrowse = () => {
+            isBrowseActive.value = !isBrowseActive.value;
+        };
+
         watch(() => store.selectedItemId, (newVal, oldVal) => {
             if (newVal !== null && sidebar.value) {
                 sidebar.value.scrollTop = 0;
@@ -190,30 +241,9 @@ export default defineComponent({
             searchQuery.value = '';
         };
 
-        const viewMajor = computed(() => store.viewMajor);
-
-        const toggleViewMajor = () => {
-            store.viewMajor = !store.viewMajor;
+        const getColorForCode = (code) => {
+            return stringToColorCode(code);
         };
-
-
-        const isDegreeExpanded = ref(false)
-        const isMajorExpanded1 = ref(false); 
-        const isMajorExpanded2 = ref(false); 
-
-        const toggleDg = () => {
-            isDegreeExpanded.value = !isDegreeExpanded.value;
-        }
-
-        const toggleMajor1 = () => {
-            if (store.selectedMajor[0] != null) isMajorExpanded1.value = !isMajorExpanded1.value;
-            console.log(isMajorExpanded1.value);
-        }
-
-        const toggleMajor2 = () => {
-            if (store.selectedMajor[1] != null) isMajorExpanded2.value = !isMajorExpanded2.value;
-            console.log(isMajorExpanded2.value);
-        }
 
         return {
             sidebar,
@@ -227,18 +257,12 @@ export default defineComponent({
             backgroundColor,
             searchQuery,
             clearSearch,
-            viewMajor,
-            MshowContent,
-            toggleViewMajor,
             advancedComputingCoreUnits,
             majorUnits1,
             majorUnits2,
-            toggleMajor1,
-            toggleMajor2,
-            isMajorExpanded1,
-            isMajorExpanded2,
-            toggleDg,
-            isDegreeExpanded,
+            toggleBrowse,
+            isBrowseActive,
+            getColorForCode
         };
     }
 
@@ -271,7 +295,8 @@ export default defineComponent({
     background-color: #f7f7f7;
     /* border: 3px solid #989898a8; */
     border-radius: 20px;
-    padding: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin: 0px;
     margin-bottom: 24px;
     text-align: center;
@@ -347,12 +372,22 @@ export default defineComponent({
     height: 38px;
     width: 33.3%;
     margin: 4px;
-    background-color: #f3ba79;
+    background-color: #e6e6e6;
     background-size: 100%;
     background-repeat: no-repeat;
     transition: 0.2s;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    border: solid #ce671d49 3px;
+    border: solid #787878 3px;
+}
+
+.button-browse .material-symbols-outlined {
+    font-size: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+    color: #787878;
 }
 
 .button-filter {
@@ -383,8 +418,15 @@ export default defineComponent({
     border: solid #d1d1d1 3px;
 }
 
+
 .button-browse:hover {
     background-color: white;
+    transition: 0.1s;
+    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.4);
+}
+
+.button-browse.active {
+    background-color: rgba(204, 255, 143, 0.733);
     transition: 0.1s;
 }
 
