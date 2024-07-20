@@ -138,7 +138,7 @@
 
   .drag-el:hover {
       border: 3px solid #1d1d1d93;
-      box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
+      box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.5);
       transition: 0.15s;
       transform: scale(1.0) translate(0%, -0%);
   }
@@ -178,7 +178,7 @@
     }
     .drag-el:hover {
         border: 1.5px solid #1d1d1d93;
-        box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.419);
+        box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.419);
         transition: 0.15s;
         transform: scale(1.0) translate(0%, -0%);
     }
@@ -191,10 +191,10 @@
   }
   
   .drag-el.selected {
-      box-shadow: 0px 0px 10px 5px rgba(255,255,255, 1);
-      cursor: grab;
-      transform: scale(1.02);
-      transition: 0.1s;
+    box-shadow: 0px 4px 6px 0.0px rgba(133, 133, 133, 0.5);
+    cursor: grab;
+    transform: scale(1.02);
+    transition: 0.1s;
   }
   
   .drag-el:active {

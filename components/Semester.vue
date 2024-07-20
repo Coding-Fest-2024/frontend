@@ -83,16 +83,15 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 12px;
-    border-radius: 22px;
     z-index: 3;
     background-color: #fafafa9c;
-    border-radius: 20px;
+    border-radius: 28px;
     margin-top: 10px;
     border: 2.5px solid #bababa;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
     background-color: none;
     min-width: 100%;
-    min-height: 55px;
+    min-height: 72px;
 }
 
 @media (max-width: 760px) {
@@ -101,9 +100,7 @@
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 8px;
-    border-radius: 22px;
     background-color: #fafafa9c;
-    border-radius: 24px;
     margin: 5px;
     border: 2.5px solid #bababa;
     box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);

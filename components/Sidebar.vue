@@ -2,7 +2,7 @@
     <div ref="sidebar" class="side_bar">
         <div class="description-panel" 
         :class="{ expanded: store.selectedItemId }"
-        :style="{ backgroundColor: backgroundColor }">
+        :style="{ backgroundColor: getSelectedColor() }">
             <transition name="fade">
             <div v-if="showContent">
                 <div class="minimize-button" @click.stop="togglePanel">
@@ -12,13 +12,13 @@
                     {{ selectedItem.id }}: {{ selectedItem.name }}
                 </div>
                 <div class="pn-content-tab">
-                    Prerequisites: <br> {{ selectedItem.Prerequisites }}
+                    Prerequisites: <br> {{ selectedItem.P }}
                 </div>
                 <div class="pn-content-tab">
-                    Corequisites: <br> {{ selectedItem.Corequisites }}
+                    Corequisites: <br> {{ selectedItem.C }}
                 </div>
                 <div class="pn-content-tab">
-                    Prohibitions: <br> {{ selectedItem.Prohibitions }}
+                    Prohibitions: <br> {{ selectedItem.N }}
                 </div>
                 <div class="pn-content-tab">
                     Settings:
@@ -87,15 +87,17 @@
                         </div>
                     </div>
                     <div v-else>
-                        <div v-for="item in filtered_items"
-                            :key="item.id"
-                            class="sb-el"
-                            :style="{ backgroundColor: getColorForCode(item.id) }"
-                            draggable="true"
-                            @dragstart="startDrag($event, item)">
-                            <div class="sb-text-container">{{ item.id }}</div>
-                            <div class="sb-inner-block">
-                                {{ item.name }}
+                        <div class="item_blk">
+                            <div v-for="item in filtered_items"
+                                :key="item.id"
+                                class="sb-el"
+                                :style="{ backgroundColor: getColorForCode(item.id) }"
+                                draggable="true"
+                                @dragstart="startDrag($event, item)">
+                                <div class="sb-text-container">{{ item.id }}</div>
+                                <div class="sb-inner-block">
+                                    {{ item.name }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,6 +117,9 @@ import aggregatedCourses from '../aggregated_courses.json';
 
 
 function stringToColorCode(str) {
+
+    if (!str) return 'hsl(0, 0%, 0%)'; // Fallback in case of no string
+
     let hash = 0;
     for (let i = 0; i < 6; i++) {
       hash = (str.charCodeAt(i) + 1) * 46 + ((hash << 5) - hash);
@@ -245,6 +250,13 @@ export default defineComponent({
             return stringToColorCode(code);
         };
 
+        const getSelectedColor = () => {
+            if (store.selectedItemId) {
+                return stringToColorCode(store.selectedItemId);
+            }
+            return 'hsl(0, 0%, 0%, 0)';
+        };
+
         return {
             sidebar,
             filtered_items,
@@ -262,7 +274,8 @@ export default defineComponent({
             majorUnits2,
             toggleBrowse,
             isBrowseActive,
-            getColorForCode
+            getColorForCode,
+            getSelectedColor,
         };
     }
 
@@ -489,6 +502,17 @@ export default defineComponent({
     border-top: solid #9898988a 4px;
     border-bottom: solid #9898988a 4px;
     height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.item_blk {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .sb-el {
@@ -497,8 +521,8 @@ export default defineComponent({
     color: white;
     border-radius: 20px;
     filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-    min-height: 74px;
-    max-height: 74px;
+    min-height: 94px;
+    max-height: 94px;
     z-index: inherit;
     cursor: grab;
     border: 3px solid #ffffff8f;
@@ -508,7 +532,7 @@ export default defineComponent({
     padding-bottom: 4px;
     margin-bottom: 6px;
     outline: none;
-    width: 100%;
+    min-width: 315px;
     cursor: grab;
     transition: 0.14s;
     user-select: none;
@@ -557,7 +581,7 @@ export default defineComponent({
     width: 100%;
     overflow: hidden;
     word-wrap: break-word;
-    height: 34px;
+    height: 54px;
     box-sizing: border-box;
     box-sizing: border-box;
 }
