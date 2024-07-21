@@ -124,6 +124,8 @@ export default defineComponent({
 
         const cleanBoard = () => {
             store.items = [];
+            store.selectedItemId = null;
+            store.saveToLocalStorage();
         }
 
         const deleteItem = (itemToDelete) => {

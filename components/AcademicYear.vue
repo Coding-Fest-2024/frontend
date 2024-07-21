@@ -50,16 +50,19 @@ const updateSemesters = (semesters) => {
 
 
 .academic-year-container {
-    background-color: #EAEAEA;
-    border-radius: 30px;
+    background-color: #eaeaea;
+    border-radius: 40px;
     width: auto;
     display: flex;
     flex-direction: column;
-    margin: 5px;
-    border: 3px solid #989898a8;
+    margin: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
+    border: 3px solid #747474a8;
     transition: 0.2s;
     align-items: center;
     padding: 10px;
+    box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
 .yr-tag {

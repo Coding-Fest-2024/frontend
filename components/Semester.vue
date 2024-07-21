@@ -106,11 +106,11 @@ watch(store.items, () => {
     padding-right: 10px;
     padding-bottom: 12px;
     z-index: 3;
-    background-color: #fafafa9c;
+    background-color: #ffffffa6;
     border-radius: 28px;
     margin-top: 10px;
-    border: 2.5px solid #bababa;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
+    border: 2.5px solid #aeaeae;
+    /* box-shadow: 0px 6px 4px 0.0px rgba(133, 133, 133, 0.2); */
     background-color: none;
     min-width: 100%;
     max-width: 100%;
@@ -124,7 +124,6 @@ watch(store.items, () => {
   background-color: #fafafa9c;
   margin: 5px;
   border: 2.5px solid #bababa;
-  box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
   background-color: none;
   min-width: 100%;
   max-width: 100%;

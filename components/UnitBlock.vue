@@ -108,7 +108,7 @@
       max-width: 24.5%;
       cursor: grab;
       border: 3px solid #ffffff8f;
-      transition: 0.14s;
+      transition: 0.18s;
   }
   
   .text-container {
