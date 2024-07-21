@@ -2,6 +2,7 @@
   <div class="app">
     <Sidebar class="side_bar"/>
     <SemBoard />
+    <DescriptionPanel />
   </div>
 </template>
 
@@ -13,7 +14,7 @@
   height: 98.5vh;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
   .app {
     flex-direction: column;
     /* height: 93vh; */

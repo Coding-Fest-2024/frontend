@@ -130,7 +130,8 @@
       line-height: normal;
       color: rgba(55, 55, 55, 0.851);
       width: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       word-wrap: break-word;
       height: 68px;
       box-sizing: border-box;
@@ -143,44 +144,53 @@
       transform: scale(1.0) translate(0%, -0%);
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 800px) {
     .text-container {
-        margin-left: 4px;
-        font-size: 11px;
-        margin-bottom: 2px;
-    }
-    .inner-block {
-        font-size: 10px;
-        height: 77px;
-        font-weight: 800;
+        margin-left: 8px;
+        font-size: 18px;
+        margin-bottom: 1px;
     }
     .drag-el {
-      align-content: space-around;
       background-color: lightskyblue;
-      color: white;
       border-radius: 16px;
       filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-      height:110px;
+      height: 63px;
       z-index: inherit;
       cursor: grab;
       border: 2px solid #ffffff8f;
       transition: 0.2s;
-      margin-left: 2px;
-      margin-right: 2px;
+      margin-left: 0px;
+      margin-right: 0px;
+      margin-top: 0px;
+      margin-bottom: 6px;
       border-radius: 16px;
       padding: 4px;
+      padding-top: 0px;
       outline: none;
-      min-width: 12%;
-      max-width: 24.5%;
+      min-width: 100%;
+      max-width: 100%;
       cursor: grab;
-      border: 1.5px solid #ffffff8f;
       transition: 0.14s;
     }
     .drag-el:hover {
-        border: 1.5px solid #1d1d1d93;
-        box-shadow: 0px 0px 10px 5px rgba(255, 255, 255, 0.419);
-        transition: 0.15s;
-        transform: scale(1.0) translate(0%, -0%);
+        border: 1.5px solid #000000bf;
+    }
+    .inner-block {
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      padding: 8px;
+      border-radius: 10px; 
+      background-color: rgba(255, 255, 255, 0.90);
+      text-align: left;
+      font-size: 12px;
+      line-height: normal;
+      color: rgba(55, 55, 55, 0.851);
+      width: 100%;
+      overflow: hidden;
+      word-wrap:normal;
+      height: 30px;
+      box-sizing: border-box;
     }
     
 }

@@ -100,7 +100,7 @@ const updateSemesters = (semesters) => {
 }
 
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
 
 .yr-tag {
     font-size: 20px;

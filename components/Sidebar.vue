@@ -1,31 +1,5 @@
 <template>
     <div ref="sidebar" class="side_bar">
-        <div class="description-panel" 
-        :class="{ expanded: store.selectedItemId }"
-        :style="{ backgroundColor: getSelectedColor() }">
-            <transition name="fade">
-            <div v-if="showContent">
-                <div class="minimize-button" @click.stop="togglePanel">
-                    <span class="material-symbols-outlined">close</span>
-                </div>
-                <div class="panel-title">
-                    {{ selectedItem.id }}: {{ selectedItem.name }}
-                </div>
-                <div class="pn-content-tab">
-                    Prerequisites: <br> {{ selectedItem.P }}
-                </div>
-                <div class="pn-content-tab">
-                    Corequisites: <br> {{ selectedItem.C }}
-                </div>
-                <div class="pn-content-tab">
-                    Prohibitions: <br> {{ selectedItem.N }}
-                </div>
-                <div class="pn-content-tab">
-                    Settings:
-                </div>
-            </div>
-            </transition>
-        </div>
         <div class="db-panel">
             <div class="search-container">
                 <span class="material-symbols-outlined">search</span>
@@ -333,7 +307,7 @@ export default defineComponent({
     margin-bottom: 5px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
   
     .default_board {
         display: flex;
@@ -508,11 +482,23 @@ export default defineComponent({
 }
 
 .item_blk {
-    width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
+    min-width: 25vw;
+    max-width: 25vw;
+}
+
+@media (max-width: 800px) {
+    .item_blk {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        min-width: 80vw;
+        max-width: 80vw;
+    }
 }
 
 .sb-el {
@@ -531,8 +517,6 @@ export default defineComponent({
     padding-right: 4px;
     padding-bottom: 4px;
     margin-bottom: 6px;
-    outline: none;
-    min-width: 315px;
     cursor: grab;
     transition: 0.14s;
     user-select: none;
@@ -564,7 +548,6 @@ export default defineComponent({
     margin-left: 10px;
     min-height: 18%;
     color: rgba(255, 255, 255, 0.90);
-    box-sizing: border-box;
 }
 
 .sb-inner-block {
@@ -622,121 +605,13 @@ export default defineComponent({
     margin-left: -55px;
 }
 
+.clear-button .material-symbols-outlined {
+    color: rgb(126, 126, 126);
+}
+
 .clear-button:hover .material-symbols-outlined {
     color: rgba(252, 52, 52, 0.888);
     transition: 0.2s;
-}
-
-.material-symbols-outlined {
-    margin-right: 0px;
-    color: rgba(122, 122, 122, 0.747);
-    margin-left: 0px;
-}
-
-.description-panel {
-    border: 5px solid #98989853;
-    border-radius: 20px;
-    width: 30%;
-    min-height: 1px;
-    margin-top: 0%;
-    margin-bottom: 10px;
-    transition: 0.3s;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-.description-panel.expanded {
-    border: 8px solid #9898985a;
-    border-radius: 28px;
-    min-width: 100%;
-    /* display: flex; */
-    min-height: 88.5%;
-    transition: 0.4s;
-    overflow-y: auto;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-}
-
-@media (max-width: 760px) {
-    .description-panel.expanded {
-        min-width: 100%;
-        /* display: flex; */
-        min-height: 85.5%;
-        transition: 0.4s;
-        overflow-y: auto;
-        box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    }
-}
-
-.panel-title {
-    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-    font-size: 30px;
-    margin-left: 15px;
-    margin-top: 15px;
-    margin-right: 20px;
-    color: #ffffff;
-    max-width: 100%;
-}
-
-.pn-content-tab {
-    display: flex;
-    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-    font-size: 16px;
-    border: 2px solid #f1f1f1af;
-    background-color: #ffffffcf;
-    border-radius: 8px;
-    min-height: 100%;
-    margin-left: 3%;
-    margin-right: 3%;
-    margin-bottom: 5px;
-    margin-top: 10px;
-    transition: 0.4s;
-    overflow: hidden;
-    padding: 4%;
-    box-shadow: 0px 0px 8px 0.0px rgba(255, 255, 255, 0.2);
-    transition: 0.2s;
-}
-
-
-.description-panel .material-symbols-outlined{
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    font-weight: bold;
-    position: relative;
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 700,
-    'GRAD' 0,
-    'opsz' 24;
-    transition: 0.2s;
-    margin-left: 90%;
-    margin-top: 15px;
-    margin-bottom: -200px;
-}
-
-.minimize-button:hover .material-symbols-outlined {
-    color: rgba(252, 52, 52, 0.888);
-    transition: 0.2s;
-}
-
-.fade-enter-active {
-    transition: 0.25s ease;
-}
-.fade-leave-active {
-    transition: 0.01s ease;
-}
-
-.fade-enter-from, .fade-leave-to {
-    opacity: 0;
-}
-.fade-enter-to, .fade-leave-from {
-    opacity: 1;
 }
 
 
