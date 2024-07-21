@@ -23,6 +23,7 @@
   }
   .side_bar {
     width: 100%;
+    max-width: 100%;
     min-height: 90vh;
     max-height: 90vh;
   }

@@ -422,10 +422,11 @@ export default defineComponent({
 }
 
 .side_bar {
-    width: 48%;
+    width: 45%;
+    max-width: 410px;
     height: 98%;
     background-color: #efeeee64;
-    border-radius: 35px;
+    border-radius: 28px;
     z-index: 10;
     overflow: auto;
     overflow: hidden;
@@ -458,7 +459,7 @@ export default defineComponent({
     overflow: hidden;
     padding: 18px;
     align-items: center;
-    border: 8px solid #98989853;
+    border: 6px solid #98989853;
     border-radius: 28px;
 }
 
@@ -486,8 +487,8 @@ export default defineComponent({
     padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    min-width: 25vw;
-    max-width: 25vw;
+    width: 25vw;
+    max-width: 350px;
 }
 
 @media (max-width: 800px) {
@@ -496,8 +497,16 @@ export default defineComponent({
         padding-right: 10px;
         padding-top: 5px;
         padding-bottom: 5px;
-        min-width: 80vw;
-        max-width: 80vw;
+        width: 80vw;
+        max-width: 350px;
+    }
+    .db-panel {
+        border: 4px solid #98989853;
+        border-radius: 20px;
+    }
+    .side_bar {
+        padding:0px;
+        border-radius: 20px;
     }
 }
 

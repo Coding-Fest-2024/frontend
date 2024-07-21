@@ -203,7 +203,7 @@ export default defineComponent({
     padding: 10px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 800px) {
     .board {
         padding: 0px;
         padding-top: 3px;
@@ -272,17 +272,21 @@ export default defineComponent({
 
 .add-year-button {
     font-size: 10px;
-    color: rgba(216, 216, 216, 0.499);
     background-color: #ffffff;
     padding: 5px;
     border-radius: 10px;
-    border: dashed 2px #d4d4d4;
+    border: solid 2px #2e2e2e;
     justify-content: center;
     cursor: pointer;
     width: 100%;
     margin: 2px;
     transition: 0.3s;
 }  
+
+.add-year-button .material-symbols-outlined {
+    color: #373737e8;
+    transition: 0.3s;
+}
 
 .add-year-button:hover {
     border: solid 2px #ff4f04e8;
@@ -300,6 +304,13 @@ export default defineComponent({
     transition: 0.3s;
     background-color: #ffd5bdb7;
     transform: scale(0.95);
+}
+
+@media (max-width: 800px) {
+    .button-container {
+        width: 100%;
+        margin-left: 0%;
+    }
 }
 
 </style>
