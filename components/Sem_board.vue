@@ -295,14 +295,14 @@ export default defineComponent({
 }
 
 .add-year-button:hover .material-symbols-outlined {
-    color: rgba(255, 106, 0, 0.883);
+    color: rgba(255, 64, 0, 0.883);
     transition: 0.3s;
 }
 
 .add-year-button:active {
     border: solid 2px #ff7236;
     transition: 0.3s;
-    background-color: #ffd5bdb7;
+    background-color: #ff7d1276;
     transform: scale(0.95);
 }
 

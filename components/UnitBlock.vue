@@ -43,6 +43,7 @@
   
   const startDrag = (event, item) => {
     event.dataTransfer.setData('item', JSON.stringify(item));
+    store.saveToLocalStorage();
   };
   
   const deleteItem = (itemToDelete) => {
@@ -53,6 +54,7 @@
     if (index > -1) {
       store.items.splice(index, 1);
     }
+    store.saveToLocalStorage();
   };
   
   function stringToColorCode(str) {
@@ -78,6 +80,10 @@
 
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
+
+  watch(store.items, () => {
+    store.saveToLocalStorage();
+  }, { deep: true });
 
   </script>
   
