@@ -115,7 +115,9 @@
 
 
   const checkForConflict = (item) => {
-    if (process.client) {
+
+    return false
+    
     const completedUnits = store.items.map(i => i.id);
 
     if (!item.P && !item.C && !item.N) {
@@ -143,8 +145,6 @@
     let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
 
     return !(prereqMet && coreqMet && prohibitionMet);
-    }
-    return false;
   };
 
   
