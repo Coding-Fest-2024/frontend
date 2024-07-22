@@ -162,16 +162,14 @@
     const evalWithReplacements = (expression, isCompletedFn, completedUnits) => {
 
       console.log('Expression:', expression);
+      console.log(completedUnits);
+
+      let exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
 
       try {
-        return eval(expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester)));
+        return eval(exp);
       } catch (error) {
         console.error('Error evaluating expression:', expression, error);
-        store.items = [];
-        store.selectedItemId = null;
-        localStorage.clear();
-        academicYears.value = loadAcademicYears();
-        saveToLocalStorage();
         return false;
       }
     };
