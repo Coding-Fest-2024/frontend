@@ -87,6 +87,7 @@
     align-items: center;
     padding: 10px;
     box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+    user-select: none;
 }
 
 .yr-tag {
@@ -137,6 +138,23 @@
 
 .material-symbols-outlined {
     font-size: 28px;
+}
+
+.academic-year-container {
+    background-color: #eaeaea;
+    border-radius: 40px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    margin: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
+    border: 3px solid #747474a8;
+    transition: 0.2s;
+    align-items: center;
+    padding:10px;
+    padding-bottom: 5px;
+    box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
 }

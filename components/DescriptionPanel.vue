@@ -1,27 +1,33 @@
 <template>
     <div class="description-panel" :class="{ expanded: store.selectedItemId }" :style="{ backgroundColor: getSelectedColor() }">
         <div v-if="showContent">
-          <div class="minimize-button" @click.stop="togglePanel">
-            <span class="material-symbols-outlined">close</span>
-          </div>
-          <div class="panel-title">
-            {{ selectedItem.id }}: {{ selectedItem.name }}
-          </div>
-          <div class="pn-content-tab">
-            Prerequisites: <br> {{ selectedItem.P }}
-          </div>
-          <div class="pn-content-tab">
-            Corequisites: <br> {{ selectedItem.C }}
-          </div>
-          <div class="pn-content-tab">
-            Prohibitions: <br> {{ selectedItem.N }}
-          </div>
-          <div class="pn-content-tab">
-            Settings:
-          </div>
+            <div class="minimize-button" @click.stop="togglePanel">
+                <span class="material-symbols-outlined">close</span>
+            </div>
+            <a class="link-button" :href="`https://www.sydney.edu.au/units/${store.selectedItemId}`" target="_blank">
+                <span class="material-symbols-outlined">link</span>
+            </a>
+            <div class="panel-title">
+                {{ selectedItem.id }}: {{ selectedItem.name }}
+            </div>
+            <div class="pn-content-tab p" :class="{ warning: !selectedItem.pMet }">
+                Prerequisites: <br> {{ selectedItem.P }}
+            </div>
+            <div class="pn-content-tab c" :class="{ warning: !selectedItem.cMet }">
+                Corequisites: <br> {{ selectedItem.C }}
+            </div>
+            <div class="pn-content-tab n" :class="{ warning: !selectedItem.nMet }">
+                Prohibitions: <br> {{ selectedItem.N }}
+            </div>
+            <div class="pn-content-tab s">
+                Settings:
+                <div class="ignore_warning_button" @click="switchWarning" :class="{ on: selectedItem.ignore_warning }">
+                    Ignore warnings: {{ selectedItem.ignore_warning ? "On!" : 'Off' }} 
+                </div>
+            </div>
         </div>
     </div>
-  </template>
+</template>
   
   <script>
   import { defineComponent, computed, ref } from 'vue';
@@ -71,6 +77,11 @@
         }
         return 'hsl(0, 0%, 0%, 0)';
       };
+
+      const switchWarning = () => {
+        selectedItem.value.ignore_warning = !selectedItem.value.ignore_warning;
+        localStorage.setItem('storedItems', JSON.stringify(store.items));
+      };
   
       watch(() => store.selectedItemId, (newVal, oldVal) => {
         if (newVal !== null) {
@@ -87,7 +98,8 @@
         showContent,
         selectedItem,
         togglePanel,
-        getSelectedColor
+        getSelectedColor,
+        switchWarning
       };
     }
   });
@@ -123,7 +135,28 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
+.ignore_warning_button {
+    background-color: #949494;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    transition: 0.2s;
+    padding: 8px;
+    font-size: 15px;
+    border: rgba(79, 79, 79, 0.512) solid 2px;
+    box-shadow: 0px 3px 5px 0.0px rgba(66, 66, 66, 0.3);
+    user-select: none;
+}
 
+.ignore_warning_button.on {
+    background-color: #13e213da;
+    border: 2px solid #15c315da;
+    color: rgb(21, 96, 38);
+    box-shadow: 0px 0px 10px 0.0px rgb(187, 255, 0);
+}
 
 .panel-title {
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -134,7 +167,7 @@
     color: #ffffff;
     max-width: 100%;
     margin-bottom: 15px;
-    margin-top: 15px;
+    margin-top: 30px;
 }
 
 .pn-content-tab {
@@ -145,31 +178,35 @@
     font-size: 15px;
     border: 2px solid #f1f1f1af;
     background-color: #fffffff8;
-    border-radius: 8px;
-    min-height: 100%;
+    border-radius: 10px;
+    min-height: 58px;
     overflow: hidden;
     padding: 12px;
-    box-shadow: 0px 0px 8px 0.0px rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 2px 8px 0.0px rgba(70, 70, 70, 0.364);
     margin-bottom:10px;
+}
+
+.pn-content-tab.warning {
+    border: 2px solid #ff0000af;
+    background-color: #ffccccf8;
 }
 
 
 .description-panel .material-symbols-outlined{
     background: none;
     border: none;
-    font-size: 22px;
+    font-size: 26px;
     cursor: pointer;
-    font-weight: bold;
-    position: relative;
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 700,
-    'GRAD' 0,
-    'opsz' 24;
-    transition: 0.2s;
+    font-weight: 600;
+    transition: 0.1s;
     margin-left: 95%;
     margin-top: 0px;
-    margin-bottom: -200px;
+}
+
+.minimize-button {
+    position: absolute;
+    top: 12px;
+    right: 38px;
 }
 
 .minimize-button .material-symbols-outlined {
@@ -180,6 +217,19 @@
 .minimize-button:hover .material-symbols-outlined {
     color: rgba(252, 52, 52, 0.888);
     transition: 0.2s;
+}
+
+.link-button {
+    position: absolute;
+    top: 12px;
+    right: 74px;
+    color: rgb(255, 255, 255);
+    transition: 0.1s;
+}
+
+.link-button:hover {
+    color: rgba(0, 0, 0, 0.8);
+    transition: 0.1s;
 }
 
 @media (max-width: 800px) {
@@ -201,23 +251,6 @@
     .description-panel.expanded {
         left: 0;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    }
-    .description-panel .material-symbols-outlined{
-        background: none;
-        border: none;
-        font-size: 22px;
-        cursor: pointer;
-        font-weight: bold;
-        position: relative;
-        font-variation-settings:
-        'FILL' 0,
-        'wght' 700,
-        'GRAD' 0,
-        'opsz' 24;
-        transition: 0.2s;
-        margin-left: 96%;
-        margin-top: -3px;
-        margin-bottom: -200px;
     }
 }
 

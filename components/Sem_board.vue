@@ -180,6 +180,7 @@
     margin-left: 29.55%;
     /* border: black solid 2px; */
     align-content: space-around;
+    user-select: none;
 }
 
 .add-year-button {

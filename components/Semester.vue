@@ -37,39 +37,24 @@ const onDrop = (event, semester, year) => {
   const itemData = JSON.parse(event.dataTransfer.getData('item'));
   let fromItemIndex = store.items.findIndex(item => item.id === itemData.id);
   let fromItem = store.items[fromItemIndex];
-  let targetItemIndex = store.items.findIndex(item => item.semester === semester && item.year === year);
 
   if (fromItemIndex === -1) {
+    // Adding a new item
     const newItem = { ...itemData, semester, year };
     store.items.push(newItem);
     newItem.animating = true;
     setTimeout(() => newItem.animating = false, 500);
     saveToLocalStorage();
-    return;
-  }
-
-  if (targetItemIndex !== -1 && fromItemIndex !== targetItemIndex) {
-    const targetItem = store.items[targetItemIndex];
+  } else {
+    // Updating an existing item
     fromItem.semester = semester;
     fromItem.year = year;
-    const targetIndex = getItems(semester, year).length;
-    fromItem.order = targetIndex;
-    store.items.splice(fromItemIndex, 1);
-    store.items.push(fromItem);
+    fromItem.ignore_warning = false;
+    store.items.splice(fromItemIndex, 1, fromItem);
     fromItem.animating = true;
     setTimeout(() => fromItem.animating = false, 500);
     saveToLocalStorage();
-  } else if (targetItemIndex === -1) {
-    fromItem.semester = semester;
-    fromItem.year = year;
-    saveToLocalStorage();
   }
-  fromItem.animating = true;
-  setTimeout(() => fromItem.animating = false, 500);
-  if (targetItem.animating) {
-    setTimeout(() => targetItem.animating = false, 500);
-  }
-  store.items.splice(fromItemIndex, 1, fromItem);
 };
 
 const getItemWidth = (semester, year) => {

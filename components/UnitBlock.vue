@@ -88,7 +88,7 @@
   const buildLogicalExpression = (reqString, completedUnits) => {
     let expression = reqString;
 
-    const wildcardPattern = /\b(\w{4}\d*X\d*)\b/g;
+    const wildcardPattern = /\b(\w{4}\d*X\d*)\b|\b(\w{4}\d*XX)\b|\b(\w{4}\d*X)\b/g;
     expression = expression.replace(wildcardPattern, (match) => {
       const expandedCodes = expandWildcards(match);
       return `(${expandedCodes.map(code => `(${code})`).join(' || ')})`;
@@ -156,9 +156,21 @@
     let coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame, completedUnits) : true;
     let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
 
+    store.items.forEach((i) => {
+      if (i.id === item.id) {
+        i.pMet = prereqMet;
+        i.cMet = coreqMet;
+        i.nMet = prohibitionMet;
+      }
+    });
+
     console.log('Prereq:', item.P, prereqMet);
     console.log('Coreq:', item.C, coreqMet);
     console.log('Prohibition:', item.N, prohibitionMet);
+
+    if (item.ignore_warning) {
+      return false;
+    }
 
     return !(prereqMet && coreqMet && prohibitionMet);
   };
