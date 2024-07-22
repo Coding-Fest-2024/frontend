@@ -138,7 +138,7 @@
     let corequisites = item.C ? buildLogicalExpression(item.C) : '';
     let prohibitions = item.N ? buildLogicalExpression(item.N) : '';
 
-    const evalWithReplacements = (expression, isCompletedFn) => {
+    const evalWithReplacements = (expression, isCompletedFn, completedUnits) => {
 
       const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
 
