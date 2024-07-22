@@ -5,7 +5,7 @@
         <div>Year#{{ year }}</div>
       </div>
       <Semester
-        v-for="semester in selectedSemesters"
+        v-for="semester in sortedSemesters"
         :key="`year-${year}-semester-${semester}`"
         :semester="semester"
         :year="year"
@@ -41,6 +41,8 @@
     selectedSemesters.value = semesters;
     saveSemesterSettings(props.year, semesters);
   };
+
+  
   
   watch(selectedSemesters, (newVal) => {
     saveSemesterSettings(props.year, newVal);
@@ -49,9 +51,9 @@
   function loadSemesterSettings(year) {
     if (process.client) {
       const settings = localStorage.getItem(`semesters-year-${year}`);
-      return settings ? JSON.parse(settings) : [2, 3];
+      return settings ? JSON.parse(settings) : [1, 2];
     }
-    return [2, 3]; // Default semesters if not in client
+    return [1, 2]; // Default semesters if not in client
   }
   
   function saveSemesterSettings(year, semesters) {
@@ -59,6 +61,10 @@
       localStorage.setItem(`semesters-year-${year}`, JSON.stringify(semesters));
     }
   }
+
+  const sortedSemesters = computed(() => {
+    return selectedSemesters.value.slice().sort((a, b) => a - b);
+  });
 </script>
 
 <style scoped>

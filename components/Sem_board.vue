@@ -61,6 +61,8 @@
     const cleanBoard = () => {
         store.items = [];
         store.selectedItemId = null;
+        localStorage.clear();
+        academicYears.value = loadAcademicYears();
         saveToLocalStorage();
     };
 
