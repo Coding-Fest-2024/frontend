@@ -121,6 +121,18 @@
       return false;
     }
 
+    const isCompletedBefore = (unitId, currentYear, currentSemester) => {
+      return store.items.some(planItem => planItem.id === unitId && (
+        planItem.year < currentYear || (planItem.year === currentYear && planItem.semester < currentSemester)
+      ));
+    };
+
+    const isCompletedBeforeOrSame = (unitId, currentYear, currentSemester) => {
+      return store.items.some(planItem => planItem.id === unitId && (
+        planItem.year < currentYear || (planItem.year === currentYear && planItem.semester <= currentSemester)
+      ));
+    };
+
     const parseAndEvaluate = (reqString) => {
       const expression = buildLogicalExpression(reqString);
       console.log('Evaluating expression:', expression);
