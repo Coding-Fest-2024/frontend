@@ -6,17 +6,22 @@
         <p>Select the semesters to display:</p>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedSemesters" :value="1" /> Semester 1
+            <input type="checkbox" v-model="selectedSemesters" :value="1" /> Intensive Period 1
           </label>
         </div>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedSemesters" :value="2" /> Semester 2
+            <input type="checkbox" v-model="selectedSemesters" :value="2" /> Semester 1
           </label>
         </div>
         <div>
           <label>
-            <input type="checkbox" v-model="selectedSemesters" :value="3" /> Intensive Units
+            <input type="checkbox" v-model="selectedSemesters" :value="3" /> Semester 2
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" v-model="selectedSemesters" :value="4" /> Intensive Period 2
           </label>
         </div>
       </div>
@@ -47,9 +52,9 @@ export default {
     function loadSemesterSettings(year) {
       if (process.client) {
         const settings = localStorage.getItem(`semesters-year-${year}`);
-        return settings ? JSON.parse(settings) : [1, 2];
+        return settings ? JSON.parse(settings) : [2, 3];
       }
-      return [1, 2]; // Default semesters if not in client
+      return [2, 3]; // Default semesters if not in client
     }
 
     function saveSemesterSettings(year, semesters) {

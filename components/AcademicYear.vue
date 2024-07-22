@@ -49,9 +49,9 @@
   function loadSemesterSettings(year) {
     if (process.client) {
       const settings = localStorage.getItem(`semesters-year-${year}`);
-      return settings ? JSON.parse(settings) : [1, 2];
+      return settings ? JSON.parse(settings) : [2, 3];
     }
-    return [1, 2]; // Default semesters if not in client
+    return [2, 3]; // Default semesters if not in client
   }
   
   function saveSemesterSettings(year, semesters) {

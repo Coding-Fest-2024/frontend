@@ -121,24 +121,25 @@
       return false;
     }
 
-    const parseAndEvaluate = (reqString) => {
-      const expression = buildLogicalExpression(reqString);
-      console.log('Evaluating expression:', expression);
-      try {
-        return eval(expression);
-      } catch (error) {
-        console.error('Error evaluating expression:', expression, error);
-        return false;
-      }
+    const isCompletedBefore = (unitId, currentYear, currentSemester) => {
+      return store.items.some(planItem => planItem.id === unitId && (
+        planItem.year < currentYear || (planItem.year === currentYear && planItem.semester < currentSemester)
+      ));
     };
 
-    let prereqMet = !item.P || parseAndEvaluate(item.P);
-    let coreqMet = !item.C || parseAndEvaluate(item.C);
-    let prohibitionMet = !item.N || !parseAndEvaluate(item.N);
+    const isCompletedBeforeOrSame = (unitId, currentYear, currentSemester) => {
+      return store.items.some(planItem => planItem.id === unitId && (
+        planItem.year < currentYear || (planItem.year === currentYear && planItem.semester <= currentSemester)
+      ));
+    };
 
-    console.log('Prereq:', item.P, prereqMet);
-    console.log('Coreq:', item.C, coreqMet);
-    console.log('Prohibition:', item.N, prohibitionMet);
+    const prerequisites = item.P ? buildLogicalExpression(item.P) : '';
+    const corequisites = item.C ? buildLogicalExpression(item.C) : '';
+    const prohibitions = item.N ? buildLogicalExpression(item.N) : '';
+
+    let prereqMet = prerequisites ? eval(prerequisites.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedBefore(p1, item.year, item.semester))) : true;
+    let coreqMet = corequisites ? eval(corequisites.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedBeforeOrSame(p1, item.year, item.semester))) : true;
+    let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
 
     return !(prereqMet && coreqMet && prohibitionMet);
   };

@@ -58,9 +58,11 @@ const onDrop = (event, semester, year) => {
     store.items.push(fromItem);
     fromItem.animating = true;
     setTimeout(() => fromItem.animating = false, 500);
+    saveToLocalStorage();
   } else if (targetItemIndex === -1) {
     fromItem.semester = semester;
     fromItem.year = year;
+    saveToLocalStorage();
   }
   fromItem.animating = true;
   setTimeout(() => fromItem.animating = false, 500);
@@ -68,7 +70,6 @@ const onDrop = (event, semester, year) => {
     setTimeout(() => targetItem.animating = false, 500);
   }
   store.items.splice(fromItemIndex, 1, fromItem);
-  saveToLocalStorage();
 };
 
 const getItemWidth = (semester, year) => {
