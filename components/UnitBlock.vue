@@ -10,7 +10,7 @@
     <div class="inner-block">
       {{ item.name }}
     </div>
-    <span v-if="checkForConflict(item)" class="material-symbols-outlined warning-icon">error</span>
+    <div v-if="checkForConflict(item)" class="material-symbols-outlined warning-icon">error</div>
   </div>
 </template>
   
@@ -355,7 +355,24 @@
       height: 30px;
       box-sizing: border-box;
     }
-    
+    .warning-icon {
+      position: absolute;
+      bottom: 0px;
+      right: 0%;
+      color: #ffffff;
+      font-size: 30px;
+      padding: 2px;
+      padding-bottom: 0px;
+      padding-right: 0px;
+      background-color: rgba(248, 80, 13, 0.894);
+      border-top-left-radius: 18px;
+      border-bottom-right-radius: 12px;
+      font-weight: 500;
+    }
+
+    .drag-el.warning {
+      border: 3px solid rgba(248, 80, 13, 0.894);
+    }
 }
 
   
