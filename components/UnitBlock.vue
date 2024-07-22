@@ -134,13 +134,13 @@
       ));
     };
 
-    const prerequisites = item.P ? buildLogicalExpression(item.P) : '';
-    const corequisites = item.C ? buildLogicalExpression(item.C) : '';
-    const prohibitions = item.N ? buildLogicalExpression(item.N) : '';
+    let prerequisites = item.P ? buildLogicalExpression(item.P) : '';
+    let corequisites = item.C ? buildLogicalExpression(item.C) : '';
+    let prohibitions = item.N ? buildLogicalExpression(item.N) : '';
 
     const evalWithReplacements = (expression, isCompletedFn) => {
 
-      let exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
+      const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
 
       try {
           return eval(exp);
