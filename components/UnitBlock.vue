@@ -1,19 +1,20 @@
 <template>
-    <div class="drag-el"
-         :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating }"
-         :style="{ backgroundColor: stringToColorCode(item.id), width: getItemWidth(semester, year) + '%' }"
-         draggable="true"
-         @click="selectItem(item)"
-         @dragstart="startDrag($event, item)">
-      <div class="text-container">{{ item.id }}</div>
-      <button class="delete-button" @click.stop="deleteItem(item)">
-        <span class="material-symbols-outlined">delete</span>
-      </button>
-      <div class="inner-block">
-        {{ item.name }}
-      </div>
+  <div class="drag-el"
+       :class="{ 'selected': item.id === store.selectedItemId, animating: item.animating, warning: checkForConflict(item) }"
+       :style="{ backgroundColor: stringToColorCode(item.id), width: getItemWidth(semester, year) + '%' }"
+       draggable="true"
+       @click="selectItem(item)"
+       @dragstart="startDrag($event, item)">
+    <div class="text-container">{{ item.id }}</div>
+    <button class="delete-button" @click.stop="deleteItem(item)">
+      <span class="material-symbols-outlined">delete</span>
+    </button>
+    <div class="inner-block">
+      {{ item.name }}
     </div>
-  </template>
+    <span v-if="checkForConflict(item)" class="material-symbols-outlined warning-icon">error</span>
+  </div>
+</template>
   
   <script setup>
   import { store } from '../store';
@@ -55,6 +56,14 @@
       store.items.splice(index, 1);
     }
     store.saveToLocalStorage();
+  };
+
+  const checkForConflict = (item) => {
+    return true;
+    const conflictingItems = store.items.filter(i => i.semester === item.semester && i.year === item.year && i.id !== item.id);
+    return conflictingItems.some(i => {
+      return i.name === item.name;
+    });
   };
   
   function stringToColorCode(str) {
@@ -150,6 +159,22 @@
       transform: scale(1.0) translate(0%, -0%);
   }
 
+  .warning-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    color: #ff4400;
+    font-size: 30px;
+    padding: 2px;
+    /* background-color: rgb(255, 255, 255); */
+    border-radius: 50%;
+    font-weight: 500;
+  }
+
+  .drag-el.warning {
+    border: 3px solid #ef3309c0;
+  }
+
   @media (max-width: 800px) {
     .text-container {
         margin-left: 8px;
@@ -203,7 +228,7 @@
 
   
   .drag-el.animating {
-      animation: swap-animation 0.5s ease-in-out;
+      animation: swap-animation 0.3s ease-in-out;
   }
   
   .drag-el.selected {
@@ -228,8 +253,6 @@
       transition: 0.15s;
       transform: scale(1) translate(-0.0%, -0%);
   }
-  
-
   
   .drag-el:hover .delete-button {
       opacity: 1;
@@ -271,12 +294,12 @@
   @keyframes swap-animation {
       0% {
           opacity: 0;
-          transform: scale(0.7) translate(-0.0%, -7%);
+          transform: scale(0.7) translate(-0.0%, -10%);
           box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 0.0);
       }
       50% {
           opacity: 0.5;
-          transform: scale(1.02) translate(-0.0%, -10%);
+          transform: scale(1.02) translate(-0.0%, -8%);
           box-shadow: 0px 0px 8.8px 5px rgba(255,255,255, 1);
       }
       100% {

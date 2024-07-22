@@ -1,19 +1,28 @@
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 export const store = reactive({
-  items: [],
+  items: loadItemsFromLocalStorage(),
   selectedItemId: null,
-  viewMajor: false,
-  selectedMajor: [],
-  
   saveToLocalStorage() {
-    localStorage.setItem('storedItems', JSON.stringify(this.items));
-  },
-
-  loadFromLocalStorage() {
-    const storedItems = localStorage.getItem('storedItems');
-    if (storedItems) {
-      this.items = JSON.parse(storedItems);
+    if (process.client) {
+      localStorage.setItem('items', JSON.stringify(this.items));
     }
-  }
+  },
 });
+
+function loadItemsFromLocalStorage() {
+  if (process.client) {
+    return JSON.parse(localStorage.getItem('items')) || [];
+  }
+  return [];
+}
+
+watch(
+  () => store.items,
+  (newVal) => {
+    if (process.client) {
+      store.saveToLocalStorage();
+    }
+  },
+  { deep: true }
+);

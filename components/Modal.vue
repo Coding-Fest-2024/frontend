@@ -40,9 +40,9 @@
   .modal-content {
     background: rgb(255, 255, 255);
     padding: 15px;
-    border-radius: 30px;
+    border-radius: 20px;
     position: relative;
-    border: 5px solid #181818ef;
+    border: 3px solid #232323ef;
   }
 
   .material-symbols-outlined {

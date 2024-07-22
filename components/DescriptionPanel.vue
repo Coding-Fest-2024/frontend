@@ -130,7 +130,7 @@
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
-    font-size: 36px;
+    font-size: 28px;
     color: #ffffff;
     max-width: 100%;
     margin-bottom: 15px;

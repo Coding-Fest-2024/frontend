@@ -1,44 +1,64 @@
 <template>
     <div class="academic-year-container">
-        <div class="yr-tag">
-            <span class="material-symbols-outlined" @click="showSettings">settings_applications</span>
-            <div>Year{{ year }}</div>
-        </div>
-        <Semester
+      <div class="yr-tag">
+        <span class="material-symbols-outlined" @click="showSettings">settings_applications</span>
+        <div>Year {{ year }}</div>
+      </div>
+      <Semester
         v-for="semester in selectedSemesters"
         :key="`year-${year}-semester-${semester}`"
         :semester="semester"
         :year="year"
-        />
-        <Modal :isVisible="isModalVisible" @close="isModalVisible = false">
-        <SettingsContent @update-semesters="updateSemesters" />
-        </Modal>
+      />
+      <Modal :isVisible="isModalVisible" @close="isModalVisible = false">
+        <SettingsContent :year="year" @update-semesters="updateSemesters" />
+      </Modal>
     </div>
-</template>
-
-
-<script setup>
-import { ref } from 'vue';
-import { store } from '../store';
-
-const props = defineProps({
-  year: {
-    type: Number,
-    required: true
+  </template>
+  
+  <script setup>
+  import { ref, watch, onMounted } from 'vue';
+  import { store } from '../store';
+  import SettingsContent from './SettingsContent.vue';
+  import Semester from './Semester.vue';
+  import Modal from './Modal.vue';
+  
+  const props = defineProps({
+    year: {
+      type: Number,
+      required: true
+    }
+  });
+  
+  const isModalVisible = ref(false);
+  const selectedSemesters = ref(loadSemesterSettings(props.year));
+  
+  const showSettings = () => {
+    isModalVisible.value = true;
+  };
+  
+  const updateSemesters = (semesters) => {
+    selectedSemesters.value = semesters;
+    saveSemesterSettings(props.year, semesters);
+  };
+  
+  watch(selectedSemesters, (newVal) => {
+    saveSemesterSettings(props.year, newVal);
+  });
+  
+  function loadSemesterSettings(year) {
+    if (process.client) {
+      const settings = localStorage.getItem(`semesters-year-${year}`);
+      return settings ? JSON.parse(settings) : [1, 2];
+    }
+    return [1, 2]; // Default semesters if not in client
   }
-});
-
-const isModalVisible = ref(false);
-const selectedSemesters = ref([1, 2]);
-
-const showSettings = () => {
-  isModalVisible.value = true;
-};
-
-const updateSemesters = (semesters) => {
-  selectedSemesters.value = semesters;
-};
-
+  
+  function saveSemesterSettings(year, semesters) {
+    if (process.client) {
+      localStorage.setItem(`semesters-year-${year}`, JSON.stringify(semesters));
+    }
+  }
 </script>
 
 <style scoped>

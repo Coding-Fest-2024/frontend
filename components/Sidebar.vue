@@ -424,7 +424,7 @@ export default defineComponent({
 .side_bar {
     width: 45%;
     max-width: 410px;
-    height: 98%;
+    height: 100%;
     background-color: #efeeee64;
     border-radius: 28px;
     z-index: 10;
