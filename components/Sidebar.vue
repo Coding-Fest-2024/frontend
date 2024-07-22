@@ -17,28 +17,23 @@
                 <button :class="{ active: isBrowseActive }" class="button-browse" @click="toggleBrowse">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
-                <button class="button-filter"></button>
+                <!-- <button class="button-filter"></button> -->
                 <button class="button-bookmark"></button>
+            </div>
+            <div class="filter-container" v-if="selectedTable" :style="{ backgroundColor: getColorForTable(selectedTable) }">
+                <span>{{ selectedTable.replace(/_/g, ' ') }}</span>
+                <button class="material-symbols-outlined" @click="clearFilter">clear</button>
             </div>
             <div class="sb-zone-container">
                 <div v-if="isBrowseActive">
                     <div class="browse-content">
-                        <div class="category">
-                        <h3>Category 1</h3>
-                        <p>Temporary content for category 1.</p>
-                        </div>
-                        <div class="category">
-                        <h3>Category 2</h3>
-                        <p>Temporary content for category 2.</p>
-                        </div>
-                        <div class="category">
-                        <h3>Category 3</h3>
-                        <p>Temporary content for category 3.</p>
+                        <div v-for="i in tables" :key="i" class="table-item" :style="{ backgroundColor: getColorForTable(i) }" @click="selectTable(i)">
+                            {{ i.replace(/_/g, ' ') }}
                         </div>
                     </div>
                 </div>
                 <div v-else>
-                    <div v-if="!searchQuery">
+                    <div v-if="searchQuery===``&&selectedTable===``">
                         <div class="default_board">
                             <span class="material-symbols-outlined">manage_search</span>
                             Search
@@ -88,6 +83,7 @@
 import { defineComponent, ref } from 'vue';
 import { store } from '../store';
 import aggregatedUnits from '../aggregated_units.json';
+import tableData from '../tables.json';
 
 
 function stringToColorCode(str) {
@@ -117,42 +113,45 @@ function stringToColorCode(str) {
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
+function stringToColorCodeTV(str) {
+
+    if (!str) return 'hsl(0, 0%, 0%)';
+
+    let hash = 0;
+    for (let i = 0; i < 4; i++) {
+    hash = (str.charCodeAt(i)) * 47 + ((hash << 3) - hash);
+    }
+    const hue = hash % 360;
+
+    let lightness = 80; // Default lightness
+    let saturation = 60; // Default saturation
+
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
 export default defineComponent({
     setup() {
         const sidebar = ref(null);
         const searchQuery = ref('');
         const isBrowseActive = ref(false);
+        const selectedTable = ref('');
 
         const items = ref(aggregatedUnits);
-
+        const tables = ref(tableData);
+        
         const filtered_items = computed(() => {
-            if (!searchQuery.value) {
-                return items.value.includes("");
+            let result = items.value;
+            if (searchQuery.value) {
+                const query = searchQuery.value.toLowerCase();
+                result = result.filter(item =>
+                    item.name.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
+                );
             }
-            const query = searchQuery.value.toLowerCase();
-            return items.value.filter(item =>
-                item.name.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
-            );
-        });
-
-        const advancedComputingCoreUnits = computed(() => {
-            const coreIds = aggregatedCourses["Advanced Computing Degree Core"].Core;
-            const advancedIds = aggregatedCourses["Advanced Computing Degree Core"].Advanced;
-            const degreeUnitIds = coreIds.concat(advancedIds);
-
-            return aggregatedUnits.filter(unit => degreeUnitIds.includes(unit.id));
-        });
-
-        const majorUnits1 = computed(() => {
-            if (!store.selectedMajor[0]) return [];
-            const unitIds = aggregatedCourses[store.selectedMajor[0]].Core.concat(aggregatedCourses[store.selectedMajor[0]].Advanced);
-            return aggregatedUnits.filter(unit => unitIds.includes(unit.id));
-        });
-
-        const majorUnits2 = computed(() => {
-            if (!store.selectedMajor[1]) return [];
-            const unitIds = aggregatedCourses[store.selectedMajor[1]].Core.concat(aggregatedCourses[store.selectedMajor[1]].Advanced);
-            return aggregatedUnits.filter(unit => unitIds.includes(unit.id));
+            if (selectedTable.value) {
+                result = result.filter(item => item.Belonging.includes(selectedTable.value));
+            }
+            return result.sort((a, b) => a.id[4].localeCompare(b.id[4]));
         });
 
         const hasSelectedItem = computed(() => store.selectedItemId !== null);
@@ -225,6 +224,10 @@ export default defineComponent({
                 return stringToColorCode(code);
         };
 
+        const getColorForTable = (code) => {
+            return stringToColorCodeTV(code);
+        };
+
         const getSelectedColor = () => {
             if (store.selectedItemId) {
                 return stringToColorCode(store.selectedItemId);
@@ -242,6 +245,15 @@ export default defineComponent({
             return false;
         };
 
+        const selectTable = (table) => {
+            selectedTable.value = table;
+            isBrowseActive.value = false;
+        };
+
+        const clearFilter = () => {
+            selectedTable.value = '';
+        };
+
         return {
             sidebar,
             filtered_items,
@@ -254,14 +266,16 @@ export default defineComponent({
             backgroundColor,
             searchQuery,
             clearSearch,
-            advancedComputingCoreUnits,
-            majorUnits1,
-            majorUnits2,
             toggleBrowse,
             isBrowseActive,
             isInPlan,
             getColorForCode,
+            getColorForTable,
             getSelectedColor,
+            tables,
+            selectedTable,
+            selectTable,
+            clearFilter
         };
     }
 
@@ -289,17 +303,15 @@ export default defineComponent({
     font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: 600;
     font-style: normal;
-    font-size: 24px;
-    color: #363636a8;
-    background-color: #f7f7f7;
+    font-size: 20px;
+    color: #121212a8;
     /* border: 3px solid #989898a8; */
-    border-radius: 20px;
     padding-left: 10px;
     padding-right: 10px;
     margin: 0px;
-    margin-bottom: 24px;
     text-align: center;
-    margin-top: 24px;
+    margin-top:20px;
+    margin-bottom: 30px;
     /* box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2); */
 }
 
@@ -313,10 +325,78 @@ export default defineComponent({
 
 
 .default_board .material-symbols-outlined {
-    font-size: 38px;
+    font-weight:100;
+    font-size: 30px;
     color: #363636a8;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.table-item {
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14.2px;
+    overflow: hidden;
+    color: #1f1f1fcd;
+    border: 2px solid #262626ac;
+    border-radius: 20px;
+    padding: 15px;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0px 6px 4px 0.0px rgba(133, 133, 133, 0.15);
+    transition: 0.2s;
+    cursor: pointer;
+    user-select: none;
+}
+
+.table-item:hover {
+    box-shadow: 0px 6px 8px 0.0px rgba(133, 133, 133, 0.8);
+    transition: 0.2s;
+}
+
+.filter-container {
+    font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14.2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 2px;
+    padding: 5px;
+    padding-left: 15px;
+    border: 2px solid #262626ac;
+    border-radius: 20px;
+    background-color: #f7f7f7;
+    width: 100%;
+    font-size: 14px;
+    color: #1f1f1fcd;
+    box-shadow: 0px 6px 4px 0.0px rgba(133, 133, 133, 0.2);
+}
+
+.filter-container:hover {
+    box-shadow: 0px 6px 8px 0.0px rgba(133, 133, 133, 0.8);
+    transition: 0.2s;
+}
+
+.filter-container button {
+    border: none;
+    background-color: #ffffff00;
+    color: rgb(56, 56, 56);
+    border-radius: 14px;
+    padding: 2px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.filter-container button:hover {
+    background-color: #ff4f4f;
+    color: white;
+    transition: 0.2s;
 }
 
 @media (max-width: 800px) {
@@ -360,27 +440,29 @@ export default defineComponent({
     display: flex;
     justify-content: space-around;
     margin-bottom: 0px;
-    width: 97%;
+    width: 100%;
     align-items: center;
+    padding-top: 4px;
+    border-top: solid #9898988a 3px;
 }
 
 .button-browse {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    height: 38px;
-    width: 33.3%;
-    margin: 4px;
+    height: 32px;
+    width: 50%;
+    margin: 2px;
     background-color: #e6e6e6;
     background-size: 100%;
     background-repeat: no-repeat;
     transition: 0.2s;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    border: solid #787878 3px;
+    box-shadow: 0px 4px 6px 0.0px rgba(133, 133, 133, 0.2);
+    border: solid #787878 2.5px;
 }
 
 .button-browse .material-symbols-outlined {
-    font-size: 30px;
+    font-size: 26px;
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
@@ -389,43 +471,30 @@ export default defineComponent({
     color: #787878;
 }
 
-.button-filter {
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    height: 38px;
-    width: 33.33%;
-    margin: 4px;
-    background-color: #e6e6e6;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    border: solid #d1d1d1 3px;
-}
 
 .button-bookmark {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    height: 38px;
-    width: 33.33%;
-    margin: 4px;
+    height: 32px;
+    width: 50%;
+    margin: 3px;
     background-color: #e6e6e6;
     background-size: 100%;
     background-repeat: no-repeat;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.2);
-    border: solid #d1d1d1 3px;
+    box-shadow: 0px 4px 6px 0.0px rgba(133, 133, 133, 0.2);
+    border: solid #d1d1d1 2.5px;
 }
 
 
 .button-browse:hover {
     background-color: white;
     transition: 0.1s;
-    box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.4);
+    box-shadow: 0px 4px 6px 0.0px rgba(68, 68, 68, 0.4);
 }
 
 .button-browse.active {
-    background-color: rgba(204, 255, 143, 0.733);
+    background-color: rgba(198, 255, 128, 0.687);
     transition: 0.1s;
 }
 
@@ -476,7 +545,7 @@ export default defineComponent({
 }
 
 .sb-zone-container {
-    margin-top: 10px;
+    margin-top: 5.5px;
     width: 100%;
     background-color: none;
     overflow-x: hidden;
@@ -486,8 +555,8 @@ export default defineComponent({
     padding-bottom: 10px;
     box-sizing: border-box;
     box-shadow: inset 0px 0px 0px 0px rgba(133, 133, 133, 0.2);
-    border-top: solid #9898988a 4px;
-    border-bottom: solid #9898988a 4px;
+    border-top: solid #9898988a 3px;
+    border-bottom: solid #9898988a 3px;
     height: 90vh;
     display: flex;
     flex-direction: column;

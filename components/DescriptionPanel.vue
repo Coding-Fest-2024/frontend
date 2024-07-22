@@ -206,29 +206,36 @@
 .minimize-button {
     position: absolute;
     top: 12px;
-    right: 38px;
+    right: 41px;
 }
 
 .minimize-button .material-symbols-outlined {
-    color: rgb(255, 255, 255);
+    color: rgba(255, 255, 255, 0.555);
     transition: 0.2s;
+    border-radius: 30%;
+    padding:3px;
 }
 
 .minimize-button:hover .material-symbols-outlined {
-    color: rgba(252, 52, 52, 0.888);
+    color: rgb(255, 255, 255);
+    background-color: rgba(208, 27, 27, 0.826);
     transition: 0.2s;
+    
 }
 
-.link-button {
+.link-button .material-symbols-outlined {
     position: absolute;
     top: 12px;
-    right: 74px;
-    color: rgb(255, 255, 255);
+    right: 48px;
+    color: rgba(255, 255, 255, 0.464);
     transition: 0.1s;
+    border-radius: 30%;
+    padding:3px;
 }
 
-.link-button:hover {
-    color: rgba(0, 0, 0, 0.8);
+.link-button:hover .material-symbols-outlined {
+    color: rgb(255, 255, 255);
+    background-color: rgba(29, 26, 115, 0.759);
     transition: 0.1s;
 }
 

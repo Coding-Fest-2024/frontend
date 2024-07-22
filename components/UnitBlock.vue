@@ -100,14 +100,35 @@
     expression = expression.replace(/\[/g, '(').replace(/\]/g, ')');
     expression = expression.replace(/\{/g, '(').replace(/\}/g, ')');
 
+    // console.log('Expression:', expression);
+
+    const invalidPattern4 = /\.|\,/g;
+    expression = expression.replace(invalidPattern4, '');
+
     // do the invalid checking before wrapping
     const invalidPattern = /\b(?!(&&|\|\||\(|\)|\b\w{4}\d{4}\b)\b)\b\w+\b/g;
     expression = expression.replace(invalidPattern, 'false ||');
+
+    const invalidPattern2 = /\|\|\)/g;
+    expression = expression.replace(invalidPattern2, ')');
+
+    // expression = expression.replace(/\) false/g, ') || false');
+    // expression = expression.replace(/\s*\|\|\s*$/g, '');
+    // expression = expression.replace(/\s*&&\s*$/g, '');
+    
+
+    // console.log('Expression:', expression);
 
     const codePattern = /\b(\w{4}\d{4})\b/g;
     expression = expression.replace(codePattern, (match) => {
       return `completedUnits.includes("${match}")`;
     });
+
+    expression = expression.replace(/\) false/g, ') || false');
+    expression = expression.replace(/\s*\|\|\s*$/g, '');
+    expression = expression.replace(/\s*&&\s*$/g, '');
+
+    console.log('Expression:', expression);
 
     return expression;
   };
@@ -140,14 +161,17 @@
 
     const evalWithReplacements = (expression, isCompletedFn, completedUnits) => {
 
-      console.log(completedUnits);
-
-      const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester));
+      console.log('Expression:', expression);
 
       try {
-          return eval(exp);
+        return eval(expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester)));
       } catch (error) {
         console.error('Error evaluating expression:', expression, error);
+        store.items = [];
+        store.selectedItemId = null;
+        localStorage.clear();
+        academicYears.value = loadAcademicYears();
+        saveToLocalStorage();
         return false;
       }
     };
