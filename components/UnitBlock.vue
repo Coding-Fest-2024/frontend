@@ -85,7 +85,7 @@
   };
 
 
-  const buildLogicalExpression = (reqString, completedUnits) => {
+  const buildLogicalExpression = (reqString) => {
     let expression = reqString;
 
     const wildcardPattern = /\b(\w{4}\d*X\d*)\b/g;
@@ -112,9 +112,11 @@
     return expression;
   };
 
-  let completedUnits = store.items.map(i => i.id);
+  const completedUnits = [];
 
   const checkForConflict = (item) => {
+
+    completedUnits = store.items.map(item => item.id);
 
     if (!item.P && !item.C && !item.N) {
       return false;
