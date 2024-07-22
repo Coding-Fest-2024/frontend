@@ -140,7 +140,9 @@
 
     const evalWithReplacements = (expression, isCompletedFn, completedUnits) => {
 
-      const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
+      console.log(completedUnits);
+
+      const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester));
 
       try {
           return eval(exp);
@@ -150,8 +152,8 @@
       }
     };
 
-    let prereqMet = prerequisites ? evalWithReplacements(prerequisites, isCompletedBefore) : true;
-    let coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame) : true;
+    let prereqMet = prerequisites ? evalWithReplacements(prerequisites, isCompletedBefore, completedUnits) : true;
+    let coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame, completedUnits) : true;
     let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
 
     console.log('Prereq:', item.P, prereqMet);
