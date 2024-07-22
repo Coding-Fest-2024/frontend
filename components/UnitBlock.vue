@@ -134,22 +134,25 @@
       ));
     };
 
-    const parseAndEvaluate = (reqString, completedUnits) => {
-      console.log(completedUnits);
-      const expression = buildLogicalExpression(reqString);
-      console.log('Evaluating expression:', expression);
+    let prerequisites = item.P ? buildLogicalExpression(item.P) : '';
+    let corequisites = item.C ? buildLogicalExpression(item.C) : '';
+    let prohibitions = item.N ? buildLogicalExpression(item.N) : '';
+
+    const evalWithReplacements = (expression, isCompletedFn) => {
+
+      const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
+
       try {
-        return eval(expression);
+          return eval(exp);
       } catch (error) {
         console.error('Error evaluating expression:', expression, error);
         return false;
       }
     };
 
-
-    let prereqMet = !item.P || parseAndEvaluate(item.P, completedUnits);
-    let coreqMet = !item.C || parseAndEvaluate(item.C, completedUnits);
-    let prohibitionMet = !item.N || !parseAndEvaluate(item.N, completedUnits);
+    let prereqMet = prerequisites ? evalWithReplacements(prerequisites, isCompletedBefore) : true;
+    let coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame) : true;
+    let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
 
     console.log('Prereq:', item.P, prereqMet);
     console.log('Coreq:', item.C, coreqMet);
