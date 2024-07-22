@@ -120,6 +120,8 @@
       return false;
     }
 
+    const completedUnits = store.items.map(i => i.id);
+
     const isCompletedBefore = (unitId, currentYear, currentSemester) => {
       return store.items.some(planItem => planItem.id === unitId && (
         planItem.year < currentYear || (planItem.year === currentYear && planItem.semester < currentSemester)
@@ -132,8 +134,8 @@
       ));
     };
 
-    const parseAndEvaluate = (reqString) => {
-      const completedUnits = store.items.map(i => i.id);
+    const parseAndEvaluate = (reqString, completedUnits) => {
+      console.log(completedUnits);
       const expression = buildLogicalExpression(reqString);
       console.log('Evaluating expression:', expression);
       try {
@@ -144,9 +146,10 @@
       }
     };
 
-    let prereqMet = !item.P || parseAndEvaluate(item.P);
-    let coreqMet = !item.C || parseAndEvaluate(item.C);
-    let prohibitionMet = !item.N || !parseAndEvaluate(item.N);
+
+    let prereqMet = !item.P || parseAndEvaluate(item.P, completedUnits);
+    let coreqMet = !item.C || parseAndEvaluate(item.C, completedUnits);
+    let prohibitionMet = !item.N || !parseAndEvaluate(item.N, completedUnits);
 
     console.log('Prereq:', item.P, prereqMet);
     console.log('Coreq:', item.C, coreqMet);
