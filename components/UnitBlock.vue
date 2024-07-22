@@ -112,11 +112,9 @@
     return expression;
   };
 
-
+  let completedUnits = store.items.map(i => i.id);
 
   const checkForConflict = (item) => {
-    
-    let completedUnits = store.items.map(i => i.id);
 
     if (!item.P && !item.C && !item.N) {
       return false;
