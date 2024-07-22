@@ -112,15 +112,13 @@
     return expression;
   };
 
-  let completedUnits = [];
-
   const checkForConflict = (item) => {
-
-    completedUnits = store.items.map(item => item.id);
 
     if (!item.P && !item.C && !item.N) {
       return false;
     }
+
+    const completedUnits = store.items.map(i => i.id);
 
     const isCompletedBefore = (unitId, currentYear, currentSemester) => {
       return store.items.some(planItem => planItem.id === unitId && (
