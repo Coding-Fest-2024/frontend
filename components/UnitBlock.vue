@@ -144,6 +144,7 @@
 
     return !(prereqMet && coreqMet && prohibitionMet);
     }
+    return false;
   };
 
   
