@@ -41,9 +41,7 @@
     selectedSemesters.value = semesters;
     saveSemesterSettings(props.year, semesters);
   };
-
-  
-  
+    
   watch(selectedSemesters, (newVal) => {
     saveSemesterSettings(props.year, newVal);
   });
