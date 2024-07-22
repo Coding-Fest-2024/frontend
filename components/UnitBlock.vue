@@ -115,7 +115,6 @@
 
 
   const checkForConflict = (item) => {
-    const completedUnits = store.items.map(i => i.id);
 
     if (!item.P && !item.C && !item.N) {
       return false;
@@ -134,6 +133,7 @@
     };
 
     const parseAndEvaluate = (reqString) => {
+      const completedUnits = store.items.map(i => i.id);
       const expression = buildLogicalExpression(reqString);
       console.log('Evaluating expression:', expression);
       try {
