@@ -85,7 +85,7 @@
   };
 
 
-  const buildLogicalExpression = (reqString) => {
+  const buildLogicalExpression = (reqString, completedUnits) => {
     let expression = reqString;
 
     const wildcardPattern = /\b(\w{4}\d*X\d*)\b/g;
@@ -112,45 +112,29 @@
     return expression;
   };
 
+
+
   const checkForConflict = (item) => {
+    const completedUnits = store.items.map(i => i.id);
 
     if (!item.P && !item.C && !item.N) {
       return false;
     }
 
-    const completedUnits = store.items.map(i => i.id);
-
-    const isCompletedBefore = (unitId, currentYear, currentSemester) => {
-      return store.items.some(planItem => planItem.id === unitId && (
-        planItem.year < currentYear || (planItem.year === currentYear && planItem.semester < currentSemester)
-      ));
-    };
-
-    const isCompletedBeforeOrSame = (unitId, currentYear, currentSemester) => {
-      return store.items.some(planItem => planItem.id === unitId && (
-        planItem.year < currentYear || (planItem.year === currentYear && planItem.semester <= currentSemester)
-      ));
-    };
-
-    let prerequisites = item.P ? buildLogicalExpression(item.P) : '';
-    let corequisites = item.C ? buildLogicalExpression(item.C) : '';
-    let prohibitions = item.N ? buildLogicalExpression(item.N) : '';
-
-    const evalWithReplacements = (expression, isCompletedFn) => {
-
-      const exp = expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester))
-
+    const parseAndEvaluate = (reqString) => {
+      const expression = buildLogicalExpression(reqString);
+      console.log('Evaluating expression:', expression);
       try {
-          return eval(exp);
+        return eval(expression);
       } catch (error) {
         console.error('Error evaluating expression:', expression, error);
         return false;
       }
     };
 
-    let prereqMet = prerequisites ? evalWithReplacements(prerequisites, isCompletedBefore) : true;
-    let coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame) : true;
-    let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
+    let prereqMet = !item.P || parseAndEvaluate(item.P);
+    let coreqMet = !item.C || parseAndEvaluate(item.C);
+    let prohibitionMet = !item.N || !parseAndEvaluate(item.N);
 
     console.log('Prereq:', item.P, prereqMet);
     console.log('Coreq:', item.C, coreqMet);
