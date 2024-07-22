@@ -2,7 +2,7 @@
     <div class="academic-year-container">
       <div class="yr-tag">
         <span class="material-symbols-outlined" @click="showSettings">settings_applications</span>
-        <div>Year {{ year }}</div>
+        <div>Year#{{ year }}</div>
       </div>
       <Semester
         v-for="semester in selectedSemesters"

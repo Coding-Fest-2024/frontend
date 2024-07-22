@@ -597,6 +597,7 @@ export default defineComponent({
 
 .sb-el.inplan .sb-inner-block {
     background-color: #c5c5c5;
+    color: rgba(55, 55, 55, 0.545);
 }
 
 .search-container {

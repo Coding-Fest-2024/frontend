@@ -6,9 +6,7 @@
        @click="selectItem(item)"
        @dragstart="startDrag($event, item)">
     <div class="text-container">{{ item.id }}</div>
-    <button class="delete-button" @click.stop="deleteItem(item)">
-      <span class="material-symbols-outlined">delete</span>
-    </button>
+    <span class="material-symbols-outlined delete-button" @click.stop="deleteItem(item)">delete</span>
     <div class="inner-block">
       {{ item.name }}
     </div>
@@ -62,15 +60,89 @@
     saveToLocalStorage();
   };
 
+  const expandWildcards = (code) => {
+    const expandCode = (code, index) => {
+      const results = [];
+      const charArray = code.split('');
+      
+      if (index >= charArray.length) {
+        return [charArray.join('')];
+      }
+
+      if (charArray[index] === 'X') {
+        for (let i = 0; i <= 9; i++) {
+          charArray[index] = i.toString();
+          results.push(...expandCode(charArray.join(''), index + 1));
+        }
+      } else {
+        results.push(...expandCode(charArray.join(''), index + 1));
+      }
+      
+      return results;
+    };
+    
+    return expandCode(code, 0);
+  };
+
+
+  const buildLogicalExpression = (reqString, completedUnits) => {
+    let expression = reqString;
+
+    const wildcardPattern = /\b(\w{4}\d*X\d*)\b/g;
+    expression = expression.replace(wildcardPattern, (match) => {
+      const expandedCodes = expandWildcards(match);
+      return `(${expandedCodes.map(code => `(${code})`).join(' || ')})`;
+    });
+
+    // Replace AND/OR with JavaScript logical operators, considering extra spaces for safety
+    expression = expression.replace(/\band\b/g, '&&').replace(/\bor\b/g, '||');
+    // Replace brackets for logical grouping
+    expression = expression.replace(/\[/g, '(').replace(/\]/g, ')');
+    expression = expression.replace(/\{/g, '(').replace(/\}/g, ')');
+
+    // do the invalid checking before wrapping
+    const invalidPattern = /\b(?!(&&|\|\||\(|\)|\b\w{4}\d{4}\b)\b)\b\w+\b/g;
+    expression = expression.replace(invalidPattern, 'false ||');
+
+    const codePattern = /\b(\w{4}\d{4})\b/g;
+    expression = expression.replace(codePattern, (match) => {
+      return `completedUnits.includes("${match}")`;
+    });
+
+    return expression;
+  };
+
+
+
   const checkForConflict = (item) => {
+    const completedUnits = store.items.map(i => i.id);
+
     if (!item.P && !item.C && !item.N) {
       return false;
     }
 
-    
+    const parseAndEvaluate = (reqString) => {
+      const expression = buildLogicalExpression(reqString);
+      console.log('Evaluating expression:', expression);
+      try {
+        return eval(expression);
+      } catch (error) {
+        console.error('Error evaluating expression:', expression, error);
+        return false;
+      }
+    };
 
-    return false;
+    let prereqMet = !item.P || parseAndEvaluate(item.P);
+    let coreqMet = !item.C || parseAndEvaluate(item.C);
+    let prohibitionMet = !item.N || !parseAndEvaluate(item.N);
+
+    console.log('Prereq:', item.P, prereqMet);
+    console.log('Coreq:', item.C, coreqMet);
+    console.log('Prohibition:', item.N, prohibitionMet);
+
+    return !(prereqMet && coreqMet && prohibitionMet);
   };
+
   
   function stringToColorCode(str) {
     let hash = 0;
@@ -159,7 +231,7 @@
   }
 
   .drag-el:hover {
-      border: 3px solid #1d1d1d93;
+      border: 3px solid #282828;
       box-shadow: 0px 6px 6px 0.0px rgba(133, 133, 133, 0.5);
       transition: 0.15s;
       transform: scale(1.0) translate(0%, -0%);
@@ -167,18 +239,21 @@
 
   .warning-icon {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-    color: #ff4400;
+    bottom: 0px;
+    right: 0%;
+    color: #ffffff;
     font-size: 30px;
     padding: 2px;
-    /* background-color: rgb(255, 255, 255); */
-    border-radius: 50%;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    background-color: rgba(248, 80, 13, 0.894);
+    border-top-left-radius: 18px;
+    border-bottom-right-radius: 12px;
     font-weight: 500;
   }
 
   .drag-el.warning {
-    border: 3px solid #ef3309c0;
+    border: 3px solid rgba(248, 80, 13, 0.894);
   }
 
   @media (max-width: 800px) {
@@ -191,10 +266,10 @@
       background-color: lightskyblue;
       border-radius: 16px;
       filter: drop-shadow(0px 4px 2px rgba(124, 124, 124, 0.15));
-      height: 63px;
+      height: 65px;
       z-index: inherit;
       cursor: grab;
-      border: 2px solid #ffffff8f;
+      border: 3px solid #ffffff8f;
       transition: 0.2s;
       margin-left: 0px;
       margin-right: 0px;
@@ -208,9 +283,6 @@
       max-width: 100%;
       cursor: grab;
       transition: 0.14s;
-    }
-    .drag-el:hover {
-        border: 1.5px solid #000000bf;
     }
     .inner-block {
       font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -269,21 +341,25 @@
   }
   
   .delete-button {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background-color: rgba(73, 70, 70, 0.5);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      opacity: 0.0;
-      margin: 4px;
-      height: 18px;
-      width: 26px;
-      overflow: hidden;
-      transition: 0.2s;
-      display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(73, 70, 70, 0.5);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0.0;
+    margin: 4px;
+    padding:2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    overflow: hidden;
+    transition: 0.2s;
+    display: flex;
+    font-size: 20px;
+    position: absolute;
+    font-weight: 300;
   }
   
   .delete-button:hover {
@@ -291,11 +367,6 @@
       transition: 0.2s;
   }
   
-  .delete-button .material-symbols-outlined {
-      color: rgba(255, 255, 255, 0.85);
-      transform: translate(-0.0vw, 0.1vw);
-      font-size: 14px;
-  }
   
   @keyframes swap-animation {
       0% {

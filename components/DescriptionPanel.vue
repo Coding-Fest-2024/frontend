@@ -142,7 +142,7 @@
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
-    font-size: 16px;
+    font-size: 15px;
     border: 2px solid #f1f1f1af;
     background-color: #fffffff8;
     border-radius: 8px;
