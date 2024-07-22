@@ -66,6 +66,7 @@
                                 :key="item.id"
                                 class="sb-el"
                                 :style="{ backgroundColor: getColorForCode(item.id) }"
+                                :class="{ inplan: isInPlan(item.id) }"
                                 draggable="true"
                                 @dragstart="startDrag($event, item)">
                                 <div class="sb-text-container">{{ item.id }}</div>
@@ -87,12 +88,11 @@
 import { defineComponent, ref } from 'vue';
 import { store } from '../store';
 import aggregatedUnits from '../aggregated_units.json';
-import aggregatedCourses from '../aggregated_courses.json';
 
 
 function stringToColorCode(str) {
 
-    if (!str) return 'hsl(0, 0%, 0%)'; // Fallback in case of no string
+    if (!str) return 'hsl(0, 0%, 0%)';
 
     let hash = 0;
     for (let i = 0; i < 6; i++) {
@@ -221,7 +221,8 @@ export default defineComponent({
         };
 
         const getColorForCode = (code) => {
-            return stringToColorCode(code);
+            if (!isInPlan(code))
+                return stringToColorCode(code);
         };
 
         const getSelectedColor = () => {
@@ -229,6 +230,16 @@ export default defineComponent({
                 return stringToColorCode(store.selectedItemId);
             }
             return 'hsl(0, 0%, 0%, 0)';
+        };
+
+        const isInPlan = (id) => {
+            for (let i = 0; i < store.items.length; i++) {
+                if (store.items[i].id === id) {
+                    // console.log(store.items[i].id);
+                    return true;
+                }
+            }
+            return false;
         };
 
         return {
@@ -248,6 +259,7 @@ export default defineComponent({
             majorUnits2,
             toggleBrowse,
             isBrowseActive,
+            isInPlan,
             getColorForCode,
             getSelectedColor,
         };
@@ -578,6 +590,15 @@ export default defineComponent({
     box-sizing: border-box;
 }
 
+.sb-el.inplan {
+    background-color: #868686;
+    transition: 0.15s;
+}
+
+.sb-el.inplan .sb-inner-block {
+    background-color: #c5c5c5;
+}
+
 .search-container {
     display: flex;
     align-items: center;
@@ -585,7 +606,7 @@ export default defineComponent({
     border-radius: 10px; /* Rounded corners for the search bar */
     padding: 5px;
     box-shadow: 0px 1.5px 2.5px rgba(172, 172, 172, 0.236);
-    border: 3px solid #9a9a9ab7;
+    border: 2.5px solid #000000b7;
     min-width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
@@ -595,12 +616,13 @@ export default defineComponent({
     background-color: transparent;
     border: none;
     outline: none;
-    color: #d5d5d5;
+    color: #242424;
     font-size: 1rem;
     padding-right: 0px;
-    min-width: 100%;
+    min-width: 97%;
     box-sizing: border-box;
     height: 35px;
+    margin-left: 10px;
 }
 
 .clear-button {
@@ -615,7 +637,7 @@ export default defineComponent({
 }
 
 .clear-button .material-symbols-outlined {
-    color: rgb(126, 126, 126);
+    color: rgb(0, 0, 0);
 }
 
 .clear-button:hover .material-symbols-outlined {

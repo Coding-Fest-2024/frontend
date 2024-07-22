@@ -18,7 +18,7 @@
   
   <script setup>
   import { store } from '../store';
-  
+
   const props = defineProps({
     item: {
       type: Object,
@@ -37,6 +37,10 @@
       required: true
     }
   });
+
+  const saveToLocalStorage = () => {
+    localStorage.setItem('storedItems', JSON.stringify(store.items));
+  };
   
   const selectItem = (item) => {
     store.selectedItemId = store.selectedItemId === item.id ? null : item.id;
@@ -44,7 +48,7 @@
   
   const startDrag = (event, item) => {
     event.dataTransfer.setData('item', JSON.stringify(item));
-    store.saveToLocalStorage();
+    saveToLocalStorage();
   };
   
   const deleteItem = (itemToDelete) => {
@@ -55,15 +59,17 @@
     if (index > -1) {
       store.items.splice(index, 1);
     }
-    store.saveToLocalStorage();
+    saveToLocalStorage();
   };
 
   const checkForConflict = (item) => {
-    return true;
-    const conflictingItems = store.items.filter(i => i.semester === item.semester && i.year === item.year && i.id !== item.id);
-    return conflictingItems.some(i => {
-      return i.name === item.name;
-    });
+    if (!item.P && !item.C && !item.N) {
+      return false;
+    }
+
+    
+
+    return false;
   };
   
   function stringToColorCode(str) {
