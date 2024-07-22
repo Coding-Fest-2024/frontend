@@ -138,18 +138,9 @@
     const corequisites = item.C ? buildLogicalExpression(item.C) : '';
     const prohibitions = item.N ? buildLogicalExpression(item.N) : '';
 
-    const evalWithReplacements = (expression, isCompletedFn) => {
-    try {
-      return eval(expression.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedFn(p1, item.year, item.semester)));
-    } catch (error) {
-        console.error('Error evaluating expression:', expression, error);
-        return false;
-      }
-    };
-
-    const prereqMet = prerequisites ? evalWithReplacements(prerequisites, isCompletedBefore) : true;
-    const coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame) : true;
-    const prohibitionMet = prohibitions ? !eval(prohibitions) : true;
+    let prereqMet = prerequisites ? eval(prerequisites.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedBefore(p1, item.year, item.semester))) : true;
+    let coreqMet = corequisites ? eval(corequisites.replace(/completedUnits\.includes\("(\w{4}\d{4})"\)/g, (match, p1) => isCompletedBeforeOrSame(p1, item.year, item.semester))) : true;
+    let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
 
     return !(prereqMet && coreqMet && prohibitionMet);
   };
