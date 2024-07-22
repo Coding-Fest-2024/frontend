@@ -112,7 +112,7 @@
     return expression;
   };
 
-  const completedUnits = [];
+  let completedUnits = [];
 
   const checkForConflict = (item) => {
 
@@ -153,6 +153,10 @@
     let prereqMet = prerequisites ? evalWithReplacements(prerequisites, isCompletedBefore) : true;
     let coreqMet = corequisites ? evalWithReplacements(corequisites, isCompletedBeforeOrSame) : true;
     let prohibitionMet = prohibitions ? !eval(prohibitions) : true;
+
+    console.log('Prereq:', item.P, prereqMet);
+    console.log('Coreq:', item.C, coreqMet);
+    console.log('Prohibition:', item.N, prohibitionMet);
 
     return !(prereqMet && coreqMet && prohibitionMet);
   };
